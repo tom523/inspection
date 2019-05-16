@@ -6,6 +6,9 @@
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
+      <div v-else>
+        <el-divider>管理</el-divider>
+      </div>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
@@ -93,3 +96,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .el-divider__text {
+    background-color: rgb(48, 65, 86);
+    color: #f2f3f7;
+  }
+</style>
