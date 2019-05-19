@@ -1,12 +1,17 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 60px">
+    <div style="margin-top: 50px">
+      <el-col>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加专业</el-button>
+      </el-col>
       <el-col>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
         >
           <el-table-column
             align="center"
@@ -39,7 +44,6 @@
                   style="width = 100%"
                 >
                   <el-option
-
                     v-for="item in professionType"
                     :key="item.value"
                     :label="item.label"
@@ -90,9 +94,6 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加</el-button>
-      </el-col>
     </div>
   </div>
 </template>
@@ -116,6 +117,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       professionType: [{
         value: 'PROFESSION',
         label: '普通专业'
@@ -136,7 +138,6 @@ export default {
   },
   methods: {
     editRowOrConfirm(row, index) {
-      debugger
       // 点击确定
       if (this.tableData[row].select_show) {
         index.members = index.members.toString()
@@ -160,6 +161,7 @@ export default {
               message: '更新成功'
             })
           }).catch(err => {
+            this.tableData.splice(row, 1)
             console.log(err)
           })
         }
@@ -216,6 +218,7 @@ export default {
         item.members.shift()
       })
       this.tableData = data
+      this.loading = false
       // 获取用户
       const membersData = await getAccountUser()
       this.members = membersData.data.items
@@ -240,8 +243,8 @@ export default {
   }
   .el-table-add-row {
     margin-top: 5px;
-    width: 80%;
-    margin-left: auto;
+    width: 10%;
+    margin-left: 80%;
     margin-right: auto;
     height: 40px;
     border: 1px dashed #c1c1cd;

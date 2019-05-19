@@ -1,12 +1,17 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 60px">
+    <div style="margin-top: 50px">
+      <el-col>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加值</el-button>
+      </el-col>
       <el-col>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
         >
           <el-table-column
             align="center"
@@ -90,9 +95,6 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加</el-button>
-      </el-col>
     </div>
   </div>
 </template>
@@ -104,6 +106,7 @@ import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUse
 export default {
   data() {
     return {
+      loading: true,
       tableData: [],
       professions: [],
       rowData: {},
@@ -131,6 +134,7 @@ export default {
               message: '添加成功'
             })
           }).catch(err => {
+            this.tableData.splice(row, 1)
             console.log(err)
           })
         } else {
@@ -142,6 +146,8 @@ export default {
               message: '更新成功'
             })
           }).catch(err => {
+            this.tableData[row].members = this.rowMember
+            this.tableData[row].access = this.rowAccess
             console.log(err)
           })
         }
@@ -204,6 +210,7 @@ export default {
       const reviewProfessionData = await getRoleUser({ role_type: 'REVIEW_PROFESSION' })
       this.professions = professionData.data
       this.professions = this.professions.concat(reviewProfessionData.data)
+      this.loading = false
       // 获取用户
       const membersData = await getAccountUser()
       this.members = membersData.data.items
@@ -228,8 +235,8 @@ export default {
   }
   .el-table-add-row {
     margin-top: 5px;
-    width: 80%;
-    margin-left: auto;
+    width: 10%;
+    margin-left: 80%;
     margin-right: auto;
     height: 40px;
     border: 1px dashed #c1c1cd;

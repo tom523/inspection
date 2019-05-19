@@ -6,10 +6,12 @@
       </el-col>
       <el-col>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 10px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
         >
           <el-table-column
             align="center"
@@ -201,7 +203,8 @@ export default {
         newPassword: '',
         newPasswordConfirm: ''
       },
-      changePassDialog: false
+      changePassDialog: false,
+      loading: true
     }
   },
   created() {
@@ -223,6 +226,7 @@ export default {
               message: '添加成功'
             })
           }).catch(err => {
+            this.tableData.splice(row, 1)
             console.log(err)
           })
         } else {
@@ -311,6 +315,7 @@ export default {
         item.select_show = false
       })
       this.tableData = data
+      this.loading = false
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
