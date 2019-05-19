@@ -23,6 +23,7 @@ export function logout() {
   })
 }
 
+// 获取角色
 export function getRoleUser(params) {
   return request({
     url: '/role/users/',
@@ -31,6 +32,7 @@ export function getRoleUser(params) {
   })
 }
 
+// 添加角色
 export function addRoleUser(data) {
   return request({
     url: '/role/users/',
@@ -39,6 +41,7 @@ export function addRoleUser(data) {
   })
 }
 
+// 更新角色
 export function updataRoleUser(id, data) {
   return request({
     url: '/role/users/' + id + '/',
@@ -47,18 +50,55 @@ export function updataRoleUser(id, data) {
   })
 }
 
+// 删除角色
 export function deleteRoleUser(id) {
-  debugger
   return request({
     url: '/role/users/' + id + '/',
     method: 'delete'
   })
 }
 
+// 获取用户
 export function getAccountUser(params) {
   return request({
     url: '/account/user/',
     method: 'get',
     params
+  })
+}
+
+// 创建用户
+export function addAccountUser(data) {
+  debugger
+  return request({
+    url: '/account/user/create_user/',
+    method: 'post',
+    data
+  })
+}
+
+// 更新用户
+export function updataAccountUser(id, data) {
+  return request({
+    url: '/account/user/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+// 删除用户
+export function deleteAccoutUser(id) {
+  return request({
+    url: '/account/user/' + id + '/',
+    method: 'delete'
+  })
+}
+
+// 修改密码
+export function modifyPassword(id, data) {
+  return request({
+    url: '/account/user/' + id + '/modify_password/',
+    method: 'post',
+    data
   })
 }

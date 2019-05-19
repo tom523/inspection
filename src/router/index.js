@@ -188,6 +188,19 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/userManage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'arrange duty',
+        component: () => import('@/views/userManage/index'),
+        meta: { title: '用户管理', icon: 'form' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
