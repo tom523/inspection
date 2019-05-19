@@ -267,7 +267,6 @@ export default {
     },
     // 点击修改密码
     changePassword(data) {
-      debugger
       // this.rowData = data
       this.rowData.id = data.id
       this.rowData.newPassword = ''
