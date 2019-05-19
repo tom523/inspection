@@ -22,3 +22,43 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getRoleUser(params) {
+  return request({
+    url: '/role/users/',
+    method: 'get',
+    params
+  })
+}
+
+export function addRoleUser(data) {
+  return request({
+    url: '/role/users/',
+    method: 'post',
+    data
+  })
+}
+
+export function updataRoleUser(id, data) {
+  return request({
+    url: '/role/users/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteRoleUser(id) {
+  debugger
+  return request({
+    url: '/role/users/' + id + '/',
+    method: 'delete'
+  })
+}
+
+export function getAccountUser(params) {
+  return request({
+    url: '/account/user/',
+    method: 'get',
+    params
+  })
+}

@@ -161,14 +161,23 @@ export const constantRoutes = [
   },
 
   {
-    path: '/role',
+    path: '/roleManage',
     component: Layout,
+    redirect: 'roleManage',
+    name: '角色管理',
+    meta: { title: '角色管理', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'role',
-        component: () => import('@/views/form/index'),
-        meta: { title: '角色管理', icon: 'form' }
+        path: 'team',
+        name: '值管理',
+        component: () => import('@/views/roleManage/team'),
+        meta: { title: '值管理', icon: 'form' }
+      },
+      {
+        path: 'profession',
+        name: '专业管理',
+        component: () => import('@/views/roleManage/profession'),
+        meta: { title: '专业管理', icon: 'form' }
       }
     ]
   },
