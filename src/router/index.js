@@ -178,6 +178,12 @@ export const constantRoutes = [
         name: '专业管理',
         component: () => import('@/views/roleManage/profession'),
         meta: { title: '专业管理', icon: 'form' }
+      },
+      {
+        path: 'function',
+        name: '功能管理',
+        component: () => import('@/views/roleManage/function'),
+        meta: { title: '功能管理', icon: 'form' }
       }
     ]
   },
