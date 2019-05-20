@@ -135,14 +135,23 @@ export const constantRoutes = [
   },
 
   {
-    path: '/base-data',
+    path: '/inspData',
     component: Layout,
+    redirect: 'inspData',
+    name: '巡检数据',
+    meta: { title: '巡检数据', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'inspection base data',
-        component: () => import('@/views/form/index'),
+        path: 'insp',
+        name: '巡检数据',
+        component: () => import('@/views/inspData/insp'),
         meta: { title: '巡检数据', icon: 'form' }
+      },
+      {
+        path: 'turn',
+        name: '轮次管理',
+        component: () => import('@/views/inspData/turn'),
+        meta: { title: '轮次管理', icon: 'form' }
       }
     ]
   },
@@ -194,7 +203,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'arrange duty',
+        name: 'account manage',
         component: () => import('@/views/userManage/index'),
         meta: { title: '用户管理', icon: 'form' }
       }

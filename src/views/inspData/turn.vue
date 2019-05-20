@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加值</el-button>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加轮次</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -21,7 +21,7 @@
           />
           <el-table-column
             align="center"
-            label="值"
+            label="轮次"
             width="100"
           >
             <template slot-scope="scope">
@@ -33,43 +33,21 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="用户"
+            label="巡检点"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.members.toString() }}
+              {{ scope.row.select_show ? '' : scope.row.points.toString() }}
               <div v-if="scope.row.select_show">
                 <el-select
-                  v-model="scope.row.members"
+                  v-model="scope.row.points"
+                  filterable
                   style="width: 100%"
                   multiple
                 >
                   <el-option
-                    v-for="item in members"
-                    :key="item.id"
+                    v-for="item in points"
+                    :key="item.username"
                     :lable="item.id"
-                    :value="item.username"
-                  />
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="333"
-            label="专业"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.access.toString() }}
-              <div v-if="scope.row.select_show">
-                <el-select
-                  v-model="scope.row.access"
-                  style="width: 100%"
-                  multiple
-                >
-                  <el-option
-                    v-for="item in professions"
-                    :key="item.id"
-                    :label="item.name"
                     :value="item.name"
                   />
                 </el-select>
@@ -100,19 +78,15 @@
 </template>
 
 <script>
-// import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
-
+import { getTurn, updateTurn, addTurn, deleteTurn, getPoint } from '@/api/insp'
 export default {
   data() {
     return {
-      loading: true,
+      loading: false,
       tableData: [],
-      professions: [],
-      rowData: {},
-      members: [],
-      rowMember: [],
-      rowAccess: []
+      points: [],
+      rowName: '',
+      rowPoint: ''
     }
   },
   created() {
@@ -122,98 +96,86 @@ export default {
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
-        obj.members = obj.members.toString()
-        obj.access = obj.access.toString()
-        // 新建值
+        obj.points = obj.points.toString()
         if (obj.id === undefined) {
-          addRoleUser(obj).then(response => {
-            obj.members = obj.members.split(',')
-            obj.access = obj.access.split(',')
+          // 新建轮次
+          addTurn({
+            name: obj.name,
+            points: obj.points
+          }).then(response => {
             this.$message({
-              type: 'success',
-              message: '添加成功'
+              type: 'sussess',
+              message: '添加轮次成功！'
             })
           }).catch(err => {
-            this.tableData.splice(index, 1)
             console.log(err)
           })
         } else {
-          updataRoleUser(obj.id, obj).then(response => {
-            obj.members = obj.members.split(',')
-            obj.access = obj.access.split(',')
+          updateTurn(obj.id, obj).then(response => {
             this.$message({
-              type: 'success',
-              message: '更新成功'
+              type: 'sussess',
+              message: '更新轮次成功'
             })
           }).catch(err => {
-            this.tableData[index].members = this.rowMember
-            this.tableData[index].access = this.rowAccess
             console.log(err)
           })
         }
         this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.rowAccess = JSON.parse(JSON.stringify(obj.access))
-        this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.rowName = JSON.parse(JSON.stringify(obj.name))
+        this.rowPoint = JSON.parse(JSON.stringify(obj.points))
         this.tableData[index].select_show = true
       }
     },
     deleteRowOrCancel(index, obj) {
       if (this.tableData[index].select_show) {
-        // 点击取消
-        this.tableData[index].access = this.rowAccess
-        this.tableData[index].members = this.rowMember
+        this.tableData[index].name = this.rowName
+        this.tableData[index].points = this.rowPoint
         this.tableData[index].select_show = false
+        // 点击取消
       } else {
-        // 点击删除，删除值
-        deleteRoleUser(obj.id).then(response => {
+        // 点击删除
+        if (obj.id === undefined) {
+          // 刚创建就删除
           this.tableData.splice(index, 1)
           this.$message({
-            type: 'success',
-            message: '删除成功！'
+            type: 'sussess',
+            message: '删除轮次成功'
           })
-        }).catch(err => {
-          console.log(err)
-        })
+        } else {
+          deleteTurn(obj.id).then(response => {
+            this.tableData.splice(index, 1)
+            this.$message({
+              type: 'sussess',
+              message: '删除轮次成功'
+            })
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       }
     },
+    // 点击添加
     add_row() {
-      // 点击添加
       this.tableData.push({
-        role_type: 'TEAM',
         name: '',
-        members: '',
-        access: '',
-        desc: '',
-        role_key: '',
-        access_name: '',
+        points: [],
         select_show: true
       })
     },
-    async fecthdata() {
-      // 获取值
-      const teamData = await getRoleUser({ role_type: 'TEAM' })
-      const teamItems = teamData.data
-      teamItems.map(item => {
-        item.select_show = false
-        item.members = item.members.split(',')
-        item.access = item.access.split(',')
-        item.members.pop()
-        item.members.shift()
-        item.access.pop()
-        item.access.shift()
+    fecthdata() {
+      getTurn().then(response => {
+        var turnData = response.data.items
+        turnData.map(item => {
+          item.points = item.points.split(',')
+          item.select_show = false
+        })
+        this.tableData = turnData
       })
-      this.tableData = teamItems
-      // 获取专业
-      const professionData = await getRoleUser({ role_type: 'PROFESSION' })
-      const reviewProfessionData = await getRoleUser({ role_type: 'REVIEW_PROFESSION' })
-      this.professions = professionData.data
-      this.professions = this.professions.concat(reviewProfessionData.data)
-      this.loading = false
-      // 获取用户
-      const membersData = await getAccountUser()
-      this.members = membersData.data.items
+      getPoint().then(response => {
+        this.points = response.data.items
+      })
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
