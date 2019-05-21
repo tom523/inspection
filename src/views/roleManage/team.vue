@@ -117,6 +117,7 @@ export default {
   },
   created() {
     this.fecthdata()
+    this.fecthSelect()
   },
   methods: {
     editRowOrConfirm(index, obj) {
@@ -133,14 +134,23 @@ export default {
               type: 'success',
               message: '添加成功'
             })
+            this.fecthdata()
           }).catch(err => {
-            this.tableData.splice(index, 1)
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
+            this.tableData[index].select_show = true
+            // this.tableData.splice(index, 1)
             console.log(err)
           })
         } else {
           updataRoleUser(obj.id, obj).then(response => {
             obj.members = obj.members.split(',')
-            obj.access = obj.access.split(',')
+            // 当专业为空的时候不转成数组
+            if (obj.access !== '') {
+              obj.access = obj.access.split(',')
+            }
             this.$message({
               type: 'success',
               message: '更新成功'
@@ -148,6 +158,10 @@ export default {
           }).catch(err => {
             this.tableData[index].members = this.rowMember
             this.tableData[index].access = this.rowAccess
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
             console.log(err)
           })
         }
@@ -162,9 +176,13 @@ export default {
     deleteRowOrCancel(index, obj) {
       if (this.tableData[index].select_show) {
         // 点击取消
-        this.tableData[index].access = this.rowAccess
-        this.tableData[index].members = this.rowMember
-        this.tableData[index].select_show = false
+        if (obj.id === undefined) {
+          this.tableData.splice(index, 1)
+        } else {
+          this.tableData[index].access = this.rowAccess
+          this.tableData[index].members = this.rowMember
+          this.tableData[index].select_show = false
+        }
       } else {
         // 点击删除，删除值
         deleteRoleUser(obj.id).then(response => {
@@ -205,6 +223,8 @@ export default {
         item.access.shift()
       })
       this.tableData = teamItems
+    },
+    async fecthSelect() {
       // 获取专业
       const professionData = await getRoleUser({ role_type: 'PROFESSION' })
       const reviewProfessionData = await getRoleUser({ role_type: 'REVIEW_PROFESSION' })
