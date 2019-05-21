@@ -110,6 +110,10 @@ export default {
               message: '添加轮次成功！'
             })
           }).catch(err => {
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
             console.log(err)
           })
         } else {
@@ -120,6 +124,10 @@ export default {
               message: '更新轮次成功'
             })
           }).catch(err => {
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
             console.log(err)
           })
         }
