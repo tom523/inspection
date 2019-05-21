@@ -91,6 +91,7 @@ export default {
   },
   created() {
     this.fecthdata()
+    this.fecthPoint()
   },
   methods: {
     editRowOrConfirm(index, obj) {
@@ -103,6 +104,7 @@ export default {
             name: obj.name,
             points: obj.points
           }).then(response => {
+            this.fecthdata()
             this.$message({
               type: 'sussess',
               message: '添加轮次成功！'
@@ -112,6 +114,7 @@ export default {
           })
         } else {
           updateTurn(obj.id, obj).then(response => {
+            this.fecthdata()
             this.$message({
               type: 'sussess',
               message: '更新轮次成功'
@@ -130,20 +133,21 @@ export default {
     },
     deleteRowOrCancel(index, obj) {
       if (this.tableData[index].select_show) {
-        this.tableData[index].name = this.rowName
-        this.tableData[index].points = this.rowPoint
-        this.tableData[index].select_show = false
         // 点击取消
+        if (obj.id === undefined) {
+          this.tableData.splice(index, 1)
+        } else {
+          this.tableData[index].name = this.rowName
+          this.tableData[index].points = this.rowPoint
+          this.tableData[index].select_show = false
+        }
       } else {
         // 点击删除
-        if (obj.id === undefined) {
-          // 刚创建就删除
-          this.tableData.splice(index, 1)
-          this.$message({
-            type: 'sussess',
-            message: '删除轮次成功'
-          })
-        } else {
+        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
           deleteTurn(obj.id).then(response => {
             this.tableData.splice(index, 1)
             this.$message({
@@ -153,7 +157,12 @@ export default {
           }).catch(err => {
             console.log(err)
           })
-        }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     },
     // 点击添加
@@ -173,6 +182,8 @@ export default {
         })
         this.tableData = turnData
       })
+    },
+    fecthPoint() {
       getPoint().then(response => {
         this.points = response.data.items
       })

@@ -151,6 +151,7 @@ export default {
             if (obj.access !== '') {
               obj.access = obj.access.split(',')
             }
+            this.fecthdata()
             this.$message({
               type: 'success',
               message: '更新成功'
@@ -185,14 +186,25 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        deleteRoleUser(obj.id).then(response => {
-          this.tableData.splice(index, 1)
-          this.$message({
-            type: 'success',
-            message: '删除成功！'
+        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteRoleUser(obj.id).then(response => {
+            this.tableData.splice(index, 1)
+            this.$message({
+              type: 'success',
+              message: '删除成功！'
+            })
+          }).catch(err => {
+            console.log(err)
           })
-        }).catch(err => {
-          console.log(err)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
         })
       }
     },

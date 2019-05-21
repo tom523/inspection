@@ -104,6 +104,7 @@ export default {
   },
   created() {
     this.fecthdata()
+    this.fecthUser()
   },
   methods: {
     editRowOrConfirm(row, index) {
@@ -114,23 +115,34 @@ export default {
         if (index.id === undefined) {
           addRoleUser(index).then(response => {
             index.members = index.members.split(',')
+            this.fecthdata()
             this.$message({
               type: 'success',
               message: '添加成功'
             })
           }).catch(err => {
             this.tableData.splice(row, 1)
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
             console.log(err)
           })
         } else {
           // 更新专业
           updataRoleUser(index.id, index).then(response => {
             index.members = index.members.split(',')
+            this.fecthdata()
             this.$message({
               type: 'success',
               message: '更新成功'
             })
           }).catch(err => {
+            this.tableData[row].members = this.rowMember
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.members
+            })
             console.log(err)
           })
         }
@@ -143,8 +155,10 @@ export default {
     },
     cancel(row, index) {
       // 点击取消
-      this.tableData[row].members = this.rowMember
-      this.tableData[row].select_show = false
+      if (index.select_show) {
+        this.tableData[row].members = this.rowMember
+        this.tableData[row].select_show = false
+      }
     },
     async fecthdata() {
       // 获取功能
@@ -158,6 +172,8 @@ export default {
       })
       this.tableData = data
       this.loading = false
+    },
+    async fecthUser() {
       // 获取用户
       const membersData = await getAccountUser()
       this.members = membersData.data.items
