@@ -1,70 +1,70 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 1%; margin-left: 78%">
-      <el-button type="success" @click="handleImport">+ 导入数据</el-button>
+    <div style="margin-top: 1%">
+      <el-button style="margin-left: 6%" type="success" @click="handleImport">+ 导入数据</el-button>
       <el-button type="primary" @click="addRow">+ 添加巡检点</el-button>
-    </div>
-    <el-table
-      :data="tableData"
-      border
-      style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 1%"
-    >
-      <el-table-column
-        align="center"
-        type="index"
-        label="序号"
-        width="80"
+      <el-table
+        :data="tableData"
+        border
+        style="width: 88%; margin-left: auto; margin-right: auto; margin-top: 1%"
+      >
+        <el-table-column
+          align="center"
+          type="index"
+          label="序号"
+          width="80"
+        />
+        <el-table-column
+          align="center"
+          label="名称"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.select_show ? '' : scope.row.name }}
+            <div v-if="scope.row.select_show">
+              <el-input v-model="scope.row.name" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="位置"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.select_show ? '' : scope.row.extra }}
+            <div v-if="scope.row.select_show">
+              <el-input v-model="scope.row.extra" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="操作"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="editRowOrConfirm(scope.$index, scope.row)"
+            >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="deleteRowOrCancel(scope.$index, scope.row)"
+            >{{ scope.row.select_show ? '取消' : '删除' }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        style="margin-top: 20px; margin-left: 6%"
+        :current-page="page"
+        :total="total"
+        background
+        prev-text="上一页"
+        next-text="下一页"
+        layout="total, prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
       />
-      <el-table-column
-        align="center"
-        label="名称"
-      >
-        <template slot-scope="scope">
-          {{ scope.row.select_show ? '' : scope.row.name }}
-          <div v-if="scope.row.select_show">
-            <el-input v-model="scope.row.name" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="位置"
-      >
-        <template slot-scope="scope">
-          {{ scope.row.select_show ? '' : scope.row.extra }}
-          <div v-if="scope.row.select_show">
-            <el-input v-model="scope.row.extra" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="操作"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="editRowOrConfirm(scope.$index, scope.row)"
-          >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="deleteRowOrCancel(scope.$index, scope.row)"
-          >{{ scope.row.select_show ? '取消' : '删除' }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      style="margin-top: 20px; margin-left: 71%"
-      :current-page="page"
-      :total="total"
-      background
-      prev-text="上一页"
-      next-text="下一页"
-      layout="total, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-    />
+    </div>
     <el-dialog
       v-loading="loading"
       element-loading-text="数据上传中"

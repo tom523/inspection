@@ -11,7 +11,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 25px"
         >
           <el-table-column
             align="center"
@@ -95,7 +95,7 @@
       </el-col>
       <el-col>
         <el-pagination
-          style="margin-top: 20px; margin-left: 55%"
+          style="margin-top: 50px; margin-left: 10%"
           :current-page="page"
           :total="total"
           background
