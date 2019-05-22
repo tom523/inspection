@@ -22,7 +22,6 @@
           <el-table-column
             align="center"
             label="名称"
-            width="100"
           >
             <template slot-scope="scope">
               {{ scope.row.select_show ? '' : scope.row.name }}
@@ -127,13 +126,13 @@ export default {
     }
   },
   created() {
-    this.fecthdata()
+    this.fetchData()
     this.fecthSelect()
   },
   methods: {
     handleCurrentChange(index) {
       this.page = index
-      this.fecthdata()
+      this.fetchData()
     },
     editRowOrConfirm(index, obj) {
       // 点击确定
@@ -141,7 +140,7 @@ export default {
         // 新建值
         if (obj.id === undefined) {
           addDevice(obj).then(response => {
-            this.fecthdata()
+            this.fetchData()
             this.$message({
               type: 'sussess',
               message: '添加设备成功！'
@@ -152,7 +151,7 @@ export default {
           })
         } else {
           updateDevice(obj.id, obj).then(response => {
-            this.fecthdata()
+            this.fetchData()
             this.$message({
               type: 'sussess',
               message: '更新设备成功'
@@ -215,7 +214,7 @@ export default {
         select_show: true
       })
     },
-    fecthdata() {
+    fetchData() {
       getDevice({
         is_virtual: false,
         page: this.page
