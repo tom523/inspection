@@ -238,10 +238,8 @@ export default {
     },
     async fecthSelect() {
       // 获取专业
-      const professionData = await getRoleUser({ role_type: 'PROFESSION' })
-      const reviewProfessionData = await getRoleUser({ role_type: 'REVIEW_PROFESSION' })
+      const professionData = await getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION' })
       this.professions = professionData.data
-      this.professions = this.professions.concat(reviewProfessionData.data)
       this.loading = false
       // 获取用户
       const membersData = await getAccountUser()

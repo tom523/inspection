@@ -139,7 +139,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: 'inspData',
     name: '巡检数据',
-    meta: { title: '巡检数据', icon: 'form' },
+    meta: { title: '巡检数据', icon: 'tree' },
     children: [
       {
         path: 'insp',
@@ -226,7 +226,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'account manage',
         component: () => import('@/views/userManage/index'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户管理', icon: 'user' }
       }
     ]
   },

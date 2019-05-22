@@ -233,12 +233,8 @@ export default {
     },
     async fecthdata() {
       // 获取专业
-      const professionData = await getRoleUser({ role_type: 'PROFESSION' })
-      const reviewProfessionData = await getRoleUser({ role_type: 'REVIEW_PROFESSION' })
-      const pipeProfessionData = await getRoleUser({ role_type: 'PIPE_PROFESSION' })
+      const professionData = await getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION,PIPE_PROFESSION' })
       var data = professionData.data
-      data = data.concat(reviewProfessionData.data)
-      data = data.concat(pipeProfessionData.data)
       data.map(item => {
         item.select_show = false
         item.members = item.members.split(',')
