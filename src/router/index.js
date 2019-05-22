@@ -142,9 +142,9 @@ export const constantRoutes = [
     meta: { title: '巡检数据', icon: 'tree' },
     children: [
       {
-        path: 'insp',
+        path: 'point',
         name: '巡检数据',
-        component: () => import('@/views/inspData/insp'),
+        component: () => import('@/views/inspData/point'),
         meta: { title: '巡检数据', icon: 'form' }
       },
       {
