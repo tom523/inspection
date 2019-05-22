@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 10px">
       <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加值</el-button>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加设备</el-button>
       </el-col>
       <el-col>
         <el-table
