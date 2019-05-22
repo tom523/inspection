@@ -176,10 +176,6 @@ export default {
         })
       }
     },
-    viewCheckItem(index, obj) {
-      this.$router.push({ path: '/inspData/item', query: { point: obj.id }})
-      console.log(obj)
-    },
     addRow() {
       this.tableData.push({
         name: '',
