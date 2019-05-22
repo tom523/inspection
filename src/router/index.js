@@ -148,6 +148,18 @@ export const constantRoutes = [
         meta: { title: '巡检数据', icon: 'form' }
       },
       {
+        path: 'device',
+        name: '设备管理',
+        component: () => import('@/views/inspData/device'),
+        meta: { title: '设备管理', icon: 'form' }
+      },
+      {
+        path: 'item',
+        name: '巡检项数据',
+        component: () => import('@/views/inspData/item'),
+        meta: { title: '巡检项数据', icon: 'form' }
+      },
+      {
         path: 'turn',
         name: '轮次管理',
         component: () => import('@/views/inspData/turn'),
