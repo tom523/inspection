@@ -219,7 +219,7 @@ export default {
   .el-table-add-row {
     margin-top: 5px;
     width: 10%;
-    margin-left: 80%;
+    margin-left: 70%;
     margin-right: auto;
     height: 40px;
     border: 1px dashed #c1c1cd;
