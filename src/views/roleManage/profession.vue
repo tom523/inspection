@@ -138,22 +138,21 @@ export default {
     this.fecthUser()
   },
   methods: {
-    editRowOrConfirm(row, index) {
+    editRowOrConfirm(index, obj) {
       // 点击确定
-      if (this.tableData[row].select_show) {
-        index.members = index.members.toString()
+      if (this.tableData[index].select_show) {
+        obj.members = obj.members.toString()
         // 新建专业
-        if (index.id === undefined) {
-          addRoleUser(index).then(response => {
-            index.members = index.members.split(',')
+        if (obj.id === undefined) {
+          addRoleUser(obj).then(response => {
+            obj.members = obj.members.split(',')
             this.fecthdata()
             this.$message({
               type: 'success',
               message: '添加成功'
             })
           }).catch(err => {
-            debugger
-            this.tableData[row].select_show = true
+            this.tableData[index].select_show = true
             this.$message({
               type: 'warning',
               message: err.response.data.data.members
@@ -162,15 +161,15 @@ export default {
           })
         } else {
           // 更新专业
-          updataRoleUser(index.id, index).then(response => {
-            index.members = index.members.split(',')
+          updataRoleUser(obj.id, obj).then(response => {
+            obj.members = obj.members.split(',')
             this.fecthdata()
             this.$message({
               type: 'success',
               message: '更新成功'
             })
           }).catch(err => {
-            this.tableData.splice(row, 1)
+            this.tableData.splice(index, 1)
             this.$message({
               type: 'warning',
               message: err.response.data.data.members
@@ -178,31 +177,31 @@ export default {
             console.log(err)
           })
         }
-        this.tableData[row].select_show = false
+        this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.rowMember = JSON.parse(JSON.stringify(index.members))
-        this.tableData[row].select_show = true
+        this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.tableData[index].select_show = true
       }
     },
-    deleteRowOrCancel(row, index) {
-      if (this.tableData[row].select_show) {
+    deleteRowOrCancel(index, obj) {
+      if (this.tableData[index].select_show) {
         // 点击取消
-        if (index.id === undefined) {
-          this.tableData.splice(row, 1)
+        if (obj.id === undefined) {
+          this.tableData.splice(index, 1)
         } else {
-          this.tableData[row].members = this.rowMember
-          this.tableData[row].select_show = false
+          this.tableData[index].members = this.rowMember
+          this.tableData[index].select_show = false
         }
       } else {
         // 点击删除
-        this.$confirm('此操作将删除' + index.name + ',是否继续', '提示', {
+        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteRoleUser(index.id).then(response => {
-            this.tableData.splice(row, 1)
+          deleteRoleUser(obj.id).then(response => {
+            this.tableData.splice(index, 1)
             this.$message({
               type: 'success',
               message: '删除成功！'

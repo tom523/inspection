@@ -69,7 +69,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser } from '@/api/user'
+import { getRoleUser, getAccountUser, updataRoleUser } from '@/api/user'
 
 export default {
   filters: {
@@ -107,57 +107,38 @@ export default {
     this.fecthUser()
   },
   methods: {
-    editRowOrConfirm(row, index) {
+    editRowOrConfirm(index, obj) {
       // 点击确定
-      if (this.tableData[row].select_show) {
-        index.members = index.members.toString()
-        // 新建专业
-        if (index.id === undefined) {
-          addRoleUser(index).then(response => {
-            index.members = index.members.split(',')
-            this.fecthdata()
-            this.$message({
-              type: 'success',
-              message: '添加成功'
-            })
-          }).catch(err => {
-            this.tableData.splice(row, 1)
-            this.$message({
-              type: 'warning',
-              message: err.response.data.data.members
-            })
-            console.log(err)
+      if (this.tableData[index].select_show) {
+        obj.members = obj.members.toString()
+        // 更新功能
+        updataRoleUser(obj.id, obj).then(response => {
+          obj.members = obj.members.split(',')
+          this.fecthdata()
+          this.$message({
+            type: 'success',
+            message: '更新成功'
           })
-        } else {
-          // 更新专业
-          updataRoleUser(index.id, index).then(response => {
-            index.members = index.members.split(',')
-            this.fecthdata()
-            this.$message({
-              type: 'success',
-              message: '更新成功'
-            })
-          }).catch(err => {
-            this.tableData[row].members = this.rowMember
-            this.$message({
-              type: 'warning',
-              message: err.response.data.data.members
-            })
-            console.log(err)
+        }).catch(err => {
+          this.tableData[index].members = this.rowMember
+          this.$message({
+            type: 'warning',
+            message: err.response.data.data.members || err.response.data.data.non_field_errors
           })
-        }
-        this.tableData[row].select_show = false
+          console.log(err)
+        })
+        this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.rowMember = JSON.parse(JSON.stringify(index.members))
-        this.tableData[row].select_show = true
+        this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.tableData[index].select_show = true
       }
     },
-    cancel(row, index) {
+    cancel(index, obj) {
       // 点击取消
-      if (index.select_show) {
-        this.tableData[row].members = this.rowMember
-        this.tableData[row].select_show = false
+      if (obj.select_show) {
+        this.tableData[index].members = this.rowMember
+        this.tableData[index].select_show = false
       }
     },
     async fecthdata() {
