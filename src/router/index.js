@@ -171,12 +171,21 @@ export const constantRoutes = [
   {
     path: '/arrange-duty',
     component: Layout,
+    redirect: 'dutyLog',
+    name: '排班管理',
+    meta: { title: '排班管理', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'arrange duty',
-        component: () => import('@/views/form/index'),
+        path: 'arrangeDuty',
+        name: '排班设置',
+        component: () => import('@/views/dutyLog/arrangeDuty'),
         meta: { title: '排班设置', icon: 'form' }
+      },
+      {
+        path: 'dutyLog',
+        name: '排班记录',
+        component: () => import('@/views/dutyLog/dutyLog'),
+        meta: { title: '排班记录', icon: 'form' }
       }
     ]
   },
