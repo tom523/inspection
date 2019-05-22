@@ -185,7 +185,9 @@ export default {
       getTurn().then(response => {
         var turnData = response.data.items
         turnData.map(item => {
-          item.points = item.points.split(',')
+          if (item.points !== '') {
+            item.points = item.points.split(',')
+          }
           item.select_show = false
         })
         this.tableData = turnData
