@@ -35,7 +35,6 @@
             label="类型"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.type }}
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.type"
@@ -49,6 +48,7 @@
                   />
                 </el-select>
               </div>
+              <div v-else>{{ scope.row.type | chooseType }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -122,6 +122,18 @@
 import { getDutyCheck, addDutyCheck, updateDutyCheck, deleteDutyCheck } from '@/api/insp'
 import { getRoleUser } from '@/api/user'
 export default {
+  filters: {
+    chooseType(info) {
+      if (info === 'PRE') {
+        info = '班前检查'
+      } else if (info === 'MID') {
+        info = '班中检查'
+      } else if (info === 'AFT') {
+        info = '班后检查'
+      }
+      return info
+    }
+  },
   data() {
     return {
       types: [{
