@@ -31,23 +31,57 @@
           />
           <el-table-column
             align="center"
-            prop="teams"
             label="值"
-          />
+          >
+            <template slot-scope="scope">{{ scope.row.teams.toString() }}</template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="班次"
           >
             <template slot-scope="scope">
-              <div v-for="item in scope.row.template">
+              <div
+                v-for="item in scope.row.template"
+                :key="item.name"
+                :label="item.name"
+                :value="item.name"
+              >
                 <el-popover trigger="hover" placement="top">
                   <p>班次: {{ item.name }}</p>
                   <p>轮次: {{ item.turns }}</p>
-                  <div slot="reference" class="name-wrapper">
+                  <p>班中检查: {{ item.duty_checks }}
+                  </p><div slot="reference" class="name-wrapper">
                     <el-tag size="medium">{{ item.name }}</el-tag>
                   </div>
                 </el-popover>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="takeover_timedelta"
+            label="交接班区间"
+          />
+          <el-table-column
+            align="center"
+            prop="execute_result"
+            label="状态"
+          />
+          <el-table-column
+            align="center"
+            label="操作"
+            width="180"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="updateConfig(scope.$index, scope.row)"
+              >更新</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="deleteConfig(scope.$index, scope.row)"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,24 +99,25 @@
         /> -->
       </el-col>
     </div>
+    <!--添加排班dialog-->
     <el-dialog
       title="添加排班"
       :visible.sync="addDutyDialog"
-      width="50%"
+      width="80%"
       center
     >
-      <el-form ref="changePasswordForm">
-        <div />
-        <el-form-item label="开始时间">
+      <el-form :inline="true">
+        <el-form-item class="form_item" label="开始时间">
           <el-date-picker
             v-model="start_time"
+            class="form_item_value"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期"
           />
         </el-form-item>
-        <el-form-item label="运转方式">
-          <el-select v-model="desc" placeholder="请选择">
+        <el-form-item style="margin-left: 50px" label="运转方式">
+          <el-select v-model="desc" class="form_item_value" placeholder="请选择">
             <el-option
               v-for="item in descs"
               :key="item.value"
@@ -91,18 +126,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="类型">
-          <el-select v-model="type" placeholder="请选择">
-            <el-option
-              v-for="item in types"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="值">
-          <el-select v-model="teams" placeholder="请选择">
+        <el-form-item class="form_item" label="值">
+          <el-select v-model="teams" class="form_item_value" placeholder="请选择">
             <el-option
               v-for="item in teamsSet"
               :key="item"
@@ -111,17 +136,19 @@
             />
           </el-select>
         </el-form-item>
+      </el-form>
+      <el-form :inline="true">
         <div
           v-for="item in template"
           :key="item.name"
           :label="item.turns"
           :value="item.name"
         >
-          <el-form-item label="班次">
-            <el-input v-model="item.name" style="width: 30%" />
+          <el-form-item label="班次" class="form_item">
+            <el-input v-model="item.name" class="form_item_value" />
           </el-form-item>
-          <el-form-item label="轮次">
-            <el-select v-model="item.turns" multiple placeholder="请选择">
+          <el-form-item label="轮次" class="form_item">
+            <el-select v-model="item.turns" class="form_item_value" multiple placeholder="请选择">
               <el-option
                 v-for="i in turns"
                 :key="i.id"
@@ -130,20 +157,32 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="班中检查" class="form_item">
+            <el-select v-model="item.duty_checks" class="form_item_value" multiple placeholder="请选择">
+              <el-option
+                v-for="i in dutyChecks"
+                :key="i.id"
+                :label="i.name"
+                :value="i.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-button @click="addTamplate">+</el-button>
         </div>
-        <div><el-button @click="addTamplate">+</el-button></div>
-        <el-form-item label="班中检查">
-          <el-select v-model="duty_checks" multiple placeholder="请选择">
+      </el-form>
+      <el-form :inline="true">
+        <el-form-item class="form_item" label="类型">
+          <el-select v-model="type" class="form_item_value" placeholder="请选择">
             <el-option
-              v-for="item in dutyChecks"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+              v-for="item in types"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="交接班区间">
-          <el-select v-model="takeover_timedelta" placeholder="请选择">
+        <el-form-item label="交接班区间" class="form_item">
+          <el-select v-model="takeover_timedelta" class="form_item_value" placeholder="请选择">
             <el-option
               v-for="item in takeoverTimedeltas"
               :key="item.value"
@@ -152,9 +191,11 @@
             />
           </el-select>
         </el-form-item>
-        <el-button @click="cancelConfig">取消</el-button>
-        <el-button type="primary" @click="addDutyConfig">确定</el-button>
       </el-form>
+      <div style="margin-left: 80%">
+        <el-button @click="cancelConfig">取消</el-button>
+        <el-button style="margin-left: 50px" type="primary" @click="addDutyConfig">确定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -165,7 +206,6 @@ import { getTurn, getDutyCheck } from '@/api/insp'
 export default {
   data() {
     return {
-      tableData: [],
       takeoverTimedeltas: [{
         value: 10,
         label: '10分钟'
@@ -204,13 +244,14 @@ export default {
       teams: null,
       takeover_timedelta: null,
       template: [{
-        name: '',
-        turns: ''
+        name: null,
+        turns: null,
+        duty_checks: null
       }],
-      duty_checks: [],
       turns: [],
       dutyChecks: [],
-      teamsSet: []
+      teamsSet: [],
+      rowID: undefined
     }
   },
   created() {
@@ -218,6 +259,38 @@ export default {
     this.fecthSelect()
   },
   methods: {
+    updateConfig(index, obj) {
+      this.rowID = obj.id
+      this.start_time = obj.start_time
+      this.type = obj.type
+      this.teams = obj.teams.toString()
+      this.template = obj.template
+      this.duty_checks = obj.template[0].duty_checks
+      this.takeover_timedelta = obj.takeover_timedelta
+      this.addDutyDialog = true
+    },
+    deleteConfig(index, obj) {
+      this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteDutyLogConfig(obj.id).then(response => {
+          this.tableData.splice(index, 1)
+          this.$message({
+            type: 'success',
+            message: '删除成功！'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     addDutyConfig() {
       console.log(this.template)
       const data = {
@@ -230,13 +303,26 @@ export default {
         template: this.template,
         duty_checks: this.duty_checks
       }
-      addDutyLogConfig(data).then(response => {
-        this.clearDate()
-        this.$message({
-          type: 'success',
-          message: '排班配置成功'
+      if (this.rowID === undefined) {
+        addDutyLogConfig(data).then(response => {
+          this.clearDate()
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: '排班配置成功'
+          })
         })
-      })
+      } else {
+        updateDutyLogConfig(this.rowID, data).then(response => {
+          this.clearDate()
+          this.fetchData()
+          this.rowID === undefined
+          this.$message({
+            type: 'success',
+            message: '更新排班配置成功'
+          })
+        })
+      }
     },
     cancelConfig() {
       this.clearDate()
@@ -246,14 +332,16 @@ export default {
       this.addDutyDialog = true
     },
     addTamplate() {
-      this.template.push({
-        name: '',
-        turns: ''
-      })
+      if (this.template.length < this.desc % 10) {
+        this.template.push({
+          name: '',
+          turns: '',
+          duty_checks: ''
+        })
+      }
     },
     fetchData() {
       getDutyLogConfig().then(response => {
-        debugger
         this.tableData = response.data.items
       })
     },
@@ -307,5 +395,11 @@ export default {
     cursor: pointer;
     justify-content: center;
     display: flex;
-}
+  }
+  .form_item {
+    margin-left: 28px
+  }
+  .form_item_value {
+    width: 300px
+  }
 </style>
