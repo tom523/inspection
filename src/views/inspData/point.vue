@@ -30,9 +30,9 @@
           label="位置"
         >
           <template slot-scope="scope">
-            {{ scope.row.select_show ? '' : scope.row.extra }}
+            {{ scope.row.select_show ? '' : scope.row.extra.location }}
             <div v-if="scope.row.select_show">
-              <el-input v-model="scope.row.extra" />
+              <el-input v-model="scope.row.extra.location" />
             </div>
           </template>
         </el-table-column>

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { getTurn, updateTurn, addTurn, deleteTurn, getPoint } from '@/api/insp'
+import { getTurn, updateTurn, addTurn, deleteTurn, getAllPoint } from '@/api/insp'
 export default {
   data() {
     return {
@@ -194,8 +194,8 @@ export default {
       })
     },
     fecthPoint() {
-      getPoint().then(response => {
-        this.points = response.data.items
+      getAllPoint().then(response => {
+        this.points = response.data
       })
     },
     row_class({ row, rowIndex }) {

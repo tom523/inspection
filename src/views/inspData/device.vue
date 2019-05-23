@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { getDevice, addDevice, updateDevice, deleteDevice, getPoint } from '@/api/insp'
+import { getDevice, addDevice, updateDevice, deleteDevice, getAllPoint } from '@/api/insp'
 import { getRoleUser } from '@/api/user'
 export default {
   data() {
@@ -231,8 +231,8 @@ export default {
       getRoleUser({ role_type__in: 'PROFESSION,PIPE_PROFESSION' }).then(response => {
         this.professions = response.data
       })
-      getPoint().then(response => {
-        this.points = response.data.items
+      getAllPoint().then(response => {
+        this.points = response.data
       })
     },
     row_class({ row, rowIndex }) {

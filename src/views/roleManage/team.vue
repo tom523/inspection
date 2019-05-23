@@ -55,9 +55,10 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="运转类型">
+            label="运转类型"
+          >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.desc}}
+              {{ scope.row.select_show ? '' : scope.row.desc }}
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.desc"
@@ -269,7 +270,7 @@ export default {
     },
     async fecthSelect() {
       // 获取专业
-      const professionData = await getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION' })
+      const professionData = await getRoleUser({ role_type: 'PROFESSION' })
       this.professions = professionData.data
       this.loading = false
       // 获取用户

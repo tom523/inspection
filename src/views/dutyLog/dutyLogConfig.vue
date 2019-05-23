@@ -40,21 +40,22 @@
             label="班次"
           >
             <template slot-scope="scope">
-              <div
-                v-for="item in scope.row.template"
-                :key="item.name"
-                :label="item.name"
-                :value="item.name"
-              >
-                <el-popover trigger="hover" placement="top">
+              <el-popover trigger="hover" placement="top">
+                <div
+                  v-for="item in scope.row.template"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name"
+                >
                   <p>班次: {{ item.name }}</p>
                   <p>轮次: {{ item.turns }}</p>
-                  <p>班中检查: {{ item.duty_checks }}
-                  </p><div slot="reference" class="name-wrapper">
-                    <el-tag size="medium">{{ item.name }}</el-tag>
-                  </div>
-                </el-popover>
-              </div>
+                  <p>班中检查: {{ item.duty_checks }}</p>
+                  <p>----------------------------</p>
+                </div>
+                <div slot="reference" class="name-wrapper">
+                  <el-tag size="medium">班次</el-tag>
+                </div>
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column

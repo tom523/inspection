@@ -225,3 +225,11 @@ export function deleteDutyCheckItem(id) {
     method: 'delete'
   })
 }
+
+// 获取所有巡检点，不分页
+export function getAllPoint() {
+  return request({
+    url: '/inspection/point/get_choices/',
+    method: 'get'
+  })
+}
