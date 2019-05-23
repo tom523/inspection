@@ -135,14 +135,47 @@ export const constantRoutes = [
   },
 
   {
-    path: '/base-data',
+    path: '/inspData',
     component: Layout,
+    redirect: 'inspData',
+    name: '巡检数据',
+    meta: { title: '巡检数据', icon: 'tree' },
     children: [
       {
-        path: 'index',
-        name: 'inspection base data',
-        component: () => import('@/views/form/index'),
+        path: 'point',
+        name: '巡检数据',
+        component: () => import('@/views/inspData/point'),
         meta: { title: '巡检数据', icon: 'form' }
+      },
+      {
+        path: 'device',
+        name: '设备管理',
+        component: () => import('@/views/inspData/device'),
+        meta: { title: '设备管理', icon: 'form' }
+      },
+      {
+        path: 'item',
+        name: '巡检项数据',
+        component: () => import('@/views/inspData/item'),
+        meta: { title: '巡检项数据', icon: 'form' }
+      },
+      {
+        path: 'turn',
+        name: '轮次管理',
+        component: () => import('@/views/inspData/turn'),
+        meta: { title: '轮次管理', icon: 'form' }
+      },
+      {
+        path: 'dutyCheck',
+        name: '班中检查',
+        component: () => import('@/views/inspData/dutyCheck'),
+        meta: { title: '班中检查', icon: 'form' }
+      },
+      {
+        path: 'dutyCheckItem',
+        name: '班中检查项',
+        component: () => import('@/views/inspData/dutyCheckItem'),
+        meta: { title: '班中检查项', icon: 'form' }
       }
     ]
   },
@@ -150,12 +183,21 @@ export const constantRoutes = [
   {
     path: '/arrange-duty',
     component: Layout,
+    redirect: 'dutyLog',
+    name: '排班管理',
+    meta: { title: '排班管理', icon: 'form' },
     children: [
       {
-        path: 'index',
-        name: 'arrange duty',
-        component: () => import('@/views/form/index'),
+        path: 'dutyLogConfig',
+        name: '排班设置',
+        component: () => import('@/views/dutyLog/dutyLogConfig'),
         meta: { title: '排班设置', icon: 'form' }
+      },
+      {
+        path: 'dutyLog',
+        name: '排班记录',
+        component: () => import('@/views/dutyLog/dutyLog'),
+        meta: { title: '排班记录', icon: 'form' }
       }
     ]
   },
@@ -194,9 +236,9 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'arrange duty',
+        name: 'account manage',
         component: () => import('@/views/userManage/index'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '用户管理', icon: 'user' }
       }
     ]
   },

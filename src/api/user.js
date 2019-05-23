@@ -69,7 +69,6 @@ export function getAccountUser(params) {
 
 // 创建用户
 export function addAccountUser(data) {
-  debugger
   return request({
     url: '/account/user/create_user/',
     method: 'post',

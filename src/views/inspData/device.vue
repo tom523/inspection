@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 50px">
+    <div style="margin-top: 10px">
       <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加值</el-button>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加设备</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -11,7 +11,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 25px"
         >
           <el-table-column
             align="center"
@@ -21,8 +21,7 @@
           />
           <el-table-column
             align="center"
-            label="值"
-            width="100"
+            label="名称"
           >
             <template slot-scope="scope">
               {{ scope.row.select_show ? '' : scope.row.name }}
@@ -33,62 +32,41 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="用户"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.members.toString() }}
-              <div v-if="scope.row.select_show">
-                <el-select
-                  v-model="scope.row.members"
-                  style="width: 100%"
-                  multiple
-                >
-                  <el-option
-                    v-for="item in members"
-                    :key="item.id"
-                    :lable="item.id"
-                    :value="item.username"
-                  />
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="运转类型">
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.desc}}
-              <div v-if="scope.row.select_show">
-                <el-select
-                  v-model="scope.row.desc"
-                  style="width: 100%"
-                >
-                  <el-option
-                    v-for="item in descs"
-                    :key="item.value"
-                    :lable="item.lable"
-                    :value="item.value"
-                  />
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
             label="专业"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.access.toString() }}
+              {{ scope.row.select_show ? '' : scope.row.profession }}
               <div v-if="scope.row.select_show">
                 <el-select
-                  v-model="scope.row.access"
+                  v-model="scope.row.profession"
                   style="width: 100%"
-                  multiple
                 >
                   <el-option
                     v-for="item in professions"
                     :key="item.id"
                     :label="item.name"
+                    :value="item.name"
+                  />
+                </el-select>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="巡检点"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.select_show ? '' : scope.row.point }}
+              <div v-if="scope.row.select_show">
+                <el-select
+                  v-model="scope.row.point"
+                  filterable
+                  style="width: 100%"
+                >
+                  <el-option
+                    v-for="item in points"
+                    :key="item.id"
+                    :lable="item.id"
                     :value="item.name"
                   />
                 </el-select>
@@ -114,94 +92,79 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <el-col>
+        <el-pagination
+          style="margin-top: 50px; margin-left: 10%"
+          :current-page="page"
+          :total="total"
+          background
+          prev-text="上一页"
+          next-text="下一页"
+          layout="total, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+        />
+      </el-col>
     </div>
   </div>
 </template>
 
 <script>
-// import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
-
+import { getDevice, addDevice, updateDevice, deleteDevice, getPoint } from '@/api/insp'
+import { getRoleUser } from '@/api/user'
 export default {
   data() {
     return {
-      descs: [{
-        value: '四班三运转',
-        label: '四班三运转'
-      },
-      {
-        value: '五班三运转',
-        label: '五班三运转'
-      },
-      {
-        value: '五班四运转',
-        label: '五班四运转'
-      }],
-      loading: true,
+      loading: false,
       tableData: [],
-      professions: [],
-      rowData: {},
-      members: [],
-      rowMember: [],
-      rowAccess: []
+      page: 1,
+      total: null,
+      professions: null,
+      rowName: null,
+      rowProfession: null,
+      rowPoint: null
     }
   },
   created() {
-    this.fecthdata()
+    this.fetchData()
     this.fecthSelect()
   },
   methods: {
+    handleCurrentChange(index) {
+      this.page = index
+      this.fetchData()
+    },
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
-        obj.members = obj.members.toString()
-        obj.access = obj.access.toString()
         // 新建值
         if (obj.id === undefined) {
-          addRoleUser(obj).then(response => {
-            obj.members = obj.members.split(',')
-            obj.access = obj.access.split(',')
+          addDevice(obj).then(response => {
+            this.fetchData()
             this.$message({
-              type: 'success',
-              message: '添加成功'
+              type: 'sussess',
+              message: '添加设备成功！'
             })
-            this.fecthdata()
           }).catch(err => {
-            this.$message({
-              type: 'warning',
-              message: err.response.data.data.members
-            })
             this.tableData[index].select_show = true
-            // this.tableData.splice(index, 1)
             console.log(err)
           })
         } else {
-          updataRoleUser(obj.id, obj).then(response => {
-            obj.members = obj.members.split(',')
-            // 当专业为空的时候不转成数组
-            if (obj.access !== '') {
-              obj.access = obj.access.split(',')
-            }
-            this.fecthdata()
+          updateDevice(obj.id, obj).then(response => {
+            this.fetchData()
             this.$message({
-              type: 'success',
-              message: '更新成功'
+              type: 'sussess',
+              message: '更新设备成功'
             })
           }).catch(err => {
-            this.tableData[index].members = this.rowMember
-            this.tableData[index].access = this.rowAccess
-            this.$message({
-              type: 'warning',
-              message: err.response.data.data.members
-            })
             console.log(err)
           })
         }
         this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.rowAccess = JSON.parse(JSON.stringify(obj.access))
-        this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.rowName = JSON.parse(JSON.stringify(obj.name))
+        this.rowProfession = JSON.parse(JSON.stringify(obj.profession))
+        this.rowPoint = JSON.parse(JSON.stringify(obj.point))
         this.tableData[index].select_show = true
       }
     },
@@ -211,8 +174,9 @@ export default {
         if (obj.id === undefined) {
           this.tableData.splice(index, 1)
         } else {
-          this.tableData[index].access = this.rowAccess
-          this.tableData[index].members = this.rowMember
+          this.tableData[index].name = this.rowName
+          this.tableData[index].profession = this.rowProfession
+          this.tableData[index].point = this.rowPoint
           this.tableData[index].select_show = false
         }
       } else {
@@ -222,11 +186,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteRoleUser(obj.id).then(response => {
+          deleteDevice(obj.id).then(response => {
             this.tableData.splice(index, 1)
             this.$message({
-              type: 'success',
-              message: '删除成功！'
+              type: 'sussess',
+              message: '删除设备成功'
             })
           }).catch(err => {
             console.log(err)
@@ -242,39 +206,34 @@ export default {
     add_row() {
       // 点击添加
       this.tableData.push({
-        role_type: 'TEAM',
+        is_virtual: true,
         name: '',
-        members: '',
-        access: '',
-        desc: '',
-        role_key: '',
-        access_name: '',
+        profession: '',
+        point: '',
         select_show: true
       })
     },
-    async fecthdata() {
-      // 获取值
-      const teamData = await getRoleUser({ role_type: 'TEAM' })
-      const teamItems = teamData.data
-      teamItems.map(item => {
-        item.select_show = false
-        item.members = item.members.split(',')
-        item.access = item.access.split(',')
-        item.members.pop()
-        item.members.shift()
-        item.access.pop()
-        item.access.shift()
+    fetchData() {
+      getDevice({
+        is_virtual: false,
+        page: this.page
+      }).then(response => {
+        this.page = response.data.page
+        this.total = response.data.count
+        var deviceData = response.data.items
+        deviceData.map(item => {
+          item.select_show = false
+        })
+        this.tableData = deviceData
       })
-      this.tableData = teamItems
     },
-    async fecthSelect() {
-      // 获取专业
-      const professionData = await getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION' })
-      this.professions = professionData.data
-      this.loading = false
-      // 获取用户
-      const membersData = await getAccountUser()
-      this.members = membersData.data.items
+    fecthSelect() {
+      getRoleUser({ role_type__in: 'PROFESSION,PIPE_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+      getPoint().then(response => {
+        this.points = response.data.items
+      })
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

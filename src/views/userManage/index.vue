@@ -101,7 +101,7 @@
           <el-table-column
             align="center"
             label="操作"
-            width="300"
+            width="400"
           >
             <template slot-scope="scope">
               <el-button
@@ -117,6 +117,10 @@
                 size="mini"
                 @click="changePassword(scope.row)"
               >修改密码</el-button>
+              <el-button
+                size="mini"
+                @click="resetPassword(scope.row)"
+              >重置密码</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -211,60 +215,77 @@ export default {
     this.fecthdata()
   },
   methods: {
-    editRowOrConfirm(row, index) {
+    editRowOrConfirm(index, obj) {
       // 点击确定
-      if (this.tableData[row].select_show) {
-        if (index.id === undefined) {
+      if (this.tableData[index].select_show) {
+        if (obj.id === undefined) {
           // 添加用户
           addAccountUser({
-            username: index.username,
-            chname: index.chname,
-            phone: index.phone
+            username: obj.username,
+            chname: obj.chname,
+            phone: obj.phone
           }).then(response => {
+            this.fecthdata()
             this.$message({
               type: 'success',
               message: '添加成功'
             })
           }).catch(err => {
-            this.tableData.splice(row, 1)
+            this.tableData.splice(index, 1)
             console.log(err)
           })
         } else {
           // 更新用户
-          updataAccountUser(index.id, index).then(response => {
+          updataAccountUser(obj.id, obj).then(response => {
+            this.fecthdata()
             this.$message({
               type: 'success',
               message: '更新成功'
             })
           })
         }
-        this.tableData[row].select_show = false
+        this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.rowUsername = JSON.parse(JSON.stringify(index.username))
-        this.rowChname = JSON.parse(JSON.stringify(index.chname))
-        this.rowIsSuperuser = JSON.parse(JSON.stringify(index.is_superuser))
-        this.rowIsStaff = JSON.parse(JSON.stringify(index.is_staff))
-        this.rowPhone = JSON.parse(JSON.stringify(index.phone))
-        this.tableData[row].select_show = true
+        this.rowUsername = JSON.parse(JSON.stringify(obj.username))
+        this.rowChname = JSON.parse(JSON.stringify(obj.chname))
+        this.rowIsSuperuser = JSON.parse(JSON.stringify(obj.is_superuser))
+        this.rowIsStaff = JSON.parse(JSON.stringify(obj.is_staff))
+        this.rowPhone = JSON.parse(JSON.stringify(obj.phone))
+        this.tableData[index].select_show = true
       }
     },
-    deleteRowOrCancel(row, index) {
-      if (this.tableData[row].select_show) {
+    deleteRowOrCancel(index, obj) {
+      if (this.tableData[index].select_show) {
         // 点击取消
-        this.tableData[row].username = this.rowUsername
-        this.tableData[row].chname = this.rowChname
-        this.tableData[row].is_superuser = this.rowIsSuperuser
-        this.tableData[row].is_staff = this.rowIsStaff
-        this.tableData[row].phone = this.rowPhone
-        this.tableData[row].select_show = false
+        if (obj.id === undefined) {
+          this.tableData.splice(index, 1)
+        } else {
+          this.tableData[index].username = this.rowUsername
+          this.tableData[index].chname = this.rowChname
+          this.tableData[index].is_superuser = this.rowIsSuperuser
+          this.tableData[index].is_staff = this.rowIsStaff
+          this.tableData[index].phone = this.rowPhone
+          this.tableData[index].select_show = false
+        }
       } else {
         // 点击删除，删除值
-        deleteAccoutUser(index.id).then(response => {
-          this.tableData.splice(row, 1)
+        this.$confirm('此操作将删除' + obj.username + ',是否继续', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteAccoutUser(obj.id).then(response => {
+            this.tableData.splice(index, 1)
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+          })
+        }).catch(() => {
           this.$message({
-            type: 'success',
-            message: '删除成功'
+            type: 'info',
+            message: '已取消删除'
           })
         })
       }
@@ -296,6 +317,26 @@ export default {
         } else {
           return false
         }
+      })
+    },
+    // 重置密码
+    resetPassword(obj) {
+      this.$confirm('此操作将重置' + obj.username + '的密码,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        modifyPassword(obj.id, { password: '' }).then(response => {
+          this.$message({
+            type: 'success',
+            message: '重置密码成功'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     add_row() {
