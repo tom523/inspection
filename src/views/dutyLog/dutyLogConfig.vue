@@ -65,7 +65,12 @@
           <el-table-column
             align="center"
             prop="execute_result"
-            label="状态"
+            label="执行结果"
+          />
+          <el-table-column
+            align="center"
+            prop="execute_time"
+            label="执行时间"
           />
           <el-table-column
             align="center"
@@ -87,7 +92,7 @@
         </el-table>
       </el-col>
       <el-col>
-        <!-- <el-pagination
+        <el-pagination
           style="margin-top: 50px; margin-left: 10%"
           :current-page="page"
           :total="total"
@@ -96,11 +101,12 @@
           next-text="下一页"
           layout="total, prev, pager, next, jumper"
           @current-change="handleCurrentChange"
-        /> -->
+        />
       </el-col>
     </div>
     <!--添加排班dialog-->
     <el-dialog
+      :before-close="cancelConfig"
       title="添加排班"
       :visible.sync="addDutyDialog"
       width="80%"
@@ -140,8 +146,8 @@
       <el-form :inline="true">
         <div
           v-for="item in template"
-          :key="item.name"
-          :label="item.turns"
+          :key="template.indexOf(item)"
+          :label="item.name"
           :value="item.name"
         >
           <el-form-item label="班次" class="form_item">
@@ -251,7 +257,10 @@ export default {
       turns: [],
       dutyChecks: [],
       teamsSet: [],
-      rowID: undefined
+      rowID: undefined,
+      page: 1,
+      total: null
+
     }
   },
   created() {
@@ -259,6 +268,10 @@ export default {
     this.fecthSelect()
   },
   methods: {
+    handleCurrentChange(index) {
+      this.page = index
+      this.fetchData()
+    },
     updateConfig(index, obj) {
       this.rowID = obj.id
       this.start_time = obj.start_time
@@ -341,7 +354,9 @@ export default {
       }
     },
     fetchData() {
-      getDutyLogConfig().then(response => {
+      getDutyLogConfig({ page: this.page }).then(response => {
+        this.page = response.data.page
+        this.total = response.data.total
         this.tableData = response.data.items
       })
     },
