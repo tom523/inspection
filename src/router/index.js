@@ -164,6 +164,18 @@ export const constantRoutes = [
         name: '轮次管理',
         component: () => import('@/views/inspData/turn'),
         meta: { title: '轮次管理', icon: 'form' }
+      },
+      {
+        path: 'dutyCheck',
+        name: '班中检查',
+        component: () => import('@/views/inspData/dutyCheck'),
+        meta: { title: '班中检查', icon: 'form' }
+      },
+      {
+        path: 'dutyCheckItem',
+        name: '班中检查项',
+        component: () => import('@/views/inspData/dutyCheckItem'),
+        meta: { title: '班中检查项', icon: 'form' }
       }
     ]
   },
@@ -176,9 +188,9 @@ export const constantRoutes = [
     meta: { title: '排班管理', icon: 'form' },
     children: [
       {
-        path: 'arrangeDuty',
+        path: 'dutyLogConfig',
         name: '排班设置',
-        component: () => import('@/views/dutyLog/arrangeDuty'),
+        component: () => import('@/views/dutyLog/dutyLogConfig'),
         meta: { title: '排班设置', icon: 'form' }
       },
       {

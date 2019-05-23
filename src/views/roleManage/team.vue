@@ -55,7 +55,26 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="333"
+            label="运转类型">
+            <template slot-scope="scope">
+              {{ scope.row.select_show ? '' : scope.row.desc}}
+              <div v-if="scope.row.select_show">
+                <el-select
+                  v-model="scope.row.desc"
+                  style="width: 100%"
+                >
+                  <el-option
+                    v-for="item in descs"
+                    :key="item.value"
+                    :lable="item.lable"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
             label="专业"
           >
             <template slot-scope="scope">
@@ -106,6 +125,18 @@ import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUse
 export default {
   data() {
     return {
+      descs: [{
+        value: '四班三运转',
+        label: '四班三运转'
+      },
+      {
+        value: '五班三运转',
+        label: '五班三运转'
+      },
+      {
+        value: '五班四运转',
+        label: '五班四运转'
+      }],
       loading: true,
       tableData: [],
       professions: [],

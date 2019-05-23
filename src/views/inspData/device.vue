@@ -32,7 +32,6 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="333"
             label="专业"
           >
             <template slot-scope="scope">

@@ -155,3 +155,73 @@ export function deleteDevice(id) {
     method: 'delete'
   })
 }
+
+// 获取班中检查
+export function getDutyCheck(params) {
+  return request({
+    url: '/inspection/duty-check/',
+    method: 'get',
+    params
+  })
+}
+
+// 添加班中检查
+export function addDutyCheck(data) {
+  return request({
+    url: '/inspection/duty-check/',
+    method: 'post',
+    data
+  })
+}
+
+// 更新班中检查
+export function updateDutyCheck(id, data) {
+  return request({
+    url: '/inspection/duty-check/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+// 删除班中检查
+export function deleteDutyCheck(id) {
+  return request({
+    url: '/inspection/duty-check/' + id + '/',
+    method: 'delete'
+  })
+}
+
+// 获取班中检查项
+export function getDutyCheckItem(params) {
+  return request({
+    url: '/inspection/duty-check-item/',
+    method: 'get',
+    params
+  })
+}
+
+// 添加班中检查项
+export function addDutyCheckItem(data) {
+  return request({
+    url: '/inspection/duty-check-item/',
+    method: 'post',
+    data
+  })
+}
+
+// 更新班中检查项
+export function updateDutyCheckItem(id, data) {
+  return request({
+    url: '/inspection/duty-check-item/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+// 删除班中检查项
+export function deleteDutyCheckItem(id) {
+  return request({
+    url: '/inspection/duty-check-item/' + id + '/',
+    method: 'delete'
+  })
+}
