@@ -179,6 +179,7 @@ export default {
     addRow() {
       this.tableData.push({
         name: '',
+        extra: { location: '' },
         select_show: true
       })
     },
