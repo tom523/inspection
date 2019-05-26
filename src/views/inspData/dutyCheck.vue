@@ -154,7 +154,9 @@ export default {
       rowName: null,
       rowType: null,
       rowProfession: null,
-      rowDesc: null
+      rowDesc: null,
+      page: 1,
+      total: null
     }
   },
   created() {
@@ -163,6 +165,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
+      this.page = index
       this.fetchData()
     },
     editRowOrConfirm(index, obj) {
@@ -250,6 +253,8 @@ export default {
     },
     fetchData() {
       getDutyCheck().then(response => {
+        this.page = response.data.page
+        this.total = response.data.count
         var dutyCheckData = response.data.items
         dutyCheckData.map(item => {
           item.select_show = false
