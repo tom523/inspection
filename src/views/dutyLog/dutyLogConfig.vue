@@ -124,12 +124,12 @@
           />
         </el-form-item>
         <el-form-item style="margin-left: 50px" label="运转方式">
-          <el-select v-model="desc" class="form_item_value" placeholder="请选择">
+          <el-select v-model="operation" class="form_item_value" placeholder="请选择">
             <el-option
-              v-for="item in descs"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in operationWay"
+              :key="item.id"
+              :label="item.name"
+              :value="item"
             />
           </el-select>
         </el-form-item>
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet } from '@/api/duty'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay } from '@/api/duty'
 import { getTurn, getDutyCheck } from '@/api/insp'
 export default {
   data() {
@@ -229,19 +229,6 @@ export default {
         value: '7*24',
         label: '7*24'
       }],
-      desc: '',
-      descs: [{
-        value: 43,
-        label: '四班三运转'
-      },
-      {
-        value: 53,
-        label: '五班三运转'
-      },
-      {
-        value: 54,
-        label: '五班四运转'
-      }],
       loading: false,
       tableData: [],
       addDutyDialog: false,
@@ -260,8 +247,9 @@ export default {
       teamsSet: [],
       rowID: undefined,
       page: 1,
-      total: null
-
+      total: null,
+      operation: null,
+      operationWay: null
     }
   },
   created() {
@@ -306,11 +294,10 @@ export default {
       })
     },
     addDutyConfig() {
-      console.log(this.template)
       const data = {
         teams: this.teams,
         start_time: this.start_time,
-        continuous: this.desc % 10,
+        continuous: this.operation.running_count,
         type: this.type,
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
@@ -370,6 +357,9 @@ export default {
       })
       getTeamSet().then(response => {
         this.teamsSet = response.data
+      })
+      getDutyLogOperationWay().then(response => {
+        this.operationWay = response.data.items
       })
     },
     clearDate() {

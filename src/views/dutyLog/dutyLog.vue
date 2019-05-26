@@ -131,7 +131,6 @@ export default {
           item.check_time = JSON.parse(item.check_time)
         })
         this.tableData = dutyLogData
-        debugger
       })
     },
     row_class({ row, rowIndex }) {

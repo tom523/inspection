@@ -77,3 +77,11 @@ export function getTeamSet() {
     method: 'get'
   })
 }
+
+// 获取排班运转方式
+export function getDutyLogOperationWay() {
+  return request({
+    url: '/duty-log/operation-way/',
+    method: 'get'
+  })
+}

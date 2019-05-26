@@ -66,9 +66,9 @@
                 >
                   <el-option
                     v-for="item in descs"
-                    :key="item.value"
-                    :lable="item.lable"
-                    :value="item.value"
+                    :key="item.id"
+                    :lable="item.name"
+                    :value="item.name"
                   />
                 </el-select>
               </div>
@@ -122,22 +122,12 @@
 <script>
 // import { getList } from '@/api/table'
 import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { getDutyLogOperationWay } from '@/api/duty'
 
 export default {
   data() {
     return {
-      descs: [{
-        value: '四班三运转',
-        label: '四班三运转'
-      },
-      {
-        value: '五班三运转',
-        label: '五班三运转'
-      },
-      {
-        value: '五班四运转',
-        label: '五班四运转'
-      }],
+      descs: [],
       loading: true,
       tableData: [],
       professions: [],
@@ -276,6 +266,8 @@ export default {
       // 获取用户
       const membersData = await getAccountUser()
       this.members = membersData.data.items
+      const descData = await getDutyLogOperationWay()
+      this.descs = descData.data.items
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
