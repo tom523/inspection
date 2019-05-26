@@ -101,12 +101,12 @@ export default {
     }
   },
   created() {
-    this.fetchData(this.page)
+    this.fetchData()
   },
   methods: {
     handleCurrentChange(index) {
       this.page = index
-      this.fetchData(this.page)
+      this.fetchData()
     },
     editRowOrConfirm(index, obj) {
       // 点击确定
@@ -183,8 +183,8 @@ export default {
         select_show: true
       })
     },
-    fetchData(page) {
-      getPoint({ page: page }).then(response => {
+    fetchData() {
+      getPoint({ page: this.page }).then(response => {
         var pointData = response.data.items
         this.total = response.data.count
         this.page = response.data.page
@@ -204,7 +204,7 @@ export default {
           type: 'success',
           message: '导入数据成功！'
         })
-        this.fetchData(this.page)
+        this.fetchData()
         this.loading = false
       }).catch(err => {
         this.loading = false
