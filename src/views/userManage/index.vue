@@ -45,50 +45,6 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="超级管理员"
-            width="100"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.is_superuser | chooseType }}
-              <div v-if="scope.row.select_show && scope.row.id">
-                <el-select
-                  v-model="scope.row.is_superuser"
-                  width="100%"
-                >
-                  <el-option
-                    v-for="item in userType"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="管理员"
-            width="100"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.is_staff | chooseType }}
-              <div v-if="scope.row.select_show && scope.row.id">
-                <el-select
-                  v-model="scope.row.is_staff"
-                  width="100%"
-                >
-                  <el-option
-                    v-for="item in userType"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
             label="手机号码"
           >
             <template slot-scope="scope">
@@ -150,16 +106,6 @@
 <script>
 import { getAccountUser, addAccountUser, updataAccountUser, deleteAccoutUser, modifyPassword } from '@/api/user'
 export default {
-  filters: {
-    chooseType(info) {
-      if (info === true) {
-        info = '是'
-      } else if (info === false) {
-        info = '否'
-      }
-      return info
-    }
-  },
   data() {
     var checkCnName = (rule, value, callback) => {
       if (!value) {
@@ -176,13 +122,6 @@ export default {
       }
     }
     return {
-      userType: [{
-        value: true,
-        label: '是'
-      }, {
-        value: false,
-        label: '否'
-      }],
       rules: {
         username: [
           { validator: checkCnName, trigger: 'blur' }
