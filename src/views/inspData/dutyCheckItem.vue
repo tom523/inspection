@@ -98,7 +98,9 @@ export default {
       tableData: [],
       dutyChecks: null,
       rowName: null,
-      rowDutyCheck: null
+      rowDutyCheck: null,
+      page: 1,
+      total: null
     }
   },
   created() {
@@ -107,6 +109,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
+      this.page = index
       this.fetchData()
     },
     editRowOrConfirm(index, obj) {
@@ -187,6 +190,8 @@ export default {
     },
     fetchData() {
       getDutyCheckItem().then(response => {
+        this.page = response.data.page
+        this.total = response.data.count
         var dutyCheckData = response.data.items
         dutyCheckData.map(item => {
           item.select_show = false
