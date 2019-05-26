@@ -76,6 +76,28 @@
           </el-table-column>
           <el-table-column
             align="center"
+            label="绑定专业"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row.select_show && scope.row.role_type === 'REVIEW_PROFESSION'">
+                <el-select
+                  v-model="scope.row.access"
+                  multiple
+                  style="width=100"
+                >
+                  <el-option
+                    v-for="item in professions"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.name"
+                  />
+                </el-select>
+              </div>
+              <div v-else>{{ scope.row.role_type !== 'REVIEW_PROFESSION' ? '--' : scope.row.access.toString() }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
             label="用户"
           >
             <template slot-scope="scope">
@@ -172,7 +194,8 @@ export default {
       }],
       tableData: [],
       rowMember: [],
-      members: []
+      members: [],
+      professions: []
     }
   },
   created() {
@@ -184,6 +207,7 @@ export default {
       // 点击确定
       if (this.tableData[index].select_show) {
         obj.members = obj.members.toString()
+        obj.access = obj.access.toString()
         // 新建专业
         if (obj.id === undefined) {
           addRoleUser(obj).then(response => {
@@ -279,9 +303,13 @@ export default {
       data.map(item => {
         item.select_show = false
         item.members = item.members.split(',')
+        item.access = item.access.split(',')
         item.members.pop()
         item.members.shift()
+        item.access.pop()
+        item.access.shift()
       })
+      this.professions = data.filter(item => item.role_type === 'PROFESSION')
       this.tableData = data
       this.loading = false
     },
