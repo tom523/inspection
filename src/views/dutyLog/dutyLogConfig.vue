@@ -258,6 +258,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
+      debugger
       this.page = index
       this.fetchData()
     },
@@ -344,7 +345,7 @@ export default {
     fetchData() {
       getDutyLogConfig({ page: this.page }).then(response => {
         this.page = response.data.page
-        this.total = response.data.total
+        this.total = response.data.count
         this.tableData = response.data.items
       })
     },
