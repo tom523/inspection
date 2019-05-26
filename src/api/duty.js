@@ -85,3 +85,12 @@ export function getDutyLogOperationWay() {
     method: 'get'
   })
 }
+
+// 新建排班运转方式
+export function addDutyLogOperationWay(data) {
+  return request({
+    url: '/duty-log/operation-way/',
+    method: 'post',
+    data
+  })
+}
