@@ -55,6 +55,27 @@
           </el-table-column>
           <el-table-column
             align="center"
+            label="巡检频率"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row.select_show && scope.row.role_type !== 'PROFESSION'">
+                <el-select
+                  v-model="scope.row.desc"
+                  style="width=100"
+                >
+                  <el-option
+                    v-for="item in frequency"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+              <div v-else>{{ scope.row.role_type === 'PROFESSION' ? '--' : scope.row.desc | chooseFrequency }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
             label="用户"
           >
             <template slot-scope="scope">
@@ -113,10 +134,31 @@ export default {
         info = '管线专业'
       }
       return info
+    },
+    chooseFrequency: function(info) {
+      if (info === 'WE') {
+        info = '每周'
+      } else if (info === 'MO') {
+        info = '每月'
+      } else if (info === 'QU') {
+        info = '每季度'
+      }
+      return info
     }
   },
   data() {
     return {
+      frequency: [{
+        value: 'WE',
+        label: '每周'
+      },
+      {
+        value: 'MO',
+        label: '每月'
+      }, {
+        value: 'QU',
+        label: '每季度'
+      }],
       loading: true,
       professionType: [{
         value: 'PROFESSION',
@@ -169,7 +211,7 @@ export default {
               message: '更新成功'
             })
           }).catch(err => {
-            this.tableData.splice(index, 1)
+            this.tableData[index].select_show = true
             this.$message({
               type: 'warning',
               message: err.response.data.data.members
