@@ -94,3 +94,21 @@ export function addDutyLogOperationWay(data) {
     data
   })
 }
+
+// 生成复检巡检记录
+export function genLogByFrequencyREview(data) {
+  return request({
+    url: 'inspection-log/turn-log/create_log_for_frequency_review/',
+    method: 'post',
+    data
+  })
+}
+
+// 生成管线巡检记录
+export function genLogByFrequencyPipe(data) {
+  return request({
+    url: 'inspection-log/turn-log/create_log_for_frequency_pipe/',
+    method: 'post',
+    data
+  })
+}

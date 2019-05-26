@@ -22,7 +22,6 @@
           <el-table-column
             align="center"
             label="轮次"
-            width="100"
           >
             <template slot-scope="scope">
               {{ scope.row.select_show ? '' : scope.row.name }}

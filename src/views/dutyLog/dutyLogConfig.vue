@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
-      <el-button type="primary">生成管线/复检巡检记录</el-button>
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="addDuty">+ 添加排班</el-button>
+      <el-col class="el-table-add-row">
+        <el-button type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
+        <el-button type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
+        <el-button type="primary" @click="addDuty">+ 添加排班</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -205,12 +206,41 @@
         <el-button style="margin-left: 50px" type="primary" @click="addDutyConfig">确定</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      width="40%"
+      :before-close="cancelConfig"
+      :visible.sync="generateLogDialog"
+    >
+      <el-form v-model="generateData">
+        <el-form-item label="是否生成本周记录">
+          <el-radio-group v-model="generateData.raise_time">
+            <el-radio label="true">是</el-radio>
+            <el-radio label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="专业">
+          <el-select
+            v-model="generateData.profession_id"
+            style="width: 80%"
+          >
+            <el-option
+              v-for="item in professions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <el-button style="margin-left: 80%" type="primary" @click="generateLogByFrequency">确定</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay } from '@/api/duty'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, genLogByFrequencyREview, genLogByFrequencyPipe } from '@/api/duty'
 import { getTurn, getDutyCheck } from '@/api/insp'
+import { getRoleUser } from '@/api/user'
 export default {
   data() {
     return {
@@ -250,7 +280,13 @@ export default {
       page: 1,
       total: null,
       operation: null,
-      operationWay: null
+      operationWay: null,
+      generateLogDialog: false,
+      generateData: {
+        raise_time: null,
+        profession_id: null
+      },
+      professions: []
     }
   },
   created() {
@@ -258,10 +294,12 @@ export default {
     this.fecthSelect()
   },
   methods: {
+    // 翻页
     handleCurrentChange(index) {
       this.page = index
       this.fetchData()
     },
+    // 更新
     updateConfig(index, obj) {
       this.rowID = obj.id
       this.start_time = obj.start_time
@@ -272,6 +310,7 @@ export default {
       this.takeover_timedelta = obj.takeover_timedelta
       this.addDutyDialog = true
     },
+    // 删除
     deleteConfig(index, obj) {
       this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
         confirmButtonText: '确定',
@@ -293,6 +332,23 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 取消添加排班
+    cancelConfig() {
+      this.clearDate()
+    },
+    // 添加排班
+    addDuty() {
+      this.addDutyDialog = true
+    },
+    addTamplate() {
+      if (this.template.length < this.operation) {
+        this.template.push({
+          name: '',
+          turns: '',
+          duty_checks: ''
+        })
+      }
     },
     addDutyConfig() {
       const data = {
@@ -326,22 +382,7 @@ export default {
         })
       }
     },
-    cancelConfig() {
-      this.clearDate()
-    },
-    addDuty() {
-      // 点击添加
-      this.addDutyDialog = true
-    },
-    addTamplate() {
-      if (this.template.length < this.operation) {
-        this.template.push({
-          name: '',
-          turns: '',
-          duty_checks: ''
-        })
-      }
-    },
+    // 获取表格
     fetchData() {
       getDutyLogConfig({ page: this.page }).then(response => {
         this.page = response.data.page
@@ -349,6 +390,7 @@ export default {
         this.tableData = response.data.items
       })
     },
+    // 获取选择框数据
     fecthSelect() {
       getTurn().then(response => {
         this.turns = response.data.items
@@ -363,6 +405,7 @@ export default {
         this.operationWay = response.data.items
       })
     },
+    // 清空表单
     clearDate() {
       this.teams = null
       this.start_time = null
@@ -372,6 +415,47 @@ export default {
       this.template = [{ name: '', turns: '' }]
       this.duty_checks = null
       this.addDutyDialog = false
+      this.generateData = [{ raise_time: null, profession_id: null }]
+      this.generateLogDialog = false
+    },
+    // 生成复检巡检记录
+    generateLogReview() {
+      this.generateLogDialog = true
+      getRoleUser({ role_type: 'REVIEW_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+    },
+    // 生成管线巡检记录
+    generateLogPipe() {
+      this.generateLogDialog = true
+      getRoleUser({ role_type: 'PIPE_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+    },
+    generateLogByFrequency() {
+      console.log(this.generateData)
+      debugger
+      if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
+        genLogByFrequencyREview(this.generateData).then(response => {
+          this.generateLogDialog = false
+          this.$message({
+            type: 'success',
+            message: '生成复检巡检记录成功！'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
+        genLogByFrequencyPipe(this.generateData).then(response => {
+          this.generateLogDialog = false
+          this.$message({
+            type: 'success',
+            message: '生成管线巡检记录成功！'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
@@ -394,10 +478,9 @@ export default {
   .el-table-add-row {
     margin-top: 5px;
     width: 10%;
-    margin-left: 80%;
+    margin-left: 70%;
     margin-right: auto;
     height: 40px;
-    border: 1px dashed #c1c1cd;
     border-radius: 3px;
     cursor: pointer;
     justify-content: center;
