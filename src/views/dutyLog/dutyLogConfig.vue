@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
+      <el-button type="primary">生成管线/复检巡检记录</el-button>
       <el-col>
         <el-button class="el-table-add-row" type="primary" @click="addDuty">+ 添加排班</el-button>
       </el-col>
@@ -129,7 +130,7 @@
               v-for="item in operationWay"
               :key="item.id"
               :label="item.name"
-              :value="item"
+              :value="item.running_count"
             />
           </el-select>
         </el-form-item>
@@ -258,7 +259,6 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      debugger
       this.page = index
       this.fetchData()
     },
@@ -334,7 +334,7 @@ export default {
       this.addDutyDialog = true
     },
     addTamplate() {
-      if (this.template.length < this.desc % 10) {
+      if (this.template.length < this.operation) {
         this.template.push({
           name: '',
           turns: '',
@@ -366,7 +366,7 @@ export default {
     clearDate() {
       this.teams = null
       this.start_time = null
-      this.desc = null
+      this.operation = null
       this.type = null
       this.takeover_timedelta = null
       this.template = [{ name: '', turns: '' }]

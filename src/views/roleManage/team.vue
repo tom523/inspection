@@ -158,6 +158,7 @@ export default {
       members: [],
       rowMember: [],
       rowAccess: [],
+      rowDsec: null,
       addDescDialog: false,
       newDesc: {
         name: '',
@@ -222,6 +223,7 @@ export default {
         // 点击编辑
         this.rowAccess = JSON.parse(JSON.stringify(obj.access))
         this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.rowDsec = JSON.parse(JSON.stringify(obj.desc))
         this.tableData[index].select_show = true
       }
     },
@@ -233,6 +235,7 @@ export default {
         } else {
           this.tableData[index].access = this.rowAccess
           this.tableData[index].members = this.rowMember
+          this.tableData[index].desc = this.rowDsec
           this.tableData[index].select_show = false
         }
       } else {
