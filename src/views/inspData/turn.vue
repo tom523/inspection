@@ -112,8 +112,10 @@ export default {
           }).catch(err => {
             this.$message({
               type: 'warning',
-              message: err.response.data.data.members
+              message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
+            obj.points = obj.points.split(',')
+            this.tableData[index].select_show = true
             console.log(err)
           })
         } else {
