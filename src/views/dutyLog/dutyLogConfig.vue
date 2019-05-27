@@ -128,10 +128,10 @@
         <el-form-item style="margin-left: 50px" label="运转方式">
           <el-select v-model="operation" class="form_item_value" placeholder="请选择">
             <el-option
-              v-for="item in operationWay"
+              v-for="(item, index) in operationWay"
               :key="item.id"
               :label="item.name"
-              :value="item.running_count"
+              :value="index"
             />
           </el-select>
         </el-form-item>
@@ -280,7 +280,7 @@ export default {
       page: 1,
       total: null,
       operation: null,
-      operationWay: null,
+      operationWay: [],
       generateLogDialog: false,
       generateData: {
         raise_time: null,
@@ -342,7 +342,7 @@ export default {
       this.addDutyDialog = true
     },
     addTamplate() {
-      if (this.template.length < this.operation) {
+      if (this.template.length < this.operationWay[this.operation].running_count) {
         this.template.push({
           name: '',
           turns: '',
@@ -354,7 +354,7 @@ export default {
       const data = {
         teams: this.teams,
         start_time: this.start_time,
-        continuous: this.operation.running_count,
+        continuous: this.operationWay[this.operation].running_count,
         type: this.type,
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
