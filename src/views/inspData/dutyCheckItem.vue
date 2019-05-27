@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 10px">
       <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加班中检查</el-button>
+        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加班中检查项</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -43,7 +43,7 @@
                 >
                   <el-option
                     v-for="item in dutyChecks"
-                    :key="item.id"
+                    :key="item.name"
                     :label="item.name"
                     :value="item.id"
                   />
@@ -193,6 +193,7 @@ export default {
         this.page = response.data.page
         this.total = response.data.count
         var dutyCheckData = response.data.items
+        debugger
         dutyCheckData.map(item => {
           item.select_show = false
         })
