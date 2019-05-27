@@ -83,6 +83,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                disabled
                 @click="updateConfig(scope.$index, scope.row)"
               >更新</el-button>
               <el-button
@@ -190,6 +191,9 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="连班天数" class="form_item">
+          <el-input v-model="continuous" class="form_item_value" />
+        </el-form-item>
         <el-form-item label="交接班区间" class="form_item">
           <el-select v-model="takeover_timedelta" class="form_item_value" placeholder="请选择">
             <el-option
@@ -238,8 +242,8 @@
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, genLogByFrequencyREview, genLogByFrequencyPipe } from '@/api/duty'
-import { getTurn, getDutyCheck } from '@/api/insp'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, genLogByFrequencyREview, genLogByFrequencyPipe, dutyCheckGetChoices } from '@/api/duty'
+import { getTurn } from '@/api/insp'
 import { getRoleUser } from '@/api/user'
 export default {
   data() {
@@ -309,6 +313,7 @@ export default {
       this.duty_checks = obj.template[0].duty_checks
       this.takeover_timedelta = obj.takeover_timedelta
       this.addDutyDialog = true
+      this.continuous = obj.continuous
     },
     // 删除
     deleteConfig(index, obj) {
@@ -354,7 +359,7 @@ export default {
       const data = {
         teams: this.teams,
         start_time: this.start_time,
-        continuous: this.operationWay[this.operation].running_count,
+        continuous: this.continuous,
         type: this.type,
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
@@ -395,8 +400,8 @@ export default {
       getTurn().then(response => {
         this.turns = response.data.items
       })
-      getDutyCheck().then(response => {
-        this.dutyChecks = response.data.items
+      dutyCheckGetChoices().then(response => {
+        this.dutyChecks = response
       })
       getTeamSet().then(response => {
         this.teamsSet = response.data

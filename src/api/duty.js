@@ -112,3 +112,11 @@ export function genLogByFrequencyPipe(data) {
     data
   })
 }
+
+// 获取班中检查
+export function dutyCheckGetChoices() {
+  return request({
+    url: '/inspection/duty-check/get_choices/',
+    method: 'get'
+  })
+}
