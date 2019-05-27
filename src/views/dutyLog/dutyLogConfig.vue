@@ -112,7 +112,7 @@
       :before-close="cancelConfig"
       title="添加排班"
       :visible.sync="addDutyDialog"
-      width="80%"
+      width="88%"
       center
     >
       <el-form :inline="true">
@@ -212,7 +212,7 @@
       :visible.sync="generateLogDialog"
     >
       <el-form v-model="generateData">
-        <el-form-item label="是否生成本周记录">
+        <el-form-item label="是否生成本周、月、季记录">
           <el-radio-group v-model="generateData.raise_time">
             <el-radio label="true">是</el-radio>
             <el-radio label="false">否</el-radio>
@@ -434,10 +434,10 @@ export default {
     },
     generateLogByFrequency() {
       console.log(this.generateData)
-      debugger
       if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
         genLogByFrequencyREview(this.generateData).then(response => {
           this.generateLogDialog = false
+          this.clearDate()
           this.$message({
             type: 'success',
             message: '生成复检巡检记录成功！'
@@ -448,6 +448,7 @@ export default {
       } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
         genLogByFrequencyPipe(this.generateData).then(response => {
           this.generateLogDialog = false
+          this.clearDate()
           this.$message({
             type: 'success',
             message: '生成管线巡检记录成功！'
@@ -490,6 +491,6 @@ export default {
     margin-left: 28px
   }
   .form_item_value {
-    width: 300px
+    width: 280px
   }
 </style>

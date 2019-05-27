@@ -1,8 +1,9 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加值</el-button>
+      <el-col class="el-table-add-row">
+        <el-button type="primary" @click="add_row">+ 添加值</el-button>
+        <el-button type="primary" @click="addDesc">新建运转类型</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -70,9 +71,6 @@
                     :lable="item.name"
                     :value="item.name"
                   />
-                  <div style="margin-left: 70%">
-                    <el-button size="mini" type="primary" @click="addDesc">新建</el-button>
-                  </div>
                 </el-select>
               </div>
             </template>
@@ -150,7 +148,7 @@ import { getDutyLogOperationWay, addDutyLogOperationWay } from '@/api/duty'
 export default {
   data() {
     return {
-      descs: [],
+      descs: [{}],
       loading: true,
       tableData: [],
       professions: [],
@@ -308,6 +306,11 @@ export default {
       addDutyLogOperationWay(this.newDesc).then(response => {
         this.addDescDialog = false
         this.fecthSelect()
+        this.newDesc = {
+          name: '',
+          team_count: null,
+          running_count: null
+        }
         this.$message({
           type: 'success',
           message: '新建运转类型成功！'
@@ -335,11 +338,9 @@ export default {
   .el-table-add-row {
     margin-top: 5px;
     width: 10%;
-    margin-left: 80%;
+    margin-left: 75%;
     margin-right: auto;
     height: 40px;
-    border: 1px dashed #c1c1cd;
-    border-radius: 3px;
     cursor: pointer;
     justify-content: center;
     display: flex;
