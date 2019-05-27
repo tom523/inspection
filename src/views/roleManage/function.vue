@@ -123,7 +123,7 @@ export default {
           this.tableData[index].members = this.rowMember
           this.$message({
             type: 'warning',
-            message: err.response.data.data.members || err.response.data.data.non_field_errors
+            message: err.response.data.data.members || err.response.data.data.non_field_errors || err.response.data.data.detail
           })
           console.log(err)
         })
