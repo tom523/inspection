@@ -1,11 +1,9 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 10px">
-      <el-col class="el-table-add-row">
-        <el-button type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
-        <el-button type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
-        <el-button type="primary" @click="addDuty">+ 添加排班</el-button>
-      </el-col>
+    <div>
+      <el-button style="margin-left: 60%" type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
+      <el-button type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
+      <el-button type="primary" @click="addDuty">+ 添加排班</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -480,17 +478,6 @@ export default {
 
   .el-table .success-row {
     background: #f0f9eb;
-  }
-  .el-table-add-row {
-    margin-top: 5px;
-    width: 10%;
-    margin-left: 70%;
-    margin-right: auto;
-    height: 40px;
-    border-radius: 3px;
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
   }
   .form_item {
     margin-left: 28px
