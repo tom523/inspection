@@ -145,6 +145,10 @@ export default {
               message: '添加设备成功！'
             })
           }).catch(err => {
+            this.$message({
+              type: 'warning',
+              message: err.response.data.data.name || err.response.data.data.point
+            })
             this.tableData[index].select_show = true
             console.log(err)
           })
