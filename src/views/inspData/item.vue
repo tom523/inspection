@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 40px">
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加巡检点</el-button>
-      </el-col>
+    <div style="margin-top: 10px">
+      <el-button style="margin-left: 85%" type="primary" @click="add_row">+ 添加巡检点项</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -72,15 +70,49 @@
             </template>
           </el-table-column>
           <el-table-column
+          align="center"
+          label="巡检点">
+            <template slot-scope="scope">
+              <div v-if="scope.row.select_show">
+                <el-select
+                width="100"
+                v-model = "scope.row.point">
+                  <el-option
+                  v-for="item in points"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"/>
+                </el-select>
+              </div>
+              <div v-else>{{ scope.row.point }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+          align="center"
+          label="设备">
+            <template slot-scope="scope">
+              <div v-if="scope.row.select_show">
+                <el-select filterable v-model="scope.row.device">
+                  <el-option
+                  v-for="item in devices"
+                  :key="item.id"
+                  :label="item.display_name"
+                  :value="item.id"/>
+                </el-select>
+              </div>
+              <div v-else>{{ scope.row.device }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
             align="center"
             label="阈值"
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.extra.threshold }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.type !== '普通巡检项'">
                 <el-input v-model="scope.row.extra.threshold" />
               </div>
+              <div v-else>{{ scope.row.extra.threshold }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -89,10 +121,10 @@
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.extra.comparisonOperator }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.type !== '普通巡检项'">
                 <el-input v-model="scope.row.extra.comparisonOperator" />
               </div>
+              <div v-else>{{ scope.row.extra.comparisonOperator }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -101,10 +133,10 @@
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.extra.cnUnit }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.type !== '普通巡检项'">
                 <el-input v-model="scope.row.extra.cnUnit" />
               </div>
+              <div v-else>{{ scope.row.extra.cnUnit }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -113,10 +145,10 @@
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.extra.symbolUnit }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.type !== '普通巡检项'">
                 <el-input v-model="scope.row.extra.symbolUnit" />
               </div>
+              <div v-else>{{ scope.row.extra.symbolUnit }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -155,43 +187,47 @@
 </template>
 
 <script>
-import { getItem, addItem, updateItem, deleteItem } from '@/api/insp'
+import { getItem, addItem, updateItem, deleteItem, getAllPoint, getAllDevice } from '@/api/insp'
 import { getRoleUser } from '@/api/user'
 export default {
   data() {
     return {
       types: [{
-        value: 'NOR',
-        label: 'NOR'
+        value: '普通巡检项',
+        label: '普通巡检项'
       }, {
-        value: 'TEM',
-        label: 'TEM'
+        value: '温度测量项',
+        label: '温度测量项'
       }, {
-        value: 'OTH',
-        label: 'OTH'
+        value: '其他测量项',
+        label: '其他测量项'
       }],
       loading: false,
       tableData: [],
       total: null,
       page: 1,
       professions: [],
+      points: [],
+      devices: [],
       rowName: null,
       rowProfesson: null,
       rowType: null,
       rowThreshold: null,
       rowComparisonOperator: null,
       rowCnUnit: null,
-      rowSymolUnit: null
+      rowSymolUnit: null,
+      rowPoint: null,
+      rowDevice: null
     }
   },
   created() {
     this.fetchData()
-    this.fetchProfession()
+    this.fetchSelect()
   },
   methods: {
     handleCurrentChange(index) {
       this.page = index
-      this.fetchData(this.page)
+      this.fetchData()
     },
     editRowOrConfirm(index, obj) {
       // 点击确定
@@ -227,6 +263,8 @@ export default {
         this.rowComparisonOperator = JSON.parse(JSON.stringify(obj.extra.comparisonOperator))
         this.rowCnUnit = JSON.parse(JSON.stringify(obj.extra.cnUnit))
         this.rowSymolUnit = JSON.parse(JSON.stringify(obj.extra.symbolUnit))
+        this.rowPoint = JSON.parse(JSON.stringify(obj.point))
+        this.rowDevice = JSON.parse(JSON.stringify(obj.device))
         this.tableData[index].select_show = true
       }
     },
@@ -243,6 +281,8 @@ export default {
           this.tableData[index].extra.comparisonOperator = this.rowComparisonOperator
           this.tableData[index].extra.cnUnit = this.rowCnUnit
           this.tableData[index].extra.symbolUnit = this.rowSymolUnit
+          this.tableData[index].point = this.rowPoint
+          this.tableData[index].device = this.rowDevice
           this.tableData[index].select_show = false
         }
       } else {
@@ -271,10 +311,21 @@ export default {
     },
     // 点击添加
     add_row() {
-
+      this.tableData.push({
+        name: '',
+        profession: '',
+        type: '',
+        extra: {
+          threshold: '-',
+          comparisonOperator: '-',
+          cnUnit: '-',
+          symbolUnit: '-'
+        },
+        select_show: true
+      })
     },
-    fetchData(page) {
-      getItem({ page: page }).then(response => {
+    fetchData() {
+      getItem({ page: this.page }).then(response => {
         var itemData = response.data.items
         this.total = response.data.count
         this.page = response.data.page
@@ -284,9 +335,15 @@ export default {
         this.tableData = itemData
       })
     },
-    fetchProfession() {
+    fetchSelect() {
       getRoleUser({ role_type: 'PROFESSION' }).then(response => {
         this.professions = response.data
+      })
+      getAllPoint().then(response => {
+        this.points = response.data
+      })
+      getAllDevice().then(response => {
+        this.devices = response.data
       })
     },
     row_class({ row, rowIndex }) {

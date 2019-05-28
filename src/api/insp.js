@@ -233,3 +233,11 @@ export function getAllPoint() {
     method: 'get'
   })
 }
+
+// 获取所有设备，不分页
+export function getAllDevice() {
+  return request({
+    url: '/inspection/device/get_choices/',
+    method: 'get'
+  })
+}

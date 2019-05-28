@@ -208,6 +208,10 @@ export default {
         this.loading = false
       }).catch(err => {
         this.loading = false
+        this.$message({
+          type: 'warning',
+          message: err.response.data[0]
+        })
         console.log(err)
       })
     },
