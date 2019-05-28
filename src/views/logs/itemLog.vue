@@ -34,13 +34,19 @@
           <el-table-column
             align="center"
             label="巡检点"
-            prop="point"
-          />
+          >
+            <template slot-scope="scope">
+              {{ points.filter(item => item.id === scope.row.point)[0].name }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="设备"
-            prop="device"
-          />
+          >
+            <template slot-scope="scope">
+              {{ devices.filter(item => item.id === scope.row.device)[0].name }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="阈值"
@@ -96,10 +102,12 @@
 </template>
 
 <script>
-import { getItem } from '@/api/insp'
+import { getItem, getAllPoint, getAllDevice } from '@/api/insp'
 export default {
   data() {
     return {
+      points: [],
+      devices: [],
       tableData: [],
       total: null,
       page: 1
@@ -119,6 +127,14 @@ export default {
         this.tableData = response.data.items
         this.total = response.data.count
         this.page = response.data.page
+      })
+    },
+    fetchSelect() {
+      getAllPoint().then(response => {
+        this.points = response.data
+      })
+      getAllDevice().then(response => {
+        this.devices = response.data
       })
     },
     row_class({ row, rowIndex }) {

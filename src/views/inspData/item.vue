@@ -346,7 +346,6 @@ export default {
       })
       getAllPoint().then(response => {
         this.points = response.data
-        debugger
       })
       getAllDevice().then(response => {
         this.devices = response.data
