@@ -125,12 +125,12 @@
           />
         </el-form-item>
         <el-form-item style="margin-left: 50px" label="运转方式">
-          <el-select v-model="operation" class="form_item_value" placeholder="请选择">
+          <el-select v-model="operation" class="form_item_value" placeholder="请选择" @change="addTamplate">
             <el-option
-              v-for="(item, index) in operationWay"
+              v-for="item in operationWay"
               :key="item.id"
               :label="item.name"
-              :value="index"
+              :value="operationWay.indexOf(item)"
             />
           </el-select>
         </el-form-item>
@@ -175,7 +175,6 @@
               />
             </el-select>
           </el-form-item>
-          <el-button @click="addTamplate">+</el-button>
         </div>
       </el-form>
       <el-form :inline="true">
@@ -270,11 +269,7 @@ export default {
       continuous: null,
       teams: null,
       takeover_timedelta: null,
-      template: [{
-        name: null,
-        turns: null,
-        duty_checks: null
-      }],
+      template: [],
       turns: [],
       dutyChecks: [],
       teamsSet: [],
@@ -345,7 +340,8 @@ export default {
       this.addDutyDialog = true
     },
     addTamplate() {
-      if (this.template.length < this.operationWay[this.operation].running_count) {
+      this.template = []
+      for (let i = 0; i < this.operationWay[this.operation].running_count; i++) {
         this.template.push({
           name: '',
           turns: '',
