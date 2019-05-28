@@ -166,7 +166,7 @@ export default {
           }).catch(err => {
             this.$message({
               type: 'warning',
-              message: err.response.data.data.members
+              message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
             this.tableData[index].select_show = true
             // this.tableData.splice(index, 1)
@@ -186,10 +186,11 @@ export default {
             })
           }).catch(err => {
             this.tableData[index].members = this.rowMember
+            this.tableData[index].desc = this.rowDsec
             this.tableData[index].access = this.rowAccess
             this.$message({
               type: 'warning',
-              message: err.response.data.data.members
+              message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
             console.log(err)
           })
