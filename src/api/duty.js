@@ -95,6 +95,23 @@ export function addDutyLogOperationWay(data) {
   })
 }
 
+// 更新排班运转方式
+export function updateDutyLogOperationWay(id, data) {
+  return request({
+    url: '/duty-log/operation-way/' + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+// 删除排班运转方式
+export function deleteDutyLogOperationWay(id) {
+  return request({
+    url: '/duty-log/operation-way/' + id + '/',
+    method: 'delete'
+  })
+}
+
 // 生成复检巡检记录
 export function genLogByFrequencyREview(data) {
   return request({

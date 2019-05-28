@@ -210,6 +210,12 @@ export const constantRoutes = [
     meta: { title: '角色管理', icon: 'form' },
     children: [
       {
+        path: 'operationWay',
+        name: '运转方式管理',
+        component: () => import('@/views/roleManage/operationWay'),
+        meta: { title: '运转方式管理', icon: 'form' }
+      },
+      {
         path: 'team',
         name: '值管理',
         component: () => import('@/views/roleManage/team'),
