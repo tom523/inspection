@@ -84,6 +84,14 @@
               </el-popover>
             </template>
           </el-table-column>
+          <el-table-column
+            align="center"
+            label="是否生成"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.has_created ? '是' : '否' }}
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           style="margin-top: 50px; margin-left: 10%"
