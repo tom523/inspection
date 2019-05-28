@@ -122,7 +122,7 @@
 <script>
 // import { getList } from '@/api/table'
 import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
-import { getDutyLogOperationWay, addDutyLogOperationWay } from '@/api/duty'
+import { getDutyLogOperationWay } from '@/api/duty'
 
 export default {
   data() {
