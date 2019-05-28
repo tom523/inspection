@@ -170,7 +170,7 @@
               <el-option
                 v-for="i in dutyChecks"
                 :key="i.id"
-                :label="i.name"
+                :label="i.display_name"
                 :value="i.id"
               />
             </el-select>
@@ -395,7 +395,7 @@ export default {
         this.turns = response.data.items
       })
       dutyCheckGetChoices().then(response => {
-        this.dutyChecks = response
+        this.dutyChecks = response.data
       })
       getTeamSet().then(response => {
         this.teamsSet = response.data
