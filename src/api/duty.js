@@ -120,3 +120,13 @@ export function dutyCheckGetChoices() {
     method: 'get'
   })
 }
+
+// 生成单个排班记录
+
+export function createInspectionLogByDutyLog(data) {
+  return request({
+    url: '/inspection-log/turn-log/create_inspection_log_by_duty_log/',
+    method: 'post',
+    data
+  })
+}

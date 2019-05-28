@@ -160,7 +160,7 @@
               <el-option
                 v-for="i in turns"
                 :key="i.id"
-                :label="i.name"
+                :label="i.display_name"
                 :value="i.id"
               />
             </el-select>

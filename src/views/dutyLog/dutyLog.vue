@@ -89,7 +89,10 @@
             label="是否生成"
           >
             <template slot-scope="scope">
-              {{ scope.row.has_created ? '是' : '否' }}
+              <div v-if="scope.row.has_created">已生成</div>
+              <div v-else>
+                <el-button round type="success" :loading="createdLoading" @click="createdLog(scope.$index, scope.row)">生成</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -109,12 +112,13 @@
 </template>
 
 <script>
-import { getDutyLog } from '@/api/duty'
+import { getDutyLog, createInspectionLogByDutyLog } from '@/api/duty'
 export default {
   data() {
     return { page: 1,
       total: null,
-      tableData: []
+      tableData: [],
+      createdLoading: false
     }
   },
   created() {
@@ -124,6 +128,22 @@ export default {
     handleCurrentChange(index) {
       this.page = index
       this.fecthData()
+    },
+    createdLog(index, obj) {
+      this.createdLoading = true
+      createInspectionLogByDutyLog({
+        raise_error: false,
+        id: obj.id
+      }).then(response => {
+        if (response.data.length !== 0) {
+          this.$message({
+            type: 'success',
+            message: '生成排班记录成功'
+          })
+        }
+        this.fecthData()
+        this.createdLoading = false
+      })
     },
     fecthData() {
       getDutyLog({ page: this.page }).then(response => {
