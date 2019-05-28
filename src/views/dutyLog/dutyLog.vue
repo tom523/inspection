@@ -3,6 +3,8 @@
     <div style="margin-top: 50px">
       <el-col>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
           :row-class-name="row_class"
           border
           :data="tableData"
@@ -118,7 +120,8 @@ export default {
     return { page: 1,
       total: null,
       tableData: [],
-      createdLoading: false
+      createdLoading: false,
+      loading: true
     }
   },
   created() {
@@ -147,18 +150,10 @@ export default {
     },
     fecthData() {
       getDutyLog({ page: this.page }).then(response => {
-        var dutyLogData = response.data.items
+        this.tableData = response.data.items
         this.page = response.data.page
         this.total = response.data.count
-        dutyLogData.map(item => {
-          item.takeover_time = item.takeover_time.replace(/u/g, '')
-          item.takeover_time = item.takeover_time.replace(/'/g, '"')
-          item.takeover_time = JSON.parse(item.takeover_time)
-          item.check_time = item.check_time.replace(/u/g, '')
-          item.check_time = item.check_time.replace(/'/g, '"')
-          item.check_time = JSON.parse(item.check_time)
-        })
-        this.tableData = dutyLogData
+        this.loading = false
       })
     },
     row_class({ row, rowIndex }) {
