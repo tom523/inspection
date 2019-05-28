@@ -3,7 +3,6 @@
     <div style="margin-top: 50px">
       <el-col class="el-table-add-row">
         <el-button type="primary" @click="add_row">+ 添加值</el-button>
-        <el-button type="primary" @click="addDesc">新建运转类型</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -117,26 +116,6 @@
         </el-table>
       </el-col>
     </div>
-    <el-dialog
-      width="30%"
-      title="新建运转类型"
-      :visible.sync="addDescDialog"
-    >
-      <el-form v-model="newDesc">
-        <el-form-item label="名称">
-          <el-input v-model="newDesc.name" style="width: 80%" />
-        </el-form-item>
-        <el-form-item label="值(个数)">
-          <el-input v-model="newDesc.team_count" style="width: 80%" />
-        </el-form-item>
-        <el-form-item label="运转次数">
-          <el-input v-model="newDesc.running_count" style="width: 80%" />
-        </el-form-item>
-      </el-form>
-      <div style="margin-left: 80%">
-        <el-button type="primary" @click="addOperationWay">确定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -157,7 +136,6 @@ export default {
       rowMember: [],
       rowAccess: [],
       rowDsec: null,
-      addDescDialog: false,
       newDesc: {
         name: '',
         team_count: null,
@@ -298,24 +276,6 @@ export default {
       this.members = membersData.data.items
       const descData = await getDutyLogOperationWay()
       this.descs = descData.data.items
-    },
-    addDesc() {
-      this.addDescDialog = true
-    },
-    addOperationWay() {
-      addDutyLogOperationWay(this.newDesc).then(response => {
-        this.addDescDialog = false
-        this.fecthSelect()
-        this.newDesc = {
-          name: '',
-          team_count: null,
-          running_count: null
-        }
-        this.$message({
-          type: 'success',
-          message: '新建运转类型成功！'
-        })
-      })
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
