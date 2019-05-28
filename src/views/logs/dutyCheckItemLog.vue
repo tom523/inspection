@@ -24,7 +24,7 @@
           <el-table-column
             align="center"
             label="检查类型"
-            prop="duty_check"
+            prop="display_name"
           />
         </el-table>
       </el-col>

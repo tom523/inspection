@@ -70,37 +70,42 @@
             </template>
           </el-table-column>
           <el-table-column
-          align="center"
-          label="巡检点">
+            align="center"
+            label="巡检点"
+          >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
                 <el-select
-                width="100"
-                v-model = "scope.row.point">
+                  v-model="scope.row.point"
+                  width="100"
+                >
                   <el-option
-                  v-for="item in points"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"/>
+                    v-for="item in points"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  />
                 </el-select>
               </div>
-              <div v-else>{{ scope.row.point }}</div>
+              <div v-else>{{ points.filter(item => item.id === scope.row.point)[0].name }}</div>
             </template>
           </el-table-column>
           <el-table-column
-          align="center"
-          label="设备">
+            align="center"
+            label="设备"
+          >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
-                <el-select filterable v-model="scope.row.device">
+                <el-select v-model="scope.row.device" filterable>
                   <el-option
-                  v-for="item in devices"
-                  :key="item.id"
-                  :label="item.display_name"
-                  :value="item.id"/>
+                    v-for="item in devices"
+                    :key="item.id"
+                    :label="item.display_name"
+                    :value="item.id"
+                  />
                 </el-select>
               </div>
-              <div v-else>{{ scope.row.device }}</div>
+              <div v-else>{{ devices.filter(item => item.id === scope.row.device)[0].name }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -341,6 +346,7 @@ export default {
       })
       getAllPoint().then(response => {
         this.points = response.data
+        debugger
       })
       getAllDevice().then(response => {
         this.devices = response.data

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
-      <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加班中检查项</el-button> 
+      <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加班中检查项</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -42,13 +42,13 @@
                   <el-option
                     v-for="item in dutyChecks"
                     :key="item.name"
-                    :label="item.name"
+                    :label="item.display_name"
                     :value="item.id"
                   />
                 </el-select>
               </div>
               <div v-else>
-                {{ scope.row.duty_check }}
+                {{ scope.row.display_name }}
               </div>
             </template>
           </el-table-column>
@@ -191,7 +191,6 @@ export default {
         this.page = response.data.page
         this.total = response.data.count
         var dutyCheckData = response.data.items
-        debugger
         dutyCheckData.map(item => {
           item.select_show = false
         })
@@ -200,6 +199,7 @@ export default {
     },
     fetchSelect() {
       getDutyCheck().then(response => {
+        debugger
         this.dutyChecks = response.data.items
       })
     },
