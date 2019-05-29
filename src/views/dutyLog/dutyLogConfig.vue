@@ -414,7 +414,7 @@ export default {
       this.template = [{ name: '', turns: '' }]
       this.duty_checks = null
       this.addDutyDialog = false
-      this.generateData = [{ raise_time: null, profession_id: null }]
+      this.generateData = { raise_time: null, profession_id: null }
       this.generateLogDialog = false
     },
     // 生成复检巡检记录
@@ -435,8 +435,6 @@ export default {
       console.log(this.generateData)
       if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
         genLogByFrequencyREview(this.generateData).then(response => {
-          this.generateLogDialog = false
-          this.clearDate()
           this.$message({
             type: 'success',
             message: '生成复检巡检记录成功！'
@@ -446,8 +444,6 @@ export default {
         })
       } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
         genLogByFrequencyPipe(this.generateData).then(response => {
-          this.generateLogDialog = false
-          this.clearDate()
           this.$message({
             type: 'success',
             message: '生成管线巡检记录成功！'
@@ -456,6 +452,8 @@ export default {
           console.log(err)
         })
       }
+      this.clearDate()
+      this.generateLogDialog = false
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
