@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加用户</el-button>
-      </el-col>
+      <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加用户</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -81,7 +79,20 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <el-col>
+        <el-pagination
+          style="margin-top: 20px; margin-left: 10%"
+          :current-page="page"
+          :total="total"
+          background
+          prev-text="上一页"
+          next-text="下一页"
+          layout="total, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+        />
+      </el-col>
     </div>
+
     <el-dialog
       title="修改密码"
       :visible.sync="changePassDialog"
@@ -147,13 +158,19 @@ export default {
         newPasswordConfirm: ''
       },
       changePassDialog: false,
-      loading: true
+      loading: true,
+      page: 1,
+      total: null,
     }
   },
   created() {
-    this.fecthdata()
+    this.fetchData()
   },
   methods: {
+    handleCurrentChange(index) {
+      this.page = index
+      this.fetchData()
+    },
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
@@ -164,7 +181,7 @@ export default {
             chname: obj.chname,
             phone: obj.phone
           }).then(response => {
-            this.fecthdata()
+            this.fetchData()
             this.$message({
               type: 'success',
               message: '添加成功'
@@ -176,7 +193,7 @@ export default {
         } else {
           // 更新用户
           updataAccountUser(obj.id, obj).then(response => {
-            this.fecthdata()
+            this.fetchData()
             this.$message({
               type: 'success',
               message: '更新成功'
@@ -287,9 +304,10 @@ export default {
         select_show: true
       })
     },
-    async fecthdata() {
+    async fetchData() {
       // 获取用户
-      const userData = await getAccountUser()
+      const userData = await getAccountUser({page: this.page})
+      this.total = userData.data.count
       var data = userData.data.items
       data.map(item => {
         item.select_show = false
