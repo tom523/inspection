@@ -214,7 +214,7 @@
     >
       <el-form v-model="generateData">
         <el-form-item label="是否生成本周、月、季记录">
-          <el-radio-group v-model="generateData.raise_time">
+          <el-radio-group v-model="generateData.this_period">
             <el-radio label="true">是</el-radio>
             <el-radio label="false">否</el-radio>
           </el-radio-group>
@@ -280,7 +280,7 @@ export default {
       operationWay: [],
       generateLogDialog: false,
       generateData: {
-        raise_time: null,
+        this_period: null,
         profession_id: null
       },
       professions: []
@@ -414,7 +414,7 @@ export default {
       this.template = [{ name: '', turns: '' }]
       this.duty_checks = null
       this.addDutyDialog = false
-      this.generateData = { raise_time: null, profession_id: null }
+      this.generateData = { this_period: null, profession_id: null }
       this.generateLogDialog = false
     },
     // 生成复检巡检记录
