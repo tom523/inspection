@@ -213,10 +213,10 @@
       :visible.sync="generateLogDialog"
     >
       <el-form v-model="generateData">
-        <el-form-item label="是否生成本周、月、季记录">
+        <el-form-item>
           <el-radio-group v-model="generateData.this_period">
-            <el-radio label="true">是</el-radio>
-            <el-radio label="false">否</el-radio>
+            <el-radio label="true">生成本周期巡检记录</el-radio>
+            <el-radio label="false">生成下周期巡检记录</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="专业">
