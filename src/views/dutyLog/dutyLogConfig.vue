@@ -189,7 +189,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="连班天数" class="form_item">
-          <el-input v-model="continuous" class="form_item_value" />
+          <el-input v-model="continuous" type="number" min="0" class="form_item_value" />
         </el-form-item>
         <el-form-item label="交接班区间" class="form_item">
           <el-select v-model="takeover_timedelta" class="form_item_value" placeholder="请选择">
