@@ -3,7 +3,7 @@
     <div style="margin-top: 50px">
       <el-col>
         <el-table
-          v-loading="loading"
+          v-loading="createdLoading"
           element-loading-text="拼命加载中"
           :row-class-name="row_class"
           border
@@ -93,7 +93,7 @@
             <template slot-scope="scope">
               <div v-if="scope.row.has_created">已生成</div>
               <div v-else>
-                <el-button round type="success" :loading="createdLoading" @click="createdLog(scope.$index, scope.row)">生成</el-button>
+                <el-button round type="success" @click="createdLog(scope.$index, scope.row)">生成</el-button>
               </div>
             </template>
           </el-table-column>
