@@ -52,7 +52,7 @@
                   <span>{{ scope.row.fault_level }}</span>
                 </el-form-item>
                 <el-form-item label="图片:">
-                  <span><el-button type="text" :disabled="scope.row.photo ? false : true" @click="onClickPhoto(scope.row.img)">查看</el-button></span>
+                  <span><el-button type="text" :disabled="scope.row.photo ? false : true" @click="onClickPhoto(scope.row.photo)">查看</el-button></span>
                 </el-form-item>
                 <el-form-item label="检查人:">
                   <span>{{ scope.row.staff }}</span>
@@ -270,5 +270,9 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+  .head-img {
+    width: 100%;
+    height: auto;
   }
 </style>
