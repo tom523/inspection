@@ -58,6 +58,13 @@ export function deleteRoleUser(id) {
   })
 }
 
+// 获取所有用户
+export function getAllUser() {
+  return request({
+    url: '/account/user/get_choices/',
+    method: 'get'
+  })
+}
 // 获取用户
 export function getAccountUser(params) {
   return request({

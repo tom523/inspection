@@ -34,7 +34,7 @@
           <el-table-column
             align="center"
             label="专业类型"
-            width="180"
+            width="120"
           >
             <template slot-scope="scope">
               {{ scope.row.select_show && scope.row.id === undefined ? '' : scope.row.role_type | chooseProfessionType }}
@@ -55,6 +55,7 @@
           </el-table-column>
           <el-table-column
             align="center"
+            width="100"
             label="巡检频率"
           >
             <template slot-scope="scope">
@@ -76,6 +77,7 @@
           </el-table-column>
           <el-table-column
             align="center"
+            width="120"
             label="绑定专业"
           >
             <template slot-scope="scope">
@@ -143,7 +145,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 
 export default {
   filters: {
@@ -315,8 +317,8 @@ export default {
     },
     async fecthUser() {
       // 获取用户
-      const membersData = await getAccountUser()
-      this.members = membersData.data.items
+      const membersData = await getAllUser()
+      this.members = membersData.data
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

@@ -211,6 +211,7 @@ export default {
       tableData: [],
       total: null,
       page: 1,
+      totalPage: null,
       professions: [],
       points: [],
       devices: [],
@@ -226,8 +227,8 @@ export default {
     }
   },
   created() {
-    this.fetchData()
     this.fetchSelect()
+    this.fetchData()
   },
   methods: {
     handleCurrentChange(index) {
@@ -315,7 +316,9 @@ export default {
       }
     },
     // 点击添加
-    add_row() {
+    async add_row() {
+      this.page = this.totalPage
+      await this.fetchData()
       this.tableData.push({
         name: '',
         profession: '',
@@ -329,11 +332,12 @@ export default {
         select_show: true
       })
     },
-    fetchData() {
-      getItem({ page: this.page }).then(response => {
+    async fetchData() {
+      await getItem({ page: this.page }).then(response => {
         var itemData = response.data.items
         this.total = response.data.count
         this.page = response.data.page
+        this.totalPage = response.data.total_page
         itemData.map(item => {
           item.select_show = false
         })

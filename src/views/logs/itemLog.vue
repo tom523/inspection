@@ -1,6 +1,17 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
+      <el-col style="margin-left: 5%">
+        <span>检查级别</span>
+        <el-select v-model="listQuery.inspection_level" clearable placeholder="检查级别" @change="fetchData">
+          <el-option
+            v-for="item in inspectionLevels"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-col>
       <el-col>
         <el-table
           :row-class-name="row_class"
@@ -8,6 +19,47 @@
           :data="tableData"
           style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 20px"
         >
+          <el-table-column type="expand">
+            <template slot-scope="scope">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="巡检点">
+                  <span>{{ scope.row.snapshot.point }}</span>
+                </el-form-item>
+                <el-form-item label="设备">
+                  <span>{{ scope.row.snapshot.device }}</span>
+                </el-form-item>
+                <div v-if="scope.row.snapshot.type !== '普通巡检项'">
+                  <el-form-item label="数值">
+                    <span>{{ scope.row.comments }}</span>
+                  </el-form-item>
+                  <el-form-item label="越限值">
+                    <span>{{ scope.row.snapshot.extra.threshold }}</span>
+                  </el-form-item>
+                  <el-form-item label="越限方式">
+                    <span>{{ scope.row.snapshot.extra.comparisonOperator }}</span>
+                  </el-form-item>
+                  <el-form-item label="单位(文字)">
+                    <span>{{ scope.row.snapshot.extra.symbolUnit }}</span>
+                  </el-form-item>
+                  <el-form-item label="单位(符号)">
+                    <span>{{ scope.row.snapshot.extra.cnUnit }}</span>
+                  </el-form-item>
+                </div>
+                <el-form-item label="检查描述">
+                  <span>{{ scope.row.comments }}</span>
+                </el-form-item>
+                <el-form-item v-if="scope.row.checking_status === 'AB'" label="缺陷等级">
+                  <span>{{ scope.row.fault_level }}</span>
+                </el-form-item>
+                <el-form-item label="图片">
+                  <span><el-button type="text" :disabled="scope.row.photo ? false : true" @click="onClickPhoto(scope.row.img)">查看</el-button></span>
+                </el-form-item>
+                <el-form-item label="检查人">
+                  <span>{{ scope.row.staff }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             type="index"
@@ -17,70 +69,49 @@
           <el-table-column
             align="center"
             label="名称"
-            prop="name"
-          />
+          >
+            <template slot-scope="scope">
+              {{ scope.row.snapshot.name }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="专业"
-            width="100"
-            prop="profession"
-          />
+          >
+            <template slot-scope="scope">
+              {{ scope.row.snapshot.profession }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="类型"
-            width="100"
-            prop="type"
-          />
-          <el-table-column
-            align="center"
-            label="巡检点"
           >
             <template slot-scope="scope">
-              {{ points.filter(item => item.id === scope.row.point)[0].name }}
+              {{ scope.row.snapshot.type }}
             </template>
           </el-table-column>
           <el-table-column
             align="center"
-            label="设备"
+            label="检查级别"
           >
             <template slot-scope="scope">
-              {{ devices.filter(item => item.id === scope.row.device)[0].name }}
+              {{ scope.row.inspection_level | levalFilter }}
             </template>
           </el-table-column>
           <el-table-column
             align="center"
-            label="阈值"
-            width="100"
+            label="状态"
           >
             <template slot-scope="scope">
-              {{ scope.row.extra.threshold }}
+              {{ scope.row.checking_status | statusFilter }}
             </template>
           </el-table-column>
           <el-table-column
             align="center"
-            label="越限方式"
-            width="100"
+            label="巡检时间"
           >
             <template slot-scope="scope">
-              {{ scope.row.extra.comparisonOperator }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="单位(文字)"
-            width="100"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.extra.cnUnit }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="单位(符号)"
-            width="100"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.extra.symbolUnit }}
+              {{ scope.row.actual_check_time }}
             </template>
           </el-table-column>
         </el-table>
@@ -88,7 +119,7 @@
       <el-col>
         <el-pagination
           style="margin-top: 50px; margin-left: 5%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -98,45 +129,96 @@
         />
       </el-col>
     </div>
+    <el-dialog :visible.sync="cpDialogPhoto" title="图片详情" width="40%">
+      <div class="img_wap">
+        <img :src="picture" class="head-img">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getItem, getAllPoint, getAllDevice } from '@/api/insp'
+import { getItemLog } from '@/api/insp'
 export default {
+  filters: {
+    statusFilter: function(code) {
+      const statusMap = {
+        'LO': '锁定',
+        'UN': '解锁',
+        'AB': '异常',
+        'NO': '正常',
+        'ST': '停检',
+        'OM': '漏检'
+      }
+      return statusMap[code]
+    },
+    levalFilter: function(code) {
+      const levalMap = {
+        1: '巡检',
+        2: '复检',
+        3: '抽检'
+      }
+      return levalMap[code]
+    }
+  },
   data() {
     return {
       points: [],
       devices: [],
       tableData: [],
       total: null,
-      page: 1
+      cpDialogPhoto: false,
+      picture: null,
+      // page: 1,
+      listQuery: {
+        page: 1,
+        inspection_level: null
+      },
+      inspectionLevels: [{
+        value: 1,
+        label: '巡检'
+      },
+      {
+        value: 2,
+        label: '复检'
+      },
+      {
+        value: 3,
+        label: '抽检'
+      }]
+
     }
   },
   created() {
     this.fetchData()
-    this.fetchSelect()
+    // this.fetchSelect()
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
+    onClickPhoto(cpLog) {
+      this.cpDialogPhoto = true
+      // console.log(cpLog)
+      this.picture = cpLog
+    },
     fetchData() {
-      getItem({ page: this.page }).then(response => {
+      debugger
+      getItemLog(this.listQuery).then(response => {
         this.tableData = response.data.items
         this.total = response.data.count
-        this.page = response.data.page
+        this.listQuery.page = response.data.page
       })
     },
-    fetchSelect() {
-      getAllPoint().then(response => {
-        this.points = response.data
-      })
-      getAllDevice().then(response => {
-        this.devices = response.data
-      })
-    },
+    // fetchSelect() {
+    //   getAllPoint().then(response => {
+    //     this.points = response.data
+    //   })
+    //   getAllDevice().then(response => {
+    //     this.devices = response.data
+    //   })
+    // },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
         return 'warning-row'
@@ -166,5 +248,17 @@ export default {
     cursor: pointer;
     justify-content: center;
     display: flex;
-}
+  }
+    .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>

@@ -121,7 +121,8 @@ export default {
       professions: null,
       rowName: null,
       rowProfession: null,
-      rowPoint: null
+      rowPoint: null,
+      totalPage: null
     }
   },
   created() {
@@ -207,8 +208,10 @@ export default {
         })
       }
     },
-    add_row() {
+    async add_row() {
       // 点击添加
+      this.page = this.totalPage
+      await this.fetchData()
       this.tableData.push({
         is_virtual: true,
         name: '',
@@ -217,13 +220,14 @@ export default {
         select_show: true
       })
     },
-    fetchData() {
-      getDevice({
+    async fetchData() {
+      await getDevice({
         is_virtual: false,
         page: this.page
       }).then(response => {
         this.page = response.data.page
         this.total = response.data.count
+        this.totalPage = response.data.total_page
         var deviceData = response.data.items
         deviceData.map(item => {
           item.select_show = false

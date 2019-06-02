@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 50px">
+    <div style="margin-top: 10px">
       <el-col>
         <el-table
           v-loading="createdLoading"
@@ -8,25 +8,25 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 100%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 100%; margin-left: auto; margin-right: auto;"
         >
           <el-table-column
             align="center"
             type="index"
             label="序号"
-            width="80"
+            width="50"
           />
           <el-table-column
             align="center"
             label="名称"
             prop="name"
-            width="100"
+            width="90"
           />
           <el-table-column
             align="center"
             label="值"
             prop="team"
-            width="100"
+            width="80"
           />
           <el-table-column
             align="center"
@@ -51,7 +51,7 @@
           <el-table-column
             label="交接班区间"
             align="center"
-            width="180"
+            width="110"
           >
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top">
@@ -66,7 +66,7 @@
           <el-table-column
             label="检查时间"
             align="center"
-            width="180"
+            width="100"
           >
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top">
@@ -88,6 +88,7 @@
           </el-table-column>
           <el-table-column
             align="center"
+            width="90"
             label="是否生成"
           >
             <template slot-scope="scope">
@@ -149,11 +150,13 @@ export default {
       })
     },
     fecthData() {
+      this.createdLoading = true
       getDutyLog({ page: this.page }).then(response => {
         this.tableData = response.data.items
         this.page = response.data.page
         this.total = response.data.count
         this.loading = false
+        this.createdLoading = false
       })
     },
     row_class({ row, rowIndex }) {

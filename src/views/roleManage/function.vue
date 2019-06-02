@@ -69,7 +69,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, updataRoleUser } from '@/api/user'
+import { getRoleUser, getAllUser, updataRoleUser } from '@/api/user'
 
 export default {
   filters: {
@@ -156,8 +156,8 @@ export default {
     },
     async fecthUser() {
       // 获取用户
-      const membersData = await getAccountUser()
-      this.members = membersData.data.items
+      const membersData = await getAllUser()
+      this.members = membersData.data
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

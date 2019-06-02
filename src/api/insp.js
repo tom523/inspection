@@ -241,3 +241,12 @@ export function getAllDevice() {
     method: 'get'
   })
 }
+
+// 获取巡检项记录
+export function getItemLog(params) {
+  return request({
+    url: '/inspection-log/item-log/',
+    method: 'get',
+    params
+  })
+}

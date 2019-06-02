@@ -121,7 +121,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAccountUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { getDutyLogOperationWay } from '@/api/duty'
 
 export default {
@@ -273,8 +273,8 @@ export default {
       this.professions = professionData.data
       this.loading = false
       // 获取用户
-      const membersData = await getAccountUser()
-      this.members = membersData.data.items
+      const membersData = await getAllUser()
+      this.members = membersData.data
       const descData = await getDutyLogOperationWay()
       this.descs = descData.data.items
     },

@@ -97,7 +97,8 @@ export default {
       page: 1,
       total: null,
       rowName: null,
-      rowLocathion: null
+      rowLocathion: null,
+      totalPage: null
     }
   },
   created() {
@@ -176,18 +177,21 @@ export default {
         })
       }
     },
-    addRow() {
+    async addRow() {
+      this.page = this.totalPage
+      await this.fetchData()
       this.tableData.push({
         name: '',
         extra: { location: '' },
         select_show: true
       })
     },
-    fetchData() {
-      getPoint({ page: this.page }).then(response => {
+    async fetchData() {
+      await getPoint({ page: this.page }).then(response => {
         var pointData = response.data.items
         this.total = response.data.count
         this.page = response.data.page
+        this.totalPage = response.data.total_page
         pointData.map(item => {
           item.select_show = false
         })
