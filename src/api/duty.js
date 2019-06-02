@@ -71,10 +71,11 @@ export function deleteDutyLog(id) {
 }
 
 // 获取整套值
-export function getTeamSet() {
+export function getTeamSet(params) {
   return request({
     url: '/role/users/extra/get_teams_set/',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

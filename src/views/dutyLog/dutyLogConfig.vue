@@ -125,7 +125,7 @@
           />
         </el-form-item>
         <el-form-item style="margin-left: 50px" label="运转方式">
-          <el-select v-model="operation" class="form_item_value" placeholder="请选择" @change="addTamplate">
+          <el-select v-model="operation" class="form_item_value" placeholder="请选择">
             <el-option
               v-for="item in operationWay"
               :key="item.id"
@@ -286,6 +286,12 @@ export default {
       professions: []
     }
   },
+  watch: {
+    operation: function() {
+      this.addTamplate()
+      this.fecthTeamSet()
+    }
+  },
   created() {
     this.fetchData()
     this.fecthSelect()
@@ -390,15 +396,19 @@ export default {
       })
     },
     // 获取选择框数据
+    fecthTeamSet() {
+      getTeamSet({
+        team_desc: this.operationWay[this.operation].name
+      }).then(response => {
+        this.teamsSet = response.data
+      })
+    },
     fecthSelect() {
       getTurn().then(response => {
         this.turns = response.data.items
       })
       dutyCheckGetChoices().then(response => {
         this.dutyChecks = response.data
-      })
-      getTeamSet().then(response => {
-        this.teamsSet = response.data
       })
       getDutyLogOperationWay().then(response => {
         this.operationWay = response.data.items

@@ -3,7 +3,7 @@
     <div style="margin-top: 10px">
       <el-col style="margin-left: 5%">
         <span>检查级别</span>
-        <el-select v-model="listQuery.inspection_level" clearable placeholder="检查级别" @change="fetchData">
+        <el-select v-model="listQuery.inspection_level" clearable placeholder="检查级别">
           <el-option
             v-for="item in inspectionLevels"
             :key="item.value"
@@ -23,10 +23,10 @@
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="巡检点">
-                  <span>{{ scope.row.snapshot.point }}</span>
+                  <span>{{ points.filter(item => item.id === scope.row.snapshot.point)[0].name }}</span>
                 </el-form-item>
                 <el-form-item label="设备">
-                  <span>{{ scope.row.snapshot.device }}</span>
+                  <span>{{ devices.filter(item => item.id === scope.row.snapshot.device)[0].name }}</span>
                 </el-form-item>
                 <div v-if="scope.row.snapshot.type !== '普通巡检项'">
                   <el-form-item label="数值">
@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { getItemLog } from '@/api/insp'
+import { getItemLog, getAllPoint, getAllDevice } from '@/api/insp'
 export default {
   filters: {
     statusFilter: function(code) {
@@ -156,7 +156,8 @@ export default {
       const levalMap = {
         1: '巡检',
         2: '复检',
-        3: '抽检'
+        3: '抽检',
+        9: '管线'
       }
       return levalMap[code]
     }
@@ -185,13 +186,22 @@ export default {
       {
         value: 3,
         label: '抽检'
+      },
+      {
+        value: 9,
+        label: '管线'
       }]
 
     }
   },
+  watch: {
+    'listQuery.inspection_level': function() {
+      this.fetchData()
+    }
+  },
   created() {
     this.fetchData()
-    // this.fetchSelect()
+    this.fetchAllPointAndDevice()
   },
   methods: {
     handleCurrentChange(index) {
@@ -204,21 +214,20 @@ export default {
       this.picture = cpLog
     },
     fetchData() {
-      debugger
       getItemLog(this.listQuery).then(response => {
         this.tableData = response.data.items
         this.total = response.data.count
         this.listQuery.page = response.data.page
       })
     },
-    // fetchSelect() {
-    //   getAllPoint().then(response => {
-    //     this.points = response.data
-    //   })
-    //   getAllDevice().then(response => {
-    //     this.devices = response.data
-    //   })
-    // },
+    fetchAllPointAndDevice() {
+      getAllPoint().then(response => {
+        this.points = response.data
+      })
+      getAllDevice().then(response => {
+        this.devices = response.data
+      })
+    },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
         return 'warning-row'
