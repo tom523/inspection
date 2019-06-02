@@ -22,39 +22,39 @@
           <el-table-column type="expand">
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="巡检点">
+                <el-form-item label="巡检点：">
                   <span>{{ points.filter(item => item.id === scope.row.snapshot.point)[0].name }}</span>
                 </el-form-item>
-                <el-form-item label="设备">
+                <el-form-item label="设备：">
                   <span>{{ devices.filter(item => item.id === scope.row.snapshot.device)[0].name }}</span>
                 </el-form-item>
                 <div v-if="scope.row.snapshot.type !== '普通巡检项'">
-                  <el-form-item label="数值">
+                  <el-form-item label="数值：">
                     <span>{{ scope.row.comments }}</span>
                   </el-form-item>
-                  <el-form-item label="越限值">
+                  <el-form-item label="越限值：">
                     <span>{{ scope.row.snapshot.extra.threshold }}</span>
                   </el-form-item>
-                  <el-form-item label="越限方式">
+                  <el-form-item label="越限方式：">
                     <span>{{ scope.row.snapshot.extra.comparisonOperator }}</span>
                   </el-form-item>
-                  <el-form-item label="单位(文字)">
+                  <el-form-item label="单位(文字):">
                     <span>{{ scope.row.snapshot.extra.symbolUnit }}</span>
                   </el-form-item>
-                  <el-form-item label="单位(符号)">
+                  <el-form-item label="单位(符号):">
                     <span>{{ scope.row.snapshot.extra.cnUnit }}</span>
                   </el-form-item>
                 </div>
-                <el-form-item label="检查描述">
+                <el-form-item label="检查描述:">
                   <span>{{ scope.row.comments }}</span>
                 </el-form-item>
                 <el-form-item v-if="scope.row.checking_status === 'AB'" label="缺陷等级">
                   <span>{{ scope.row.fault_level }}</span>
                 </el-form-item>
-                <el-form-item label="图片">
+                <el-form-item label="图片:">
                   <span><el-button type="text" :disabled="scope.row.photo ? false : true" @click="onClickPhoto(scope.row.img)">查看</el-button></span>
                 </el-form-item>
-                <el-form-item label="检查人">
+                <el-form-item label="检查人:">
                   <span>{{ scope.row.staff }}</span>
                 </el-form-item>
               </el-form>
@@ -196,6 +196,7 @@ export default {
   },
   watch: {
     'listQuery.inspection_level': function() {
+      this.listQuery.page = 1
       this.fetchData()
     }
   },

@@ -63,6 +63,12 @@ export const constantRoutes = [
     meta: { title: '巡检记录', icon: 'example' },
     children: [
       {
+        path: 'itemLog',
+        name: '巡检项记录',
+        component: () => import('@/views/logs/itemLog'),
+        meta: { title: '巡检项记录', icon: 'tree' }
+      },
+      {
         path: 'table',
         name: '巡检记录',
         component: () => import('@/views/logs/index'),
@@ -73,49 +79,43 @@ export const constantRoutes = [
         name: '管线记录',
         component: () => import('@/views/tree/index'),
         meta: { title: '管线记录', icon: 'tree' }
-      },
-      {
-        path: 'tree',
-        name: '异常记录',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '异常记录', icon: 'tree' }
-      },
-      {
-        path: 'turnLog',
-        name: '轮次记录',
-        component: () => import('@/views/logs/turnLog'),
-        meta: { title: '轮次记录', icon: 'tree' }
-      },
-      {
-        path: 'pointLog',
-        name: '巡检点记录',
-        component: () => import('@/views/logs/pointLog'),
-        meta: { title: '巡检点记录', icon: 'tree' }
-      },
-      {
-        path: 'itemLog',
-        name: '巡检项记录',
-        component: () => import('@/views/logs/itemLog'),
-        meta: { title: '巡检项记录', icon: 'tree' }
-      },
-      {
-        path: 'deviceLog',
-        name: '设备记录',
-        component: () => import('@/views/logs/deviceLog'),
-        meta: { title: '设备记录', icon: 'tree' }
-      },
-      {
-        path: 'dutyCheckLog',
-        name: '班中检查记录',
-        component: () => import('@/views/logs/dutyCheckLog'),
-        meta: { title: '班中检查记录', icon: 'tree' }
-      },
-      {
-        path: 'dutyCheckItemLog',
-        name: '班中检查项记录',
-        component: () => import('@/views/logs/dutyCheckItemLog'),
-        meta: { title: '班中检查项记录', icon: 'tree' }
       }
+      // {
+      //   path: 'tree',
+      //   name: '异常记录',
+      //   component: () => import('@/views/tree/index'),
+      //   meta: { title: '异常记录', icon: 'tree' }
+      // },
+      // {
+      //   path: 'turnLog',
+      //   name: '轮次记录',
+      //   component: () => import('@/views/logs/turnLog'),
+      //   meta: { title: '轮次记录', icon: 'tree' }
+      // },
+      // {
+      //   path: 'pointLog',
+      //   name: '巡检点记录',
+      //   component: () => import('@/views/logs/pointLog'),
+      //   meta: { title: '巡检点记录', icon: 'tree' }
+      // },
+      // {
+      //   path: 'deviceLog',
+      //   name: '设备记录',
+      //   component: () => import('@/views/logs/deviceLog'),
+      //   meta: { title: '设备记录', icon: 'tree' }
+      // },
+      // {
+      //   path: 'dutyCheckLog',
+      //   name: '班中检查记录',
+      //   component: () => import('@/views/logs/dutyCheckLog'),
+      //   meta: { title: '班中检查记录', icon: 'tree' }
+      // },
+      // {
+      //   path: 'dutyCheckItemLog',
+      //   name: '班中检查项记录',
+      //   component: () => import('@/views/logs/dutyCheckItemLog'),
+      //   meta: { title: '班中检查项记录', icon: 'tree' }
+      // }
     ]
   },
 

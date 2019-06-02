@@ -161,6 +161,7 @@ export default {
       loading: true,
       page: 1,
       total: null,
+      totalPage: null
     }
   },
   created() {
@@ -295,7 +296,9 @@ export default {
         })
       })
     },
-    add_row() {
+    async add_row() {
+      this.page = this.totalPage
+      await this.fetchData()
       // 点击添加
       this.tableData.push({
         username: '',
@@ -306,8 +309,9 @@ export default {
     },
     async fetchData() {
       // 获取用户
-      const userData = await getAccountUser({page: this.page})
+      const userData = await getAccountUser({ page: this.page })
       this.total = userData.data.count
+      this.totalPage = userData.data.total_page
       var data = userData.data.items
       data.map(item => {
         item.select_show = false
