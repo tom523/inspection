@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-col class="el-table-add-row">
-        <el-button type="primary" @click="add_row">新建运转类型</el-button>
-      </el-col>
+      <el-button style="margin-left: 80%; width: 10%" type="primary" @click="add_row">新建运转类型</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -218,14 +216,4 @@ export default {
   .el-table .success-row {
     background: #f0f9eb;
   }
-  .el-table-add-row {
-    margin-top: 5px;
-    width: 10%;
-    margin-left: 75%;
-    margin-right: auto;
-    height: 40px;
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
-}
 </style>

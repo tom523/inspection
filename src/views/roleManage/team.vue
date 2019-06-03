@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-col class="el-table-add-row">
-        <el-button type="primary" @click="add_row">+ 添加值</el-button>
-      </el-col>
+      <el-button style="margin-left: 80%; width: 10%" type="primary" @click="add_row">+ 添加值</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -11,7 +9,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 30px;"
         >
           <el-table-column
             align="center"

@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <el-button style="margin-left: 60%" type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
-      <el-button type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
-      <el-button type="primary" @click="addDuty">+ 添加排班</el-button>
+      <el-button style="margin-left: 80%; width: 10%;" type="primary" @click="addDuty">+ 添加排班</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -207,41 +205,12 @@
         <el-button style="margin-left: 50px" type="primary" @click="addDutyConfig">确定</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      width="40%"
-      :before-close="cancelConfig"
-      :visible.sync="generateLogDialog"
-    >
-      <el-form v-model="generateData">
-        <el-form-item>
-          <el-radio-group v-model="generateData.this_period">
-            <el-radio label="true">生成本周期巡检记录</el-radio>
-            <el-radio label="false">生成下周期巡检记录</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="专业">
-          <el-select
-            v-model="generateData.profession_id"
-            style="width: 80%"
-          >
-            <el-option
-              v-for="item in professions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <el-button style="margin-left: 80%" type="primary" @click="generateLogByFrequency">确定</el-button>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, genLogByFrequencyREview, genLogByFrequencyPipe, dutyCheckGetChoices } from '@/api/duty'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, dutyCheckGetChoices } from '@/api/duty'
 import { getTurn } from '@/api/insp'
-import { getRoleUser } from '@/api/user'
 export default {
   data() {
     return {
@@ -278,11 +247,6 @@ export default {
       total: null,
       operation: null,
       operationWay: [],
-      generateLogDialog: false,
-      generateData: {
-        this_period: null,
-        profession_id: null
-      },
       professions: []
     }
   },
@@ -424,46 +388,6 @@ export default {
       this.template = [{ name: '', turns: '' }]
       this.duty_checks = null
       this.addDutyDialog = false
-      this.generateData = { this_period: null, profession_id: null }
-      this.generateLogDialog = false
-    },
-    // 生成复检巡检记录
-    generateLogReview() {
-      this.generateLogDialog = true
-      getRoleUser({ role_type: 'REVIEW_PROFESSION' }).then(response => {
-        this.professions = response.data
-      })
-    },
-    // 生成管线巡检记录
-    generateLogPipe() {
-      this.generateLogDialog = true
-      getRoleUser({ role_type: 'PIPE_PROFESSION' }).then(response => {
-        this.professions = response.data
-      })
-    },
-    generateLogByFrequency() {
-      console.log(this.generateData)
-      if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
-        genLogByFrequencyREview(this.generateData).then(response => {
-          this.$message({
-            type: 'success',
-            message: '生成复检巡检记录成功！'
-          })
-        }).catch(err => {
-          console.log(err)
-        })
-      } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
-        genLogByFrequencyPipe(this.generateData).then(response => {
-          this.$message({
-            type: 'success',
-            message: '生成管线巡检记录成功！'
-          })
-        }).catch(err => {
-          console.log(err)
-        })
-      }
-      this.clearDate()
-      this.generateLogDialog = false
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加班中检查</el-button>
-      </el-col>
+      <el-button style="margin-left: 80%; width: 10%" type="primary" @click="add_row">+ 添加班中检查</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -285,16 +283,4 @@ export default {
   .el-table .success-row {
     background: #f0f9eb;
   }
-  .el-table-add-row {
-    margin-top: 5px;
-    width: 10%;
-    margin-left: 80%;
-    margin-right: auto;
-    height: 40px;
-    border: 1px dashed #c1c1cd;
-    border-radius: 3px;
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
-}
 </style>

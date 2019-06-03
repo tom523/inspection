@@ -118,7 +118,7 @@
       </el-col>
       <el-col>
         <el-pagination
-          style="margin-top: 50px; margin-left: 5%"
+          style="margin-top: 30px; margin-left: 5%; margin-bottom: 40px;"
           :current-page="listQuery.page"
           :total="total"
           background

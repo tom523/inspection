@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
-      <el-button style="margin-left: 85%" type="primary" @click="add_row">+ 添加巡检点项</el-button>
+      <el-button style="margin-left: 85%; width: 10%" type="primary" @click="add_row">+ 添加巡检点项</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -177,7 +177,7 @@
       </el-col>
       <el-col>
         <el-pagination
-          style="margin-top: 50px; margin-left: 5%"
+          style="margin-top: 30px; margin-left: 5%; margin-bottom: 40px"
           :current-page="page"
           :total="total"
           background

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 50px">
-      <el-col>
-        <el-button class="el-table-add-row" type="primary" @click="add_row">+ 添加专业</el-button>
-      </el-col>
+    <div style="margin-top: 30px">
+      <el-button style="margin-left: 58%; width: 10%;" type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
+      <el-button style="width: 10%" type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
+      <el-button style="width: 10%" type="primary" @click="add_row">+ 添加专业</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -11,7 +11,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 40px"
         >
           <el-table-column
             align="center"
@@ -139,6 +139,34 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <el-dialog
+        width="40%"
+        :before-close="clearDate"
+        :visible.sync="generateLogDialog"
+      >
+        <el-form v-model="generateData">
+          <el-form-item>
+            <el-radio-group v-model="generateData.this_period">
+              <el-radio label="true">生成本周期巡检记录</el-radio>
+              <el-radio label="false">生成下周期巡检记录</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="专业">
+            <el-select
+              v-model="generateData.profession_id"
+              style="width: 80%"
+            >
+              <el-option
+                v-for="item in professions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <el-button style="margin-left: 80%" type="primary" @click="generateLogByFrequency">确定</el-button>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -146,6 +174,7 @@
 <script>
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { genLogByFrequencyREview, genLogByFrequencyPipe } from '@/api/duty'
 
 export default {
   filters: {
@@ -197,7 +226,12 @@ export default {
       tableData: [],
       rowMember: [],
       members: [],
-      professions: []
+      professions: [],
+      generateData: {
+        this_period: null,
+        profession_id: null
+      },
+      generateLogDialog: false
     }
   },
   created() {
@@ -320,6 +354,51 @@ export default {
       const membersData = await getAllUser()
       this.members = membersData.data
     },
+    // 生成复检巡检记录
+    generateLogReview() {
+      this.generateLogDialog = true
+      getRoleUser({ role_type: 'REVIEW_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+    },
+    // 生成管线巡检记录
+    generateLogPipe() {
+      this.generateLogDialog = true
+      getRoleUser({ role_type: 'PIPE_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+    },
+    generateLogByFrequency() {
+      console.log(this.generateData)
+      if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
+        genLogByFrequencyREview(this.generateData).then(response => {
+          this.$message({
+            type: 'success',
+            message: '生成复检巡检记录成功！'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
+        genLogByFrequencyPipe(this.generateData).then(response => {
+          this.$message({
+            type: 'success',
+            message: '生成管线巡检记录成功！'
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+      this.clearDate()
+      this.generateLogDialog = false
+    },
+    clearDate() {
+      this.generateLogDialog = false
+      this.generateData = {
+        this_period: null,
+        profession_id: null
+      }
+    },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
         return 'warning-row'
@@ -338,16 +417,4 @@ export default {
   .el-table .success-row {
     background: #f0f9eb;
   }
-  .el-table-add-row {
-    margin-top: 5px;
-    width: 10%;
-    margin-left: 80%;
-    margin-right: auto;
-    height: 40px;
-    border: 1px dashed #c1c1cd;
-    border-radius: 3px;
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
-}
 </style>

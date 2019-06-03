@@ -1,12 +1,13 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 1%">
-      <el-button style="margin-left: 6%" type="success" @click="handleImport">+ 导入数据</el-button>
-      <el-button type="primary" @click="addRow">+ 添加巡检点</el-button>
+      <el-button style="margin-left: 70%; width: 9.5%" type="success" @click="handleImport">+ 导入数据</el-button>
+      <el-button style="width: 9.5%;" type="primary" @click="addRow">+ 添加巡检点</el-button>
       <el-table
         :data="tableData"
         border
-        style="width: 88%; margin-left: auto; margin-right: auto; margin-top: 1%"
+        :row-class-name="row_class"
+        style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 1%"
       >
         <el-table-column
           align="center"
@@ -55,7 +56,7 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        style="margin-top: 20px; margin-left: 6%"
+        style="margin-top: 20px; margin-left: 10%"
         :current-page="page"
         :total="total"
         background
@@ -237,7 +238,23 @@ export default {
         type: 'warning'
       })
       return false
+    },
+    row_class({ row, rowIndex }) {
+      if (rowIndex % 2 === 0) {
+        return 'warning-row'
+      } else if (rowIndex % 2 === 1) {
+        return 'success-row'
+      }
     }
   }
 }
 </script>
+<style>
+  .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+<style>

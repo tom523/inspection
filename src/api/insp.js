@@ -55,7 +55,7 @@ export function deletePoint(id) {
 // 获取轮次
 export function getTurn() {
   return request({
-    url: '/inspection/turn',
+    url: '/inspection/turn/',
     method: 'get'
   })
 }
