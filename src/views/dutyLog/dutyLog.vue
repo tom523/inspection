@@ -100,7 +100,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          style="margin-top: 20px; margin-bottom: 40px"
+          style="margin-top: 20px; margin-bottom: 10%"
           :current-page="page"
           :total="total"
           background

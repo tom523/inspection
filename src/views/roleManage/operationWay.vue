@@ -9,7 +9,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 10%"
         >
           <el-table-column
             align="center"

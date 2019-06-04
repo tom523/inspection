@@ -81,7 +81,7 @@
       </el-col>
       <el-col>
         <el-pagination
-          style="margin-top: 20px; margin-left: 10%"
+          style="margin-top: 20px; margin-left: 10%; margin-bottom: 10%"
           :current-page="page"
           :total="total"
           background

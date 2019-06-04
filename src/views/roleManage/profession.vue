@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 30px">
-      <el-button style="margin-left: 58%; width: 10%;" type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
-      <el-button style="width: 10%" type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
+      <el-button style="margin-left: 54%; width: 12%;" type="primary" @click="generateLogPipe">生成管线巡检记录</el-button>
+      <el-button style="width: 12%" type="primary" @click="generateLogReview">生成复检巡检记录</el-button>
       <el-button style="width: 10%" type="primary" @click="add_row">+ 添加专业</el-button>
       <el-col>
         <el-table
@@ -11,7 +11,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 40px"
+          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 10%"
         >
           <el-table-column
             align="center"
