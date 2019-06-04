@@ -16,6 +16,7 @@
             type="index"
             label="序号"
             width="80"
+            :index="indexMethod"
           />
           <el-table-column
             align="center"
@@ -271,6 +272,9 @@ export default {
       } else if (rowIndex % 2 === 1) {
         return 'success-row'
       }
+    },
+    indexMethod(index) {
+      return (this.page - 1) * 10 + index + 1
     }
   }
 }
