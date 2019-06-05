@@ -41,14 +41,33 @@
           />
           <el-table-column
             align="center"
-            prop="turns"
             label="轮次"
-          />
+          >
+            <template slot-scope="scope">
+              <span
+                v-for="(turn, index) in scope.row.turns"
+                :key="index"
+              >
+                {{ turn }}
+                <br>
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
-            prop="duty_checks"
             label="班中检查"
-          />
+            width="130"
+          >
+            <template slot-scope="scope">
+              <span
+                v-for="(item, index) in scope.row.duty_checks"
+                :key="index"
+              >
+                {{ item }}
+                <br>
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column
             label="交接班区间"
             align="center"
@@ -56,8 +75,8 @@
           >
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top">
-                <p>开始时间: {{ scope.row.takeover_time.s }}</p>
-                <p>结束时间: {{ scope.row.takeover_time.e }}</p>
+                <p>开始时间: {{ scope.row.takeover_start_time }}</p>
+                <p>结束时间: {{ scope.row.takeover_end_time }}</p>
                 <div slot="reference" class="name-wrapper">
                   <el-tag size="medium">交接班区间</el-tag>
                 </div>

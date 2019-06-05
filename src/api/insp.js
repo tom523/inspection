@@ -234,6 +234,14 @@ export function getAllPoint() {
   })
 }
 
+// 获取所有普通专业巡检点
+export function getTurnChoices(argument) {
+  return request({
+    url: '/inspection/point/get_turn_choices/',
+    method: 'get'
+  })
+}
+
 // 获取所有设备，不分页
 export function getAllDevice() {
   return request({

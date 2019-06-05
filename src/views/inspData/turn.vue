@@ -33,7 +33,6 @@
             label="巡检点"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.points.toString() }}
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.points"
@@ -48,6 +47,15 @@
                     :value="item.name"
                   />
                 </el-select>
+              </div>
+              <div v-else>
+                <span
+                  v-for="(point, index) in scope.row.points"
+                  :key="index"
+                >
+                  {{ point }}
+                  <br>
+                </span>
               </div>
             </template>
           </el-table-column>
@@ -80,7 +88,7 @@
 </template>
 
 <script>
-import { getTurn, updateTurn, addTurn, deleteTurn, getAllPoint } from '@/api/insp'
+import { getTurn, updateTurn, addTurn, deleteTurn, getTurnChoices } from '@/api/insp'
 export default {
   data() {
     return {
@@ -198,7 +206,7 @@ export default {
       })
     },
     fecthPoint() {
-      getAllPoint().then(response => {
+      getTurnChoices().then(response => {
         this.points = response.data
       })
     },
