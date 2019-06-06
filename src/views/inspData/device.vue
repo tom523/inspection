@@ -67,8 +67,8 @@
                   <el-option
                     v-for="item in points"
                     :key="item.id"
-                    :lable="item.id"
-                    :value="item.name"
+                    :lable="item.name"
+                    :value="item.id"
                   />
                 </el-select>
               </div>
@@ -140,6 +140,7 @@ export default {
       if (this.tableData[index].select_show) {
         // 新建值
         if (obj.id === undefined) {
+          debugger
           addDevice(obj).then(response => {
             this.fetchData()
             this.$message({

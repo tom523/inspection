@@ -108,3 +108,11 @@ export function modifyPassword(id, data) {
     data
   })
 }
+
+// 调人记录
+export function getTransferLog() {
+  return request({
+    url: '/role/transfer/',
+    method: 'get'
+  })
+}
