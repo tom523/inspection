@@ -157,6 +157,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/photo',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: '图片',
+        component: () => import('@/views/photo/index'),
+        meta: { title: '图片', icon: 'form' }
+      }
+    ]
+  },
 
   {
     path: '/abc',
