@@ -157,6 +157,7 @@ export const constantRoutes = [
       }
     ]
   },
+
   {
     path: '/photo',
     component: Layout,
@@ -166,6 +167,19 @@ export const constantRoutes = [
         name: '图片',
         component: () => import('@/views/photo/index'),
         meta: { title: '图片', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/inspDaily',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: '巡检日报',
+        component: () => import('@/views/inspDaily/index'),
+        meta: { title: '巡检日报', icon: 'form' }
       }
     ]
   },

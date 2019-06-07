@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getPhoto } from '@/api/photo'
+import { getPhoto } from '@/api/photoAndDaily'
 export default {
   data() {
     return {
