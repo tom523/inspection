@@ -148,3 +148,12 @@ export function createInspectionLogByDutyLog(data) {
     data
   })
 }
+
+// 交接班记录
+export function gettakeoverLog(params) {
+  return request({
+    url: '/duty-log/take-over-log/',
+    method: 'get',
+    params
+  })
+}

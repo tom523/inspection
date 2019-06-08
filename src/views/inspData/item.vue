@@ -77,7 +77,9 @@
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
                 <el-select
-                  v-model="scope.row.point"
+                  v-model="scope.row.point.id"
+                  :placeholder="scope.row.point.name"
+                  filterable
                   width="100"
                 >
                   <el-option
@@ -88,7 +90,7 @@
                   />
                 </el-select>
               </div>
-              <div v-else>{{ points.filter(item => item.id === scope.row.point)[0].name }}</div>
+              <div v-else>{{ scope.row.point.name }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -97,7 +99,7 @@
           >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
-                <el-select v-model="scope.row.device" filterable>
+                <el-select v-model="scope.row.device.id" :placeholder="scope.row.device.name" filterable>
                   <el-option
                     v-for="item in devices"
                     :key="item.id"
@@ -106,7 +108,7 @@
                   />
                 </el-select>
               </div>
-              <div v-else>{{ devices.filter(item => item.id === scope.row.device)[0].name }}</div>
+              <div v-else>{{ scope.row.device.name }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -252,6 +254,8 @@ export default {
           })
         } else {
           // 更新
+          obj.point = obj.point.id
+          obj.device = obj.device.id
           updateItem(obj.id, obj).then(response => {
             this.fetchData()
             this.$message({

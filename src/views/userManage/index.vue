@@ -60,6 +60,7 @@
           >
             <template slot-scope="scope">
               <el-button
+                :disabled="scope.row.select_show === true && scope.row.username === ''"
                 size="mini"
                 @click="editRowOrConfirm(scope.$index, scope.row)"
               >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
@@ -189,7 +190,12 @@ export default {
               message: '添加成功'
             })
           }).catch(err => {
-            this.tableData.splice(index, 1)
+            this.$message({
+              type: 'warning',
+              message: err.response.data.message
+            })
+            this.tableData[index].select_show = true
+            // this.tableData.splice(index, 1)
             console.log(err)
           })
         } else {

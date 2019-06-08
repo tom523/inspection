@@ -207,13 +207,13 @@ export default {
   methods: {
     fetchData() {
       getDayPointCount().then(response => {
-        this.pointCount = response.data.data
+        this.pointCount = response.data
       })
       getDayDeviceLogCount().then(response => {
-        this.deviceLogCount = response.data.data
+        this.deviceLogCount = response.data
       })
       getDayItemLogCount().then(response => {
-        this.itemLogCount = response.data.data
+        this.itemLogCount = response.data
       })
       getDayTeamProfessionItemCount().then(response => {
         this.teamProfessionItemCount = response.data

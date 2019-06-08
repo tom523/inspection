@@ -139,7 +139,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: '交班记录',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/takeoverLog/index'),
         meta: { title: '交班记录', icon: 'form' }
       }
     ]
