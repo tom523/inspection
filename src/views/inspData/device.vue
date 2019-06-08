@@ -68,7 +68,7 @@
                     v-for="item in points"
                     :key="item.id"
                     :lable="item.name"
-                    :value="item.id"
+                    :value="item.name"
                   />
                 </el-select>
               </div>
@@ -120,6 +120,7 @@ export default {
       page: 1,
       total: null,
       professions: null,
+      points: null,
       rowName: null,
       rowProfession: null,
       rowPoint: null,
@@ -138,9 +139,9 @@ export default {
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
-        // 新建值
+        obj.point = this.points.filter(item => item.name === obj.point)[0].id
+        // 新建设备
         if (obj.id === undefined) {
-          debugger
           addDevice(obj).then(response => {
             this.fetchData()
             this.$message({
@@ -215,7 +216,7 @@ export default {
       this.page = this.totalPage
       await this.fetchData()
       this.tableData.push({
-        is_virtual: true,
+        is_virtual: false,
         name: '',
         profession: '',
         point: '',
