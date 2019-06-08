@@ -57,7 +57,7 @@
                 </el-row>
               </template>
             </el-step>
-            <el-step status="finish" title="轮次">
+            <el-step style="cursor: pointer" status="finish" title="轮次" @click.native="changeTable('轮次')">
               <template slot="description">
                 <el-row style="margin-top: 40px">
                   <el-col v-for="(item, index) in turnCount" :key="index" :span="4" align="center">{{ item.value }}</el-col>
@@ -130,7 +130,7 @@
               </el-table-column>
             </el-table>
           </div>
-          <div v-else-if="tableStatus === '设备' || tableStatus === '巡检项' || tableStatus === '巡检点'" style="margin-left: 20px;">
+          <div v-else style="margin-left: 20px;">
             <el-table
               height="720px"
               border
@@ -144,7 +144,7 @@
                   prop="team"
                 />
                 <el-table-column
-                  v-if="tableStatus !== '巡检点'"
+                  v-if="tableStatus !== '巡检点' && tableStatus !== '轮次'"
                   label="专业"
                   align="center"
                   prop="profession"
@@ -160,11 +160,13 @@
                   prop="NO"
                 />
                 <el-table-column
+                  v-if="tableStatus !== '轮次'"
                   label="异常"
                   align="center"
                   prop="AB"
                 />
                 <el-table-column
+                  v-if="tableStatus !== '轮次'"
                   label="停检"
                   align="center"
                   prop="ST"
@@ -184,7 +186,7 @@
 </template>
 
 <script>
-import { getDayPointCount, getDayDeviceLogCount, getDayItemLogCount, getDayTeamProfessionItemCount, getDayTeamProfessionDeviceCount, getTodayAllDutyLog, getDayTurnCount, getDayTeamPointCount } from '@/api/photoAndDaily'
+import { getDayPointCount, getDayDeviceLogCount, getDayItemLogCount, getDayTeamProfessionItemCount, getDayTeamProfessionDeviceCount, getTodayAllDutyLog, getDayTurnCount, getDayTeamPointCount, getDayTeamTurnCount } from '@/api/photoAndDaily'
 export default {
   data() {
     return {
@@ -198,6 +200,7 @@ export default {
       tableData: null,
       turnCount: null,
       teamPointCount: null,
+      teamTurnCount: null,
       spanArr: []
     }
   },
@@ -230,6 +233,9 @@ export default {
       getDayTeamPointCount().then(response => {
         this.teamPointCount = response.data
       })
+      getDayTeamTurnCount().then(response => {
+        this.teamTurnCount = response.data
+      })
     },
     // 判断是否需要合并单元格
     getSpanArr(data) {
@@ -258,6 +264,8 @@ export default {
         this.tableData = this.teamProfessionItemCount
       } else if (this.tableStatus === '巡检点') {
         this.tableData = this.teamPointCount
+      } else if (this.tableStatus === '轮次') {
+        this.tableData = this.teamTurnCount
       }
       this.getSpanArr(this.tableData)
     },

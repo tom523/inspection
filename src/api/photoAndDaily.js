@@ -71,3 +71,11 @@ export function getDayTeamPointCount() {
     method: 'get'
   })
 }
+
+// 轮次详情
+export function getDayTeamTurnCount() {
+  return request({
+    url: '/inspection-log/turn-log/get_day_team_turn_count/',
+    method: 'get'
+  })
+}
