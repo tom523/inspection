@@ -56,3 +56,18 @@ export function getTodayAllDutyLog() {
     method: 'get'
   })
 }
+// 轮次的所有状态统计
+export function getDayTurnCount() {
+  return request({
+    url: '/inspection-log/turn-log/get_day_turn_count/',
+    method: 'get'
+  })
+}
+
+// 点的状态详情
+export function getDayTeamPointCount() {
+  return request({
+    url: '/inspection-log/point-log/get_day_team_point_count/',
+    method: 'get'
+  })
+}

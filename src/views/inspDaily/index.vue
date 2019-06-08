@@ -8,7 +8,7 @@
           </el-row>
           <el-steps style="height: auto; margin-top: 20px" direction="vertical" align-center>
             <!-- 当天所有的班次 -->
-            <el-step status="finish" title="班次" @click.native="changeTable('班次')">
+            <el-step style="cursor: pointer" status="finish" title="班次" @click.native="changeTable('班次')">
               <template slot="description">
                 <el-row style="margin-top: 40px">
                   <el-col align="center" :span="4">名称</el-col>
@@ -25,7 +25,7 @@
               </template>
             </el-step>
             <!-- 点记录所有状态统计 -->
-            <el-step status="finish" title="巡检点">
+            <el-step style="cursor: pointer" status="finish" title="巡检点" @click.native="changeTable('巡检点')">
               <template slot="description">
                 <el-row style="margin-top: 40px">
                   <el-col v-for="(item, index) in pointCount" :key="index" :span="4" align="center">{{ item.value }}</el-col>
@@ -36,7 +36,7 @@
               </template>
             </el-step>
             <!-- 设备记录的所有状态统计 -->
-            <el-step status="finish" title="设备" @click.native="changeTable('设备')">
+            <el-step style="cursor: pointer" status="finish" title="设备" @click.native="changeTable('设备')">
               <template slot="description">
                 <el-row style="margin-top: 40px">
                   <el-col v-for="(item, index) in deviceLogCount" :key="index" :span="4" align="center">{{ item.value }}</el-col>
@@ -47,7 +47,7 @@
               </template>
             </el-step>
             <!-- 项记录的所有状态统计 -->
-            <el-step status="finish" title="巡检项" @click.native="changeTable('巡检项')">
+            <el-step style="cursor: pointer" status="finish" title="巡检项" @click.native="changeTable('巡检项')">
               <template slot="description">
                 <el-row style="margin-top: 40px">
                   <el-col v-for="(item, index) in itemLogCount" :key="index" :span="4" align="center">{{ item.value }}</el-col>
@@ -57,109 +57,124 @@
                 </el-row>
               </template>
             </el-step>
+            <el-step status="finish" title="轮次">
+              <template slot="description">
+                <el-row style="margin-top: 40px">
+                  <el-col v-for="(item, index) in turnCount" :key="index" :span="4" align="center">{{ item.value }}</el-col>
+                </el-row>
+                <el-row style="margin-top: 40px">
+                  <el-col v-for="(item, index) in turnCount" :key="index" :span="4" align="center">{{ item.name }}</el-col>
+                </el-row>
+              </template>
+            </el-step>
           </el-steps>
         </div>
       </el-main>
       <el-main>
-        <div style="margin-left: 20px; height: 700px">
-          <el-row>
-            <el-col>{{ tableStatus }}</el-col>
-          </el-row>
+        <div style="margin-left: 20px; height: 720px">
           <div v-if="tableStatus === '班次'">
             <el-table
+              height="720px"
               :data="todayAllDutyLog"
               border
               stripe
             >
-              <el-table-column
-                prop="name"
-                width="100"
-                align="center"
-                label="名称"
-              />
-              <el-table-column
-                label="轮次"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <span v-for="(turn, index) in scope.row.turns" :key="index">{{ turn }}<br></span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="班中检查"
-                align="center"
-              >
-                <template slot-scope="scope">
+              <el-table-column align="center" :label="tableStatus">
+                <el-table-column
+                  prop="name"
+                  width="100"
+                  align="center"
+                  label="名称"
+                />
+                <el-table-column
+                  label="轮次"
+                  width="220"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <span v-for="(turn, index) in scope.row.turns" :key="index">{{ turn }}<br></span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="班中检查"
+                  align="center"
+                >
+                  <template slot-scope="scope">
 
-                  <el-popover trigger="hover" placement="left">
-                    <div
-                      v-for="item in scope.row.check_time"
-                      :key="item.s"
-                      :label="item.s"
-                      :value="item.s"
-                    >
-                      <p>开始时间: {{ item.s }}</p>
-                      <p>结束时间: {{ item.e }}</p>
-                      <p>-----------------------------------------</p>
-                    </div>
-                    <div slot="reference" class="name-wrapper">
-                      <span v-for="(check, index) in scope.row.duty_checks" :key="index">{{ check }}<br></span>
-                    </div>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="交接班时间"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <span>{{ scope.row.takeover_start_time }}<br></span>
-                  <span>{{ scope.row.takeover_end_time }}</span>
-                </template>
+                    <el-popover trigger="hover" placement="left">
+                      <div
+                        v-for="item in scope.row.check_time"
+                        :key="item.s"
+                        :label="item.s"
+                        :value="item.s"
+                      >
+                        <p>开始时间: {{ item.s }}</p>
+                        <p>结束时间: {{ item.e }}</p>
+                        <p>-----------------------------------------</p>
+                      </div>
+                      <div slot="reference" class="name-wrapper">
+                        <span v-for="(check, index) in scope.row.duty_checks" :key="index">{{ check }}<br></span>
+                      </div>
+                    </el-popover>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="交接班时间"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.takeover_start_time }}<br></span>
+                    <span>{{ scope.row.takeover_end_time }}</span>
+                  </template>
+                </el-table-column>
               </el-table-column>
             </el-table>
           </div>
-          <div v-else style="margin-left: 20px;">
+          <div v-else-if="tableStatus === '设备' || tableStatus === '巡检项' || tableStatus === '巡检点'" style="margin-left: 20px;">
             <el-table
+              height="720px"
               border
               :span-method="objectSpanMethod"
               :data="tableData"
             >
-              <el-table-column
-                label="值"
-                align="center"
-                prop="team"
-              />
-              <el-table-column
-                label="专业"
-                align="center"
-                prop="profession"
-              />
-              <el-table-column
-                label="未检"
-                align="center"
-                prop="UN"
-              />
-              <el-table-column
-                label="正常"
-                align="center"
-                prop="NO"
-              />
-              <el-table-column
-                label="异常"
-                align="center"
-                prop="AB"
-              />
-              <el-table-column
-                label="停检"
-                align="center"
-                prop="ST"
-              />
-              <el-table-column
-                label="漏检"
-                align="center"
-                prop="OM"
-              />
+              <el-table-column align="center" :label="tableStatus">
+                <el-table-column
+                  label="值"
+                  align="center"
+                  prop="team"
+                />
+                <el-table-column
+                  v-if="tableStatus !== '巡检点'"
+                  label="专业"
+                  align="center"
+                  prop="profession"
+                />
+                <el-table-column
+                  label="未检"
+                  align="center"
+                  prop="UN"
+                />
+                <el-table-column
+                  label="正常"
+                  align="center"
+                  prop="NO"
+                />
+                <el-table-column
+                  label="异常"
+                  align="center"
+                  prop="AB"
+                />
+                <el-table-column
+                  label="停检"
+                  align="center"
+                  prop="ST"
+                />
+                <el-table-column
+                  label="漏检"
+                  align="center"
+                  prop="OM"
+                />
+              </el-table-column>
             </el-table>
           </div>
         </div>
@@ -169,7 +184,7 @@
 </template>
 
 <script>
-import { getDayPointCount, getDayDeviceLogCount, getDayItemLogCount, getDayTeamProfessionItemCount, getDayTeamProfessionDeviceCount, getTodayAllDutyLog } from '@/api/photoAndDaily'
+import { getDayPointCount, getDayDeviceLogCount, getDayItemLogCount, getDayTeamProfessionItemCount, getDayTeamProfessionDeviceCount, getTodayAllDutyLog, getDayTurnCount, getDayTeamPointCount } from '@/api/photoAndDaily'
 export default {
   data() {
     return {
@@ -181,6 +196,8 @@ export default {
       teamProfessionDeviceCount: null,
       todayAllDutyLog: null,
       tableData: null,
+      turnCount: null,
+      teamPointCount: null,
       spanArr: []
     }
   },
@@ -206,6 +223,12 @@ export default {
       })
       getTodayAllDutyLog().then(response => {
         this.todayAllDutyLog = response.data.duty_logs
+      })
+      getDayTurnCount().then(response => {
+        this.turnCount = response.data.data
+      })
+      getDayTeamPointCount().then(response => {
+        this.teamPointCount = response.data
       })
     },
     // 判断是否需要合并单元格
@@ -233,6 +256,8 @@ export default {
         this.tableData = this.teamProfessionDeviceCount
       } else if (this.tableStatus === '巡检项') {
         this.tableData = this.teamProfessionItemCount
+      } else if (this.tableStatus === '巡检点') {
+        this.tableData = this.teamPointCount
       }
       this.getSpanArr(this.tableData)
     },
