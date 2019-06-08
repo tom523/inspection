@@ -258,3 +258,12 @@ export function getItemLog(params) {
     params
   })
 }
+
+// 获取轮次记录
+export function getTurnLog(params) {
+  return request({
+    url: '/inspection-log/turn-log/',
+    mehtod: 'get',
+    params
+  })
+}

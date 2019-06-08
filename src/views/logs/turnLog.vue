@@ -17,21 +17,44 @@
           <el-table-column
             align="center"
             label="轮次"
-            prop="name"
+            prop="snapshot.name"
           />
           <el-table-column
             align="center"
             label="巡检点"
-            prop="points"
+            prop="snapshot.points"
           />
           <el-table-column
             align="center"
-            label="相关专业"
-            prop="display_name"
+            label="状态"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.checking_status | statusFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="轮次开始时间"
+            prop="plan_start_time"
+          />
+          <el-table-column
+            align="center"
+            label="轮次结束时间"
+            prop="plan_end_time"
+          />
+          <el-table-column
+            align="center"
+            label="巡检开始时间"
+            prop="actual_start_time"
+          />
+          <el-table-column
+            align="center"
+            label="巡检结束时间"
+            prop="actual_end_time"
           />
         </el-table>
         <el-pagination
-          style="margin-top: 20px; margin-left: 6%"
+          style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"
           :current-page="page"
           :total="total"
           background
@@ -46,8 +69,18 @@
 </template>
 
 <script>
-import { getTurn } from '@/api/insp'
+import { getTurnLog } from '@/api/insp'
 export default {
+  filters: {
+    statusFilter(key) {
+      const map = {
+        'NO': '已检',
+        'LO': '未检',
+        'OM': '遗漏'
+      }
+      return map[key]
+    }
+  },
   data() {
     return {
       tableData: [],
@@ -64,7 +97,7 @@ export default {
       this.fecthdata()
     },
     fecthdata() {
-      getTurn({ page: this.page }).then(response => {
+      getTurnLog({ page: this.page }).then(response => {
         this.page = response.data.page
         this.total = response.data.count
         this.tableData = response.data.items

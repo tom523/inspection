@@ -79,19 +79,19 @@ export const constantRoutes = [
         name: '管线记录',
         component: () => import('@/views/tree/index'),
         meta: { title: '管线记录', icon: 'tree' }
-      }
+      },
       // {
       //   path: 'tree',
       //   name: '异常记录',
       //   component: () => import('@/views/tree/index'),
       //   meta: { title: '异常记录', icon: 'tree' }
       // },
-      // {
-      //   path: 'turnLog',
-      //   name: '轮次记录',
-      //   component: () => import('@/views/logs/turnLog'),
-      //   meta: { title: '轮次记录', icon: 'tree' }
-      // },
+      {
+        path: 'turnLog',
+        name: '轮次记录',
+        component: () => import('@/views/logs/turnLog'),
+        meta: { title: '轮次记录', icon: 'tree' }
+      }
       // {
       //   path: 'pointLog',
       //   name: '巡检点记录',
