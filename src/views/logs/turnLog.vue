@@ -45,13 +45,20 @@
           <el-table-column
             align="center"
             label="巡检开始时间"
-            prop="actual_start_time"
-          />
+          >
+            <template slot-scope="scope">
+              {{ scope.row.actual_start_time || '--' }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="巡检结束时间"
             prop="actual_end_time"
-          />
+          >
+            <template slot-scope="scope">
+              {{ scope.row.actual_end_time || '--' }}
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"

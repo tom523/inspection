@@ -23,10 +23,10 @@
             <template slot-scope="scope">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="巡检点：">
-                  <span>{{ points.filter(item => item.id === scope.row.snapshot.point)[0].name }}</span>
+                  <span>{{ scope.row.point_name }}</span>
                 </el-form-item>
                 <el-form-item label="设备：">
-                  <span>{{ devices.filter(item => item.id === scope.row.snapshot.device)[0].name }}</span>
+                  <span>{{ scope.row.device_name }}</span>
                 </el-form-item>
                 <div v-if="scope.row.snapshot.type !== '普通巡检项'">
                   <el-form-item label="数值：">
@@ -112,7 +112,7 @@
             label="巡检时间"
           >
             <template slot-scope="scope">
-              {{ scope.row.actual_check_time }}
+              {{ scope.row.actual_check_time || '--' }}
             </template>
           </el-table-column>
         </el-table>
