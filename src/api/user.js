@@ -116,3 +116,11 @@ export function getTransferLog() {
     method: 'get'
   })
 }
+
+// 获取所有巡检项类型
+export function getGlobalChoices() {
+  return request({
+    url: '/account/get_global_choices/',
+    method: 'get'
+  })
+}

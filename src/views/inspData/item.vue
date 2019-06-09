@@ -61,10 +61,10 @@
               <div v-if="scope.row.select_show">
                 <el-select v-model="scope.row.type">
                   <el-option
-                    v-for="item in types"
-                    :key="item.value"
-                    :lable="item.lable"
-                    :value="item.value"
+                    v-for="item in getGlobalChoices"
+                    :key="item"
+                    :lable="item"
+                    :value="item"
                   />
                 </el-select>
               </div>
@@ -78,7 +78,6 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.point.id"
-                  :placeholder="scope.row.point.name"
                   filterable
                   width="100"
                 >
@@ -99,11 +98,11 @@
           >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
-                <el-select v-model="scope.row.device.id" :placeholder="scope.row.device.name" filterable>
+                <el-select v-model="scope.row.device.id" filterable>
                   <el-option
                     v-for="item in devices"
                     :key="item.id"
-                    :label="item.display_name"
+                    :label="item.name"
                     :value="item.id"
                   />
                 </el-select>
@@ -196,20 +195,10 @@
 
 <script>
 import { getItem, addItem, updateItem, deleteItem, getAllPoint, getAllDevice } from '@/api/insp'
-import { getRoleUser } from '@/api/user'
+import { getRoleUser, getGlobalChoices } from '@/api/user'
 export default {
   data() {
     return {
-      types: [{
-        value: '普通巡检项',
-        label: '普通巡检项'
-      }, {
-        value: '温度测量项',
-        label: '温度测量项'
-      }, {
-        value: '其他测量项',
-        label: '其他测量项'
-      }],
       loading: false,
       tableData: [],
       total: null,
@@ -226,7 +215,8 @@ export default {
       rowCnUnit: null,
       rowSymolUnit: null,
       rowPoint: null,
-      rowDevice: null
+      rowDevice: null,
+      globalChoices: null
     }
   },
   created() {
@@ -241,6 +231,8 @@ export default {
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
+        obj.point = obj.point.id
+        obj.device = obj.device.id
         if (obj.id === undefined) {
           // 添加
           addItem(obj).then(response => {
@@ -254,8 +246,6 @@ export default {
           })
         } else {
           // 更新
-          obj.point = obj.point.id
-          obj.device = obj.device.id
           updateItem(obj.id, obj).then(response => {
             this.fetchData()
             this.$message({
@@ -328,6 +318,12 @@ export default {
         name: '',
         profession: '',
         type: '',
+        point: {
+          id: null
+        },
+        device: {
+          id: null
+        },
         extra: {
           threshold: '-',
           comparisonOperator: '-',
@@ -358,6 +354,9 @@ export default {
       })
       getAllDevice().then(response => {
         this.devices = response.data
+      })
+      getGlobalChoices().then(response => {
+        this.getGlobalChoices = response.item_type_choices
       })
     },
     row_class({ row, rowIndex }) {

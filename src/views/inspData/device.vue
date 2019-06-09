@@ -57,18 +57,18 @@
             label="巡检点"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.point }}
+              {{ scope.row.select_show ? '' : scope.row.point.name }}
               <div v-if="scope.row.select_show">
                 <el-select
-                  v-model="scope.row.point"
+                  v-model="scope.row.point.id"
                   filterable
                   style="width: 100%"
                 >
                   <el-option
                     v-for="item in points"
                     :key="item.id"
-                    :lable="item.name"
-                    :value="item.name"
+                    :label="item.name"
+                    :value="item.id"
                   />
                 </el-select>
               </div>
@@ -139,8 +139,8 @@ export default {
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
-        obj.point = this.points.filter(item => item.name === obj.point)[0].id
         // 新建设备
+        obj.point = obj.point.id
         if (obj.id === undefined) {
           addDevice(obj).then(response => {
             this.fetchData()
@@ -219,7 +219,9 @@ export default {
         is_virtual: false,
         name: '',
         profession: '',
-        point: '',
+        point: {
+          id: null
+        },
         select_show: true
       })
     },
