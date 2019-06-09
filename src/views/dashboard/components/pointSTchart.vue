@@ -54,6 +54,10 @@ export default {
       }, 100)
       window.addEventListener('resize', this.__resizeHandler)
     }
+
+    // 监听侧边栏的变化
+    this.sidebarElm = document.getElementsByClassName('sidebar-container')[0]
+    this.sidebarElm && this.sidebarElm.addEventListener('transitionend', this.sidebarResizeHandler)
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -69,10 +73,15 @@ export default {
     this.chart = null
   },
   methods: {
+    sidebarResizeHandler(e) {
+      if (e.propertyName === 'width') {
+        this.__resizeHandler()
+      }
+    },
     setOptions(chartData) {
       this.chart.setOption({
         title: {
-          text: '停检点统计图'
+          text: '缺陷未修复统计图'
         },
         color: ['#FF7F50'],
         tooltip: {
