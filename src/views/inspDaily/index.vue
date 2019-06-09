@@ -266,6 +266,8 @@ export default {
         this.tableData = this.teamPointCount
       } else if (this.tableStatus === '轮次') {
         this.tableData = this.teamTurnCount
+      } else {
+        return
       }
       this.getSpanArr(this.tableData)
     },
