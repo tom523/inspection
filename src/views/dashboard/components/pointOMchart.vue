@@ -81,7 +81,7 @@ export default {
     setOptions(chartData) {
       this.chart.setOption({
         title: {
-          text: '缺陷未修复统计图'
+          text: '漏检点统计图'
         },
         color: ['#FF7F50'],
         tooltip: {
