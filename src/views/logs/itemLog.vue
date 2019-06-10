@@ -139,7 +139,8 @@
 </template>
 
 <script>
-import { getItemLog, getAllPoint, getAllDevice } from '@/api/insp'
+import { getItemLog } from '@/api/insp'
+import { getDate } from '@/utils/tool'
 export default {
   filters: {
     statusFilter: function(code) {
@@ -165,8 +166,6 @@ export default {
   },
   data() {
     return {
-      points: [],
-      devices: [],
       tableData: [],
       total: null,
       cpDialogPhoto: false,
@@ -174,7 +173,10 @@ export default {
       // page: 1,
       listQuery: {
         page: 1,
-        inspection_level: null
+        inspection_level: null,
+        checking_status: null,
+        actual_check_time__lte: null,
+        actual_check_time__gte: null
       },
       inspectionLevels: [{
         value: 1,
@@ -196,14 +198,23 @@ export default {
     }
   },
   watch: {
+    'listQuery.checking_status': function() {
+      debugger
+      this.listQuery.page = 1
+      this.listQuery.actual_check_time__lte = getDate() + ' 00:00:00'
+      this.listQuery.actual_check_time__gte = getDate() + ' 23:59:59'
+      this.fetchData()
+    },
     'listQuery.inspection_level': function() {
       this.listQuery.page = 1
       this.fetchData()
     }
   },
   created() {
+    if (this.$route.query.status) {
+      this.listQuery.checking_status = this.$route.query.status
+    }
     this.fetchData()
-    this.fetchAllPointAndDevice()
   },
   methods: {
     handleCurrentChange(index) {
@@ -220,14 +231,6 @@ export default {
         this.tableData = response.data.items
         this.total = response.data.count
         this.listQuery.page = response.data.page
-      })
-    },
-    fetchAllPointAndDevice() {
-      getAllPoint().then(response => {
-        this.points = response.data
-      })
-      getAllDevice().then(response => {
-        this.devices = response.data
       })
     },
     row_class({ row, rowIndex }) {

@@ -61,6 +61,14 @@ export function getTurn(params) {
   })
 }
 
+// 获取所有轮次
+export function getAllTurn() {
+  return request({
+    url: '/inspection/turn/get_choices/',
+    mehtod: 'get'
+  })
+}
+
 // 更新轮次
 export function updateTurn(id, data) {
   return request({
@@ -230,7 +238,7 @@ export function deleteDutyCheckItem(id) {
 // 获取所有巡检点，不分页
 export function getAllPoint() {
   return request({
-    url: '/inspection/point/get_choices/',
+    url: '/inspection/point/get_all_point_choices/',
     method: 'get'
   })
 }
@@ -238,7 +246,7 @@ export function getAllPoint() {
 // 获取所有普通专业巡检点
 export function getTurnChoices(argument) {
   return request({
-    url: '/inspection/point/get_turn_choices/',
+    url: '/inspection/point/get_profession_point_choices/',
     method: 'get'
   })
 }

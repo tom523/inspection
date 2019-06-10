@@ -211,7 +211,7 @@
 
 <script>
 import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, dutyCheckGetChoices } from '@/api/duty'
-import { getTurn } from '@/api/insp'
+import { getAllTurn } from '@/api/insp'
 export default {
   data() {
     return {
@@ -369,7 +369,7 @@ export default {
       })
     },
     fecthSelect() {
-      getTurn().then(response => {
+      getAllTurn().then(response => {
         this.turns = response.data.items
       })
       dutyCheckGetChoices().then(response => {

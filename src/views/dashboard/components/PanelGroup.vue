@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
+      <div class="card-panel" @click="viewItemLog('AB')">
         <div class="card-panel-icon-wrapper icon-clipboard">
           <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
         </div>
@@ -12,7 +12,7 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
+      <div class="card-panel" @click="viewItemLog('RE')">
         <div class="card-panel-icon-wrapper icon-component">
           <svg-icon icon-class="component" class-name="card-panel-icon" />
         </div>
@@ -72,6 +72,9 @@ export default {
     })
   },
   methods: {
+    viewItemLog(status) {
+      this.$router.push({ path: '/example/itemLog', query: { status: status }})
+    }
   }
 }
 </script>
