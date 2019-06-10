@@ -3,6 +3,11 @@
     <panel-group />
     <el-row>
       <el-col style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+        <Recent-Dutylog />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <ABfault-chart :chart-data="ABchartData" />
       </el-col>
     </el-row>
@@ -40,6 +45,7 @@ import ABfaultChart from './components/faultABchart'
 import REfaultChart from './components/faultREchart'
 import STpointChart from './components/pointSTchart'
 import OMpointChart from './components/pointOMchart'
+import RecentDutylog from './components/RecentDutylog'
 import { getDashboardCount } from '@/api/dashboard'
 export default {
   name: 'DashboardAdmin',
@@ -48,7 +54,8 @@ export default {
     ABfaultChart,
     REfaultChart,
     OMpointChart,
-    STpointChart
+    STpointChart,
+    RecentDutylog
   },
   data() {
     return {
