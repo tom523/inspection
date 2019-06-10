@@ -23,10 +23,10 @@
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.name }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.id === undefined">
                 <el-input v-model="scope.row.name" />
               </div>
+              <div v-else>{{ scope.row.name }}</div>
             </template>
           </el-table-column>
           <el-table-column

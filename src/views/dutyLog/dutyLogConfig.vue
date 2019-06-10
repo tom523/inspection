@@ -370,7 +370,7 @@ export default {
     },
     fecthSelect() {
       getAllTurn().then(response => {
-        this.turns = response.data.items
+        this.turns = response.data
       })
       dutyCheckGetChoices().then(response => {
         this.dutyChecks = response.data
