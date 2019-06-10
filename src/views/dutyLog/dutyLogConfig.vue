@@ -203,7 +203,7 @@
       </el-form>
       <div style="margin-left: 80%">
         <el-button @click="cancelConfig">取消</el-button>
-        <el-button style="margin-left: 50px" type="primary" @click="addDutyConfig">确定</el-button>
+        <el-button v-loading.fullscreen.lock="fullscreenLoading" style="margin-left: 50px" type="primary" @click="addDutyConfig">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -248,11 +248,15 @@ export default {
       total: null,
       operation: null,
       operationWay: [],
-      professions: []
+      professions: [],
+      fullscreenLoading: false
     }
   },
   watch: {
     operation: function() {
+      if (this.operation === null) {
+        return
+      }
       this.addTamplate()
       this.fecthTeamSet()
     }
@@ -321,6 +325,7 @@ export default {
       }
     },
     addDutyConfig() {
+      this.fullscreenLoading = true
       const data = {
         teams: this.teams,
         start_time: this.start_time,
@@ -335,10 +340,14 @@ export default {
         addDutyLogConfig(data).then(response => {
           this.clearDate()
           this.fetchData()
+          this.fullscreenLoading = false
           this.$message({
             type: 'success',
             message: '排班配置成功'
           })
+        }).catch(err => {
+          console.log(err)
+          this.fullscreenLoading = false
         })
       } else {
         updateDutyLogConfig(this.rowID, data).then(response => {
@@ -386,7 +395,7 @@ export default {
       this.operation = null
       this.type = null
       this.takeover_timedelta = null
-      this.template = [{ name: '', turns: '' }]
+      this.template = []
       this.duty_checks = null
       this.addDutyDialog = false
     },

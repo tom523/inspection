@@ -29,6 +29,7 @@
           </el-table-column>
           <el-table-column
             align="center"
+            width="100"
             label="状态"
           >
             <template slot-scope="scope">
