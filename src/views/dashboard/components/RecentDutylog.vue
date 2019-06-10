@@ -30,10 +30,10 @@
             />
             <el-table-column
               align="center"
-              label="用户"
+              label="员工"
             >
               <template slot-scope="scope">
-                {{ scope.row.users || '--' }}
+                <span v-for="(staff, index) in scope.row.staffs" :key="index">{{ staff }}<br></span>
               </template>
             </el-table-column>
             <el-table-column
