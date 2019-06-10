@@ -113,8 +113,8 @@ export function deleteDutyLogOperationWay(id) {
   })
 }
 
-// 生成复检巡检记录
-export function genLogByFrequencyREview(data) {
+// 生成复检,管线巡检记录
+export function genLogByFrequencyREviewAndPipe(data) {
   return request({
     url: '/inspection-log/turn-log/create_log_for_frequency/',
     method: 'post',
@@ -122,14 +122,14 @@ export function genLogByFrequencyREview(data) {
   })
 }
 
-// 生成管线巡检记录
-export function genLogByFrequencyPipe(data) {
-  return request({
-    url: 'inspection-log/turn-log/create_log_for_frequency_pipe/',
-    method: 'post',
-    data
-  })
-}
+// // 生成管线巡检记录
+// export function genLogByFrequencyPipe(data) {
+//   return request({
+//     url: 'inspection-log/turn-log/create_log_for_frequency_pipe/',
+//     method: 'post',
+//     data
+//   })
+// }
 
 // 获取班中检查
 export function dutyCheckGetChoices() {

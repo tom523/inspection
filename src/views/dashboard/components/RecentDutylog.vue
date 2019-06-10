@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div>
+    <el-row>
       <el-col>
         <el-table
           border
@@ -13,93 +13,93 @@
           >
             <el-table-column
               align="center"
-              label="班次"
-              width="100"
+              type="index"
+              label="序号"
+              width="80"
+              :index="indexMethod"
+            />
+            <el-table-column
+              align="center"
+              label="名称"
               prop="name"
             />
             <el-table-column
               align="center"
               label="值"
-              width="100"
               prop="team"
             />
             <el-table-column
               align="center"
+              label="用户"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.users || '--' }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
               label="开始时间"
-              width="200"
               prop="start_time"
             />
             <el-table-column
               align="center"
               label="结束时间"
-              width="200"
               prop="end_time"
-            />
-            <el-table-column
-              align="center"
-              width="200"
-              label="轮次"
-            >
-              <template slot-scope="scope">
-                <span v-for="(turn, index) in scope.row.turns" :key="index">{{ turn }}<br></span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              width="200"
-              label="班中检查"
-            >
-              <template slot-scope="scope">
-                <div v-if="scope.row.duty_checks.length !== 0">
-                  <span v-for="(check, index) in scope.row.duty_checks" :key="index">{{ check }}<br></span>
-                </div>
-                <div v-else>--</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              width="200"
-              label="班中检查时间"
-            >
-              <template slot-scope="scope">
-                <span v-for="(time, index) in scope.row.check_time" :key="index">{{ time.s.substring(11) + ' 至 ' + time.e.substring(11) }}<br></span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              width="200"
-              label="交班开始时间"
-              prop="takeover_start_time"
-            />
-            <el-table-column
-              align="center"
-              width="200"
-              label="交班结束时间"
-              prop="takeover_end_time"
             />
           </el-table-column>
         </el-table>
       </el-col>
-    </div>
+    </el-row>
+    <el-row>
+      <el-col>
+        <el-pagination
+          style="margin-top: 30px; margin-bottom: 20px"
+          :current-page="listQuery.page"
+          :total="total"
+          page-size="5"
+          background
+          prev-text="上一页"
+          next-text="下一页"
+          layout="total, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+        />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import { getRecentDutyLog } from '@/api/dashboard'
+// import { getRecentDutyLog } from '@/api/dashboard'
+import { getDutyLog } from '@/api/duty'
+import { getCurTime } from '@/utils/tool'
 export default {
   data() {
     return {
-      tableData: []
+      listQuery: {
+        page: 1,
+        page_size: 5,
+        end_time__gte: getCurTime()
+      },
+      tableData: [],
+      total: null
     }
   },
   created() {
     this.fecthdata()
   },
   methods: {
+    handleCurrentChange(index) {
+      this.listQuery.page = index
+      this.fecthdata()
+    },
     fecthdata() {
-      getRecentDutyLog().then(response => {
-        this.tableData = response.data
+      getDutyLog(this.listQuery).then(response => {
+        this.total = response.data.count
+        this.tableData = response.data.items
       })
+    },
+    indexMethod(index) {
+      return (this.listQuery.page - 1) * 5 + index + 1
     }
   }
 }

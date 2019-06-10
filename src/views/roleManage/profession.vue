@@ -174,7 +174,7 @@
 <script>
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
-import { genLogByFrequencyREview, genLogByFrequencyPipe } from '@/api/duty'
+import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
 
 export default {
   filters: {
@@ -370,25 +370,33 @@ export default {
     },
     generateLogByFrequency() {
       console.log(this.generateData)
-      if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
-        genLogByFrequencyREview(this.generateData).then(response => {
-          this.$message({
-            type: 'success',
-            message: '生成复检巡检记录成功！'
-          })
-        }).catch(err => {
-          console.log(err)
+      genLogByFrequencyREviewAndPipe(this.generateData).then(response => {
+        this.$message({
+          type: 'success',
+          message: '生成记录成功！'
         })
-      } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
-        genLogByFrequencyPipe(this.generateData).then(response => {
-          this.$message({
-            type: 'success',
-            message: '生成管线巡检记录成功！'
-          })
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+      }).catch(err => {
+        console.log(err)
+      })
+      // if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
+      //   genLogByFrequencyREview(this.generateData).then(response => {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '生成复检巡检记录成功！'
+      //     })
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
+      //   genLogByFrequencyPipe(this.generateData).then(response => {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '生成管线巡检记录成功！'
+      //     })
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // }
       this.clearDate()
       this.generateLogDialog = false
     },
