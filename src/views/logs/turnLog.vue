@@ -22,8 +22,11 @@
           <el-table-column
             align="center"
             label="巡检点"
-            prop="snapshot.points"
-          />
+          >
+            <template slot-scope="scope">
+              <span v-for="(point, index) in scope.row.snapshot.points.split(',')" :key="index">{{ point }}<br></span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="状态"

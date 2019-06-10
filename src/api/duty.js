@@ -116,7 +116,7 @@ export function deleteDutyLogOperationWay(id) {
 // 生成复检巡检记录
 export function genLogByFrequencyREview(data) {
   return request({
-    url: 'inspection-log/turn-log/create_log_for_frequency_review/',
+    url: '/inspection-log/turn-log/create_log_for_frequency/',
     method: 'post',
     data
   })

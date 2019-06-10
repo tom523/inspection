@@ -2,7 +2,16 @@
   <div class="app-container">
     <div style="margin-top: 10px">
       <el-col>
-        <el-button style="margin-left: 80%; width: 10%" type="primary" @click="add_row">+ 添加设备</el-button>
+        <span style="margin-left: 10%">专业</span>
+        <el-select v-model="listQuery.profession" clearable placeholder="选择专业">
+          <el-option
+            v-for="item in professions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+        <el-button style="margin-left: 54%; width: 10%" type="primary" @click="add_row">+ 添加设备</el-button>
       </el-col>
       <el-col>
         <el-table
@@ -96,7 +105,7 @@
       <el-col>
         <el-pagination
           style="margin-top: 50px; margin-left: 10%; margin-bottom: 10%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -124,7 +133,18 @@ export default {
       rowName: null,
       rowProfession: null,
       rowPoint: null,
-      totalPage: null
+      totalPage: null,
+      listQuery: {
+        is_virtual: false,
+        page: 1,
+        profession: null
+      }
+    }
+  },
+  watch: {
+    'listQuery.profession': function() {
+      this.listQuery.page = 1
+      this.fetchData()
     }
   },
   created() {
@@ -213,7 +233,7 @@ export default {
     },
     async add_row() {
       // 点击添加
-      this.page = this.totalPage
+      this.listQuery.page = this.totalPage
       await this.fetchData()
       this.tableData.push({
         is_virtual: false,
@@ -226,11 +246,8 @@ export default {
       })
     },
     async fetchData() {
-      await getDevice({
-        is_virtual: false,
-        page: this.page
-      }).then(response => {
-        this.page = response.data.page
+      await getDevice(this.listQuery).then(response => {
+        this.listQuery.page = response.data.page
         this.total = response.data.count
         this.totalPage = response.data.total_page
         var deviceData = response.data.items
@@ -256,7 +273,7 @@ export default {
       }
     },
     indexMethod(index) {
-      return (this.page - 1) * 10 + index + 1
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }

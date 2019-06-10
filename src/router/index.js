@@ -205,9 +205,9 @@ export const constantRoutes = [
     children: [
       {
         path: 'point',
-        name: '巡检数据',
+        name: '巡检点数据',
         component: () => import('@/views/inspData/point'),
-        meta: { title: '巡检数据', icon: 'form' }
+        meta: { title: '巡检点数据', icon: 'form' }
       },
       {
         path: 'device',

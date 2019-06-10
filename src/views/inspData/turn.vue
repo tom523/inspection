@@ -2,87 +2,96 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <el-button style="margin-left: 80%; width: 10%" type="primary" @click="add_row">+ 添加轮次</el-button>
-      <el-col>
-        <el-table
-          v-loading="loading"
-          element-loading-text="拼命加载中"
-          :row-class-name="row_class"
-          border
-          :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 10%"
+      <el-table
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        :row-class-name="row_class"
+        border
+        :data="tableData"
+        style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 10%"
+      >
+        <el-table-column
+          align="center"
+          type="index"
+          label="序号"
+          width="80"
+          :index="indexMethod"
+        />
+        <el-table-column
+          align="center"
+          label="轮次"
         >
-          <el-table-column
-            align="center"
-            type="index"
-            label="序号"
-            width="80"
-          />
-          <el-table-column
-            align="center"
-            label="轮次"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.name }}
-              <div v-if="scope.row.select_show">
-                <el-input v-model="scope.row.name" />
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="巡检点"
-          >
-            <template slot-scope="scope">
-              <div v-if="scope.row.select_show">
-                <el-select
-                  v-model="scope.row.points"
-                  filterable
-                  style="width: 100%"
-                  multiple
-                >
-                  <el-option
-                    v-for="item in points"
-                    :key="item.username"
-                    :lable="item.id"
-                    :value="item.name"
-                  />
-                </el-select>
-              </div>
-              <div v-else>
-                <span
-                  v-for="(point, index) in scope.row.points"
-                  :key="index"
-                >
-                  {{ point }}
-                  <br>
-                </span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="相关专业"
-            prop="related_professions"
-          />
-          <el-table-column
-            align="center"
-            label="操作"
-            width="180"
-          >
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="editRowOrConfirm(scope.$index, scope.row)"
-              >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="deleteRowOrCancel(scope.$index, scope.row)"
-              >{{ scope.row.select_show ? '取消' : '删除' }}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
+          <template slot-scope="scope">
+            {{ scope.row.select_show ? '' : scope.row.name }}
+            <div v-if="scope.row.select_show">
+              <el-input v-model="scope.row.name" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="巡检点"
+        >
+          <template slot-scope="scope">
+            <div v-if="scope.row.select_show">
+              <el-select
+                v-model="scope.row.points"
+                filterable
+                style="width: 100%"
+                multiple
+              >
+                <el-option
+                  v-for="item in points"
+                  :key="item.username"
+                  :lable="item.id"
+                  :value="item.name"
+                />
+              </el-select>
+            </div>
+            <div v-else>
+              <span
+                v-for="(point, index) in scope.row.points"
+                :key="index"
+              >
+                {{ point }}
+                <br>
+              </span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="相关专业"
+          prop="related_professions"
+        />
+        <el-table-column
+          align="center"
+          label="操作"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="editRowOrConfirm(scope.$index, scope.row)"
+            >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="deleteRowOrCancel(scope.$index, scope.row)"
+            >{{ scope.row.select_show ? '取消' : '删除' }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        style="margin-left: 10%; margin-bottom: 40px; margin-bottom: 10%"
+        :current-page="page"
+        :total="total"
+        background
+        prev-text="上一页"
+        next-text="下一页"
+        layout="total, prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -96,7 +105,9 @@ export default {
       tableData: [],
       points: [],
       rowName: '',
-      rowPoint: ''
+      rowPoint: '',
+      page: 1,
+      total: null
     }
   },
   created() {
@@ -104,6 +115,10 @@ export default {
     this.fecthPoint()
   },
   methods: {
+    handleCurrentChange(index) {
+      this.page = index
+      this.fecthdata()
+    },
     editRowOrConfirm(index, obj) {
       // 点击确定
       if (this.tableData[index].select_show) {
@@ -194,7 +209,9 @@ export default {
       })
     },
     fecthdata() {
-      getTurn().then(response => {
+      getTurn({ page: this.page }).then(response => {
+        this.page = response.data.page
+        this.total = response.data.count
         var turnData = response.data.items
         turnData.map(item => {
           if (item.points !== '') {
@@ -216,6 +233,9 @@ export default {
       } else if (rowIndex % 2 === 1) {
         return 'success-row'
       }
+    },
+    indexMethod(index) {
+      return (this.page - 1) * 10 + index + 1
     }
   }
 }
