@@ -131,6 +131,7 @@ export default {
       professions: [],
       rowData: {},
       members: [],
+      rowName: null,
       rowMember: [],
       rowAccess: [],
       rowDsec: null,
@@ -196,6 +197,7 @@ export default {
         this.tableData[index].select_show = false
       } else {
         // 点击编辑
+        this.rowName = JSON.parse(JSON.stringify(obj.name))
         this.rowAccess = JSON.parse(JSON.stringify(obj.access))
         this.rowMember = JSON.parse(JSON.stringify(obj.members))
         this.rowDsec = JSON.parse(JSON.stringify(obj.desc))
@@ -208,6 +210,7 @@ export default {
         if (obj.id === undefined) {
           this.tableData.splice(index, 1)
         } else {
+          this.tableData[index].name = this.rowName
           this.tableData[index].access = this.rowAccess
           this.tableData[index].members = this.rowMember
           this.tableData[index].desc = this.rowDsec
