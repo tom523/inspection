@@ -3,7 +3,6 @@
     <div>
       <el-col>
         <el-table
-          :row-class-name="row_class"
           border
           stripe
           :data="tableData"
@@ -51,7 +50,10 @@
               label="班中检查"
             >
               <template slot-scope="scope">
-                <span v-for="(check, index) in scope.row.duty_checks" :key="index">{{ check }}<br></span>
+                <div v-if="scope.row.duty_checks.length !== 0">
+                  <span v-for="(check, index) in scope.row.duty_checks" :key="index">{{ check }}<br></span>
+                </div>
+                <div v-else>--</div>
               </template>
             </el-table-column>
             <el-table-column

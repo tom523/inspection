@@ -59,13 +59,16 @@
             width="130"
           >
             <template slot-scope="scope">
-              <span
-                v-for="(item, index) in scope.row.duty_checks"
-                :key="index"
-              >
-                {{ item }}
-                <br>
-              </span>
+              <div v-if="scope.row.duty_checks.length !== 0">
+                <span
+                  v-for="(item, index) in scope.row.duty_checks"
+                  :key="index"
+                >
+                  {{ item }}
+                  <br>
+                </span>
+              </div>
+              <div v-else>--</div>
             </template>
           </el-table-column>
           <el-table-column
