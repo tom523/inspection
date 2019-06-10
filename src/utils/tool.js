@@ -81,3 +81,10 @@ export function convertExcelToJson(excelData) {
   }
   return point
 }
+
+// 返回当前时间接口格式
+export function getCurTime() {
+  var curtime = new Date()
+  var curDate = curtime.getFullYear() + '-' + Number(curtime.getMonth() + 1) + '-' + curtime.getDate() + ' ' + curtime.getHours() + ':' + curtime.getMinutes() + ':' + curtime.getSeconds()
+  return curDate
+}

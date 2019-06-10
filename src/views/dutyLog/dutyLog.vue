@@ -121,7 +121,7 @@
         </el-table>
         <el-pagination
           style="margin-top: 20px; margin-bottom: 10%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -136,9 +136,14 @@
 
 <script>
 import { getDutyLog, createInspectionLogByDutyLog } from '@/api/duty'
+import { getCurTime } from '@/utils/tool'
 export default {
   data() {
-    return { page: 1,
+    return {
+      listQuery: {
+        page: 1,
+        end_time__gte: null
+      },
       total: null,
       tableData: [],
       createdLoading: false,
@@ -150,7 +155,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fecthData()
     },
     createdLog(index, obj) {
@@ -171,9 +176,10 @@ export default {
     },
     fecthData() {
       this.createdLoading = true
-      getDutyLog({ page: this.page }).then(response => {
+      this.listQuery.end_time__gte = getCurTime()
+      getDutyLog(this.listQuery).then(response => {
         this.tableData = response.data.items
-        this.page = response.data.page
+        this.listQuery.page = response.data.page
         this.total = response.data.count
         this.loading = false
         this.createdLoading = false
@@ -187,7 +193,7 @@ export default {
       }
     },
     indexMethod(index) {
-      return (this.page - 1) * 10 + index + 1
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }
