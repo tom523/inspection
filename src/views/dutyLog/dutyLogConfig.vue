@@ -155,7 +155,8 @@
             <el-input v-model="item.name" class="form_item_value" />
           </el-form-item>
           <el-form-item label="轮次" class="form_item">
-            <el-select v-model="item.turns" class="form_item_value" multiple placeholder="请选择">
+            <el-select v-model="item.turns" class="form_item_value" collapse-tags multiple placeholder="请选择">
+              <el-button type="text" style="margin-left: 80%" @click="allSelectTurns(item.turns)">全选</el-button>
               <el-option
                 v-for="i in turns"
                 :key="i.id"
@@ -398,6 +399,13 @@ export default {
       this.template = []
       this.duty_checks = null
       this.addDutyDialog = false
+    },
+    allSelectTurns(turns) {
+      for (var i = 0; i < this.turns.length; i++) {
+        if (turns.filter(item => item === this.turns[i].id).length === 0) {
+          turns.push(this.turns[i].id)
+        }
+      }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
