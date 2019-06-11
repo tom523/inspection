@@ -199,10 +199,9 @@ export default {
   },
   watch: {
     'listQuery.checking_status': function() {
-      debugger
       this.listQuery.page = 1
-      this.listQuery.actual_check_time__lte = getDate() + ' 00:00:00'
-      this.listQuery.actual_check_time__gte = getDate() + ' 23:59:59'
+      this.listQuery.actual_check_time__gte = getDate() + ' 00:00:00'
+      this.listQuery.actual_check_time__lte = getDate() + ' 23:59:59'
       this.fetchData()
     },
     'listQuery.inspection_level': function() {
