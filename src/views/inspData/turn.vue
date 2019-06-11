@@ -54,7 +54,7 @@
                 :key="index"
               >
                 {{ point }}
-                <br>
+                <br v-if="typeof scope.row.points === 'object'">
               </span>
             </div>
           </template>
