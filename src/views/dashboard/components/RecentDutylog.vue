@@ -16,7 +16,6 @@
               type="index"
               label="序号"
               width="80"
-              :index="indexMethod"
             />
             <el-table-column
               align="center"
@@ -50,21 +49,6 @@
         </el-table>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col>
-        <el-pagination
-          style="margin-top: 30px; margin-bottom: 20px"
-          :current-page="listQuery.page"
-          :total="total"
-          page-size="5"
-          background
-          prev-text="上一页"
-          next-text="下一页"
-          layout="total, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-        />
-      </el-col>
-    </el-row>
   </div>
 </template>
 
@@ -80,26 +64,18 @@ export default {
         page_size: 5,
         end_time__gte: getCurTime()
       },
-      tableData: [],
-      total: null
+      tableData: []
     }
   },
   created() {
     this.fecthdata()
   },
   methods: {
-    handleCurrentChange(index) {
-      this.listQuery.page = index
-      this.fecthdata()
-    },
     fecthdata() {
       getDutyLog(this.listQuery).then(response => {
         this.total = response.data.count
         this.tableData = response.data.items
       })
-    },
-    indexMethod(index) {
-      return (this.listQuery.page - 1) * 5 + index + 1
     }
   }
 }

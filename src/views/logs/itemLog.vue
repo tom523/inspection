@@ -28,7 +28,7 @@
                 <el-form-item label="设备：">
                   <span>{{ scope.row.device_name }}</span>
                 </el-form-item>
-                <div v-if="scope.row.snapshot.type !== '普通巡检项'">
+                <div v-if="scope.row.snapshot.type !== '普通检查项' && scope.row.snapshot.type !== '其他检查项'">
                   <el-form-item label="数值：">
                     <span>{{ scope.row.comments }}</span>
                   </el-form-item>
