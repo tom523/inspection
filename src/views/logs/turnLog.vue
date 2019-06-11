@@ -6,7 +6,7 @@
           :row-class-name="row_class"
           border
           :data="tableData"
-          style="width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px"
+          style="width: 90%; margin-left: auto; margin-right: auto; margin-top: 20px"
         >
           <el-table-column
             align="center"
@@ -20,6 +20,7 @@
             prop="snapshot.name"
           />
           <el-table-column
+            width="200"
             align="center"
             label="巡检点"
           >
@@ -65,7 +66,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"
+          style="margin-top: 20px; margin-left: 5%; margin-bottom: 5%"
           :current-page="page"
           :total="total"
           background

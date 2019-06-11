@@ -1,8 +1,26 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-col>
-        <el-table
+      <el-timeline style="width: 90%; margin-left: auto; margin-right: auto">
+        <el-timeline-item v-for="item in tableData" :key="item.id" :timestamp="item.create_at" placement="top">
+          <el-card v-if="item.handOverStaff === 'admin' && item.takeOverStaff === 'admin'">
+            <h4>系统自动交接班</h4>
+            <el-steps :active="2" simple>
+              <el-step :title="item.handOverDutyName + '--' + item.handOverTeam" />
+              <el-step :title="item.takeOverDutyName + '--' + item.takeOverTeam" />
+            </el-steps>
+          </el-card>
+          <el-card v-else>
+            <h4>员工交接班</h4>
+            <el-steps :active="2" simple>
+              <el-step :title="item.handOverDutyName + '--' + item.handOverTeam + '--' + item.handOverStaff" />
+              <el-step :title="item.takeOverDutyName + '--' + item.takeOverTeam + '--' + item.takeOverStaff" />
+            </el-steps>
+          </el-card>
+        </el-timeline-item>
+
+      </el-timeline>
+      <!-- <el-table
           :row-class-name="row_class"
           border
           :data="tableData"
@@ -44,18 +62,17 @@
             label="接班人"
             prop="takeOverStaff"
           />
-        </el-table>
-        <el-pagination
-          style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"
-          :current-page="page"
-          :total="total"
-          background
-          prev-text="上一页"
-          next-text="下一页"
-          layout="total, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-        />
-      </el-col>
+        </el-table> -->
+      <el-pagination
+        style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"
+        :current-page="page"
+        :total="total"
+        background
+        prev-text="上一页"
+        next-text="下一页"
+        layout="total, prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
