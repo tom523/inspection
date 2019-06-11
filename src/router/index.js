@@ -68,16 +68,16 @@ export const constantRoutes = [
         component: () => import('@/views/logs/itemLog'),
         meta: { title: '巡检项记录', icon: 'tree' }
       },
+      // {
+      //   path: 'table',
+      //   name: '巡检记录',
+      //   component: () => import('@/views/logs/index'),
+      //   meta: { title: '巡检记录', icon: 'table' }
+      // },
       {
-        path: 'table',
-        name: '巡检记录',
-        component: () => import('@/views/logs/index'),
-        meta: { title: '巡检记录', icon: 'table' }
-      },
-      {
-        path: 'tree',
+        path: 'pipeLog',
         name: '管线记录',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/logs/pipeLog'),
         meta: { title: '管线记录', icon: 'tree' }
       },
       // {

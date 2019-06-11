@@ -92,7 +92,6 @@ export default {
           const workbook = XLSX.read(btoa(fixedData), { type: 'base64' })
           const firstSheetName = workbook.SheetNames[0]
           const worksheet = workbook.Sheets[firstSheetName]
-          debugger
           const header = this.getHeaderRow(worksheet)
           const results = XLSX.utils.sheet_to_json(worksheet, { range: this.ignoreRange, header: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'] })
           this.generateData({ header, results, workbook })
