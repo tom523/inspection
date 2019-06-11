@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '无锡陆贰捌科技', icon: 'dashboard' }
+      meta: { title: '无锡陆贰捌科技', icon: 'international' }
     }]
   },
 
@@ -60,13 +60,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: '巡检记录', icon: 'example' },
+    meta: { title: '巡检记录', icon: 'nested' },
     children: [
       {
         path: 'itemLog',
         name: '巡检项记录',
         component: () => import('@/views/logs/itemLog'),
-        meta: { title: '巡检项记录', icon: 'tree' }
+        meta: { title: '巡检项记录', icon: 'clipboard' }
       },
       // {
       //   path: 'table',
@@ -90,7 +90,7 @@ export const constantRoutes = [
         path: 'turnLog',
         name: '轮次记录',
         component: () => import('@/views/logs/turnLog'),
-        meta: { title: '轮次记录', icon: 'tree' }
+        meta: { title: '轮次记录', icon: 'size' }
       }
       // {
       //   path: 'pointLog',
@@ -127,7 +127,7 @@ export const constantRoutes = [
         path: 'index',
         name: '数据统计',
         component: () => import('@/views/statistics/index'),
-        meta: { title: '数据统计', icon: 'form' }
+        meta: { title: '数据统计', icon: 'dashboard' }
       }
     ]
   },
@@ -140,7 +140,7 @@ export const constantRoutes = [
         path: 'index',
         name: '交班记录',
         component: () => import('@/views/takeoverLog/index'),
-        meta: { title: '交班记录', icon: 'form' }
+        meta: { title: '交班记录', icon: 'drag' }
       }
     ]
   },
@@ -153,7 +153,7 @@ export const constantRoutes = [
         path: 'index',
         name: '调班记录',
         component: () => import('@/views/transferLog/index'),
-        meta: { title: '调班记录', icon: 'form' }
+        meta: { title: '调班记录', icon: 'guide' }
       }
     ]
   },
@@ -166,7 +166,7 @@ export const constantRoutes = [
         path: 'index',
         name: '图片',
         component: () => import('@/views/photo/index'),
-        meta: { title: '图片', icon: 'form' }
+        meta: { title: '图片', icon: 'icon' }
       }
     ]
   },
@@ -179,7 +179,7 @@ export const constantRoutes = [
         path: 'index',
         name: '巡检日报',
         component: () => import('@/views/inspDaily/index'),
-        meta: { title: '巡检日报', icon: 'form' }
+        meta: { title: '巡检日报', icon: 'message' }
       }
     ]
   },
@@ -201,7 +201,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: 'inspData',
     name: '巡检数据',
-    meta: { title: '巡检数据', icon: 'tree' },
+    meta: { title: '巡检数据', icon: 'example' },
     children: [
       {
         path: 'point',
@@ -213,31 +213,31 @@ export const constantRoutes = [
         path: 'device',
         name: '设备管理',
         component: () => import('@/views/inspData/device'),
-        meta: { title: '设备管理', icon: 'form' }
+        meta: { title: '设备管理', icon: 'lock' }
       },
       {
         path: 'item',
         name: '巡检项数据',
         component: () => import('@/views/inspData/item'),
-        meta: { title: '巡检项数据', icon: 'form' }
+        meta: { title: '巡检项数据', icon: 'clipboard' }
       },
       {
         path: 'turn',
         name: '轮次管理',
         component: () => import('@/views/inspData/turn'),
-        meta: { title: '轮次管理', icon: 'form' }
+        meta: { title: '轮次管理', icon: 'size' }
       },
       {
         path: 'dutyCheck',
         name: '班中检查',
         component: () => import('@/views/inspData/dutyCheck'),
-        meta: { title: '班中检查', icon: 'form' }
+        meta: { title: '班中检查', icon: 'eye-open' }
       },
       {
         path: 'dutyCheckItem',
         name: '班中检查项',
         component: () => import('@/views/inspData/dutyCheckItem'),
-        meta: { title: '班中检查项', icon: 'form' }
+        meta: { title: '班中检查项', icon: 'edit' }
       }
     ]
   },
@@ -247,7 +247,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: 'dutyLog',
     name: '排班管理',
-    meta: { title: '排班管理', icon: 'form' },
+    meta: { title: '排班管理', icon: 'tab' },
     children: [
       {
         path: 'dutyLogConfig',
@@ -269,7 +269,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: 'roleManage',
     name: '角色管理',
-    meta: { title: '角色管理', icon: 'form' },
+    meta: { title: '角色管理', icon: 'component' },
     children: [
       {
         path: 'operationWay',
