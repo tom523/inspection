@@ -1,8 +1,10 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 1%">
-      <el-button style="margin-left: 70%; width: 9.5%" type="success" @click="handleImport">+ 导入数据</el-button>
-      <el-button style="width: 9.5%;" type="primary" @click="addRow">+ 添加巡检点</el-button>
+      <span style="margin-left: 10%">搜索：</span>
+      <el-input v-model="listQuery.name__contains" style="width: 20%" size="medium" placeholder="请输入搜索内容" />
+      <el-button style="margin-left: 35%; width: 10%" type="success" @click="handleImport">+ 导入数据</el-button>
+      <el-button style="width: 10%;" type="primary" @click="addRow">+ 添加巡检点</el-button>
       <el-table
         :data="tableData"
         border
@@ -58,7 +60,7 @@
       </el-table>
       <el-pagination
         style="margin-top: 20px; margin-left: 10%; margin-bottom: 10%"
-        :current-page="page"
+        :current-page="listQuery.page"
         :total="total"
         background
         prev-text="上一页"
@@ -96,11 +98,20 @@ export default {
       loading: false,
       range: 2,
       tableData: [],
-      page: 1,
+      listQuery: {
+        page: 1,
+        name__contains: null
+      },
       total: null,
       rowName: null,
       rowLocathion: null,
       totalPage: null
+    }
+  },
+  watch: {
+    'listQuery.name__contains': function() {
+      this.listQuery.page = 1
+      this.fetchData()
     }
   },
   created() {
@@ -108,7 +119,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
     editRowOrConfirm(index, obj) {
@@ -180,7 +191,7 @@ export default {
       }
     },
     async addRow() {
-      this.page = this.totalPage
+      this.listQuery.page = this.totalPage
       await this.fetchData()
       this.tableData.push({
         name: '',
@@ -189,10 +200,10 @@ export default {
       })
     },
     async fetchData() {
-      await getPoint({ page: this.page }).then(response => {
+      await getPoint(this.listQuery).then(response => {
         var pointData = response.data.items
         this.total = response.data.count
-        this.page = response.data.page
+        this.listQuery.page = response.data.page
         this.totalPage = response.data.total_page
         pointData.map(item => {
           item.select_show = false
@@ -248,7 +259,7 @@ export default {
       }
     },
     indexMethod(index) {
-      return (this.page - 1) * 10 + index + 1
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }

@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 10px">
-      <el-button style="margin-left: 85%; width: 10%" type="primary" @click="add_row">+ 添加巡检点项</el-button>
+    <div style="margin-top: 5px">
+      <span style="margin-left: 5%">搜索：</span>
+      <el-input v-model="listQuery.name__contains" style="width: 20%" size="medium" placeholder="请输入搜索内容" />
+      <el-button style="margin-left: 56%; width: 10%" type="primary" @click="add_row">+ 添加巡检点项</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -180,7 +182,7 @@
       <el-col>
         <el-pagination
           style="margin-top: 30px; margin-left: 5%; margin-bottom: 40px; margin-bottom: 10%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -202,7 +204,10 @@ export default {
       loading: false,
       tableData: [],
       total: null,
-      page: 1,
+      listQuery: {
+        page: 1,
+        name__contains: null
+      },
       totalPage: null,
       professions: [],
       points: [],
@@ -219,13 +224,19 @@ export default {
       globalChoices: null
     }
   },
+  watch: {
+    'listQuery.name__contains': function() {
+      this.listQuery.page = 1
+      this.fetchData()
+    }
+  },
   created() {
     this.fetchSelect()
     this.fetchData()
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
     editRowOrConfirm(index, obj) {
@@ -312,7 +323,7 @@ export default {
     },
     // 点击添加
     async add_row() {
-      this.page = this.totalPage
+      this.listQuery.page = this.totalPage
       await this.fetchData()
       this.tableData.push({
         name: '',
@@ -334,10 +345,10 @@ export default {
       })
     },
     async fetchData() {
-      await getItem({ page: this.page }).then(response => {
+      await getItem(this.listQuery).then(response => {
         var itemData = response.data.items
         this.total = response.data.count
-        this.page = response.data.page
+        this.listQuery.page = response.data.page
         this.totalPage = response.data.total_page
         itemData.map(item => {
           item.select_show = false
@@ -367,7 +378,7 @@ export default {
       }
     },
     indexMethod(index) {
-      return (this.page - 1) * 10 + index + 1
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }

@@ -276,3 +276,12 @@ export function getTurnLog(params) {
     params
   })
 }
+
+// 获取巡检点记录
+export function getPointLog(params) {
+  return request({
+    url: '/inspection-log/point-log/',
+    method: 'get',
+    params
+  })
+}

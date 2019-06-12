@@ -63,6 +63,12 @@ export const constantRoutes = [
     meta: { title: '巡检记录', icon: 'nested' },
     children: [
       {
+        path: 'pointLog',
+        name: '巡检点记录',
+        component: () => import('@/views/logs/pointLog'),
+        meta: { title: '巡检点记录', icon: 'form' }
+      },
+      {
         path: 'itemLog',
         name: '巡检项记录',
         component: () => import('@/views/logs/itemLog'),
@@ -92,12 +98,6 @@ export const constantRoutes = [
         component: () => import('@/views/logs/turnLog'),
         meta: { title: '轮次记录', icon: 'size' }
       }
-      // {
-      //   path: 'pointLog',
-      //   name: '巡检点记录',
-      //   component: () => import('@/views/logs/pointLog'),
-      //   meta: { title: '巡检点记录', icon: 'tree' }
-      // },
       // {
       //   path: 'deviceLog',
       //   name: '设备记录',
