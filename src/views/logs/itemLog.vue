@@ -150,7 +150,8 @@ export default {
         'AB': '异常',
         'NO': '正常',
         'ST': '停检',
-        'OM': '漏检'
+        'OM': '漏检',
+        'RE': '修复'
       }
       return statusMap[code]
     },
@@ -200,8 +201,10 @@ export default {
   watch: {
     'listQuery.checking_status': function() {
       this.listQuery.page = 1
-      this.listQuery.actual_check_time__gte = getDate() + ' 00:00:00'
-      this.listQuery.actual_check_time__lte = getDate() + ' 23:59:59'
+      if (this.listQuery.checking_status === 'AB') {
+        this.listQuery.actual_check_time__gte = getDate() + ' 00:00:00'
+        this.listQuery.actual_check_time__lte = getDate() + ' 23:59:59'
+      }
       this.fetchData()
     },
     'listQuery.inspection_level': function() {

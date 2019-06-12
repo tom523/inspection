@@ -6,7 +6,7 @@
           <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">未修复缺陷总数</div>
+          <div class="card-panel-text">缺陷总数</div>
           <count-to :start-val="0" :end-val="abFault" :duration="2000" class="card-panel-num" />
         </div>
       </div>
@@ -17,7 +17,7 @@
           <svg-icon icon-class="component" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">已修复缺陷总数</div>
+          <div class="card-panel-text">已修复总数</div>
           <count-to :start-val="0" :end-val="reFault" :duration="2000" class="card-panel-num" />
         </div>
       </div>
