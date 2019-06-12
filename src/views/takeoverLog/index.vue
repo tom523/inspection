@@ -1,7 +1,16 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 50px">
-      <el-timeline style="width: 90%; margin-left: auto; margin-right: auto">
+      <span style="margin-left: 8%">选择专业</span>
+      <el-select v-model="listQuery.professions" placeholder="请选择">
+        <el-option
+          v-for="item in professions"
+          :key="item"
+          :label="item"
+          :value="item"
+        />
+      </el-select>
+      <el-timeline style="width: 90%; margin-left: auto; margin-right: auto;margin-top: 30px">
         <el-timeline-item v-for="item in tableData" :key="item.id" :timestamp="item.create_at" placement="top">
           <el-card v-if="item.handOverStaff === 'admin' && item.takeOverStaff === 'admin'">
             <h4>系统自动交接班</h4>
@@ -65,7 +74,7 @@
         </el-table> -->
       <el-pagination
         style="margin-top: 20px; margin-left: 10%; margin-bottom: 5%"
-        :current-page="page"
+        :current-page="listQuery.page"
         :total="total"
         background
         prev-text="上一页"
@@ -78,17 +87,31 @@
 </template>
 
 <script>
-import { gettakeoverLog } from '@/api/duty'
+import { gettakeoverLog, getTeamProfessionChoices } from '@/api/duty'
 export default {
 
   data() {
     return {
       tableData: [],
-      page: 1,
+      professions: null,
+      listQuery: {
+        page: 1,
+        professions: null
+      },
       total: null
     }
   },
-  created() {
+  watch: {
+    'listQuery.professions': function() {
+      this.listQuery.page = 1
+      this.fecthdata()
+    }
+  },
+  async created() {
+    await getTeamProfessionChoices().then(response => {
+      this.professions = response.data
+      this.listQuery.professions = this.professions[0]
+    })
     this.fecthdata()
   },
   methods: {
@@ -97,8 +120,8 @@ export default {
       this.fecthdata()
     },
     fecthdata() {
-      gettakeoverLog({ page: this.page }).then(response => {
-        this.page = response.data.page
+      gettakeoverLog(this.listQuery).then(response => {
+        this.listQuery.page = response.data.page
         this.total = response.data.count
         this.tableData = response.data.items
       })

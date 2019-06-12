@@ -152,8 +152,16 @@ export function createInspectionLogByDutyLog(data) {
 // 交接班记录
 export function gettakeoverLog(params) {
   return request({
-    url: '/duty-log/take-over-log/',
+    url: '/duty-log/take-over-log/get_queryset_by_professions/',
     method: 'get',
     params
+  })
+}
+
+// 交接班记录选项
+export function getTeamProfessionChoices() {
+  return request({
+    url: '/role/users/extra/team_profession_choices/',
+    method: 'get'
   })
 }
