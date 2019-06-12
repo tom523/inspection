@@ -134,7 +134,7 @@ export default {
           series: [{
             name: '班次统计',
             type: 'bar',
-            data: response.data.duty_log_statistic.map(item => { return item.time_consumed })
+            data: response.data.duty_log_statistic.map(item => { return item.time_consumed / 60 })
           }]
         }
       })
@@ -147,7 +147,7 @@ export default {
           series: [{
             name: '轮次统计',
             type: 'bar',
-            data: response.data.turn_log_statistic.map(item => { return item.time_consumed })
+            data: response.data.turn_log_statistic.map(item => { return item.time_consumed / 60 })
           }]
         }
       })
@@ -160,7 +160,7 @@ export default {
           series: [{
             name: '员工统计',
             type: 'bar',
-            data: response.data.staff_time_statistic.map(item => { return item.time_consumed })
+            data: response.data.staff_time_statistic.map(item => { return item.time_consumed / 60 })
           }]
         }
       })
