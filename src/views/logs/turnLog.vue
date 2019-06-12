@@ -2,7 +2,12 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <el-col>
+        <el-button style="width: 10%;margin-left: 85%" type="primary" @click="listQuery.plan_end_time__gte = null">查看所有轮次记录</el-button>
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           :row-class-name="row_class"
           border
           :data="tableData"
@@ -67,7 +72,7 @@
         </el-table>
         <el-pagination
           style="margin-top: 20px; margin-left: 5%; margin-bottom: 5%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -82,6 +87,7 @@
 
 <script>
 import { getTurnLog } from '@/api/insp'
+import { getCurTime } from '@/utils/tool'
 export default {
   filters: {
     statusFilter(key) {
@@ -96,8 +102,18 @@ export default {
   data() {
     return {
       tableData: [],
-      page: 1,
-      total: null
+      listQuery: {
+        page: 1,
+        plan_end_time__gte: getCurTime()
+      },
+      total: null,
+      loading: false
+    }
+  },
+  watch: {
+    'listQuery.plan_end_time__gte': function() {
+      this.listQuery.page = 1
+      this.fecthdata()
     }
   },
   created() {
@@ -105,14 +121,16 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fecthdata()
     },
     fecthdata() {
-      getTurnLog({ page: this.page }).then(response => {
-        this.page = response.data.page
+      this.loading = true
+      getTurnLog(this.listQuery).then(response => {
+        this.listQuery.page = response.data.page
         this.total = response.data.count
         this.tableData = response.data.items
+        this.loading = false
       })
     },
     row_class({ row, rowIndex }) {
