@@ -164,9 +164,9 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: '图片',
+        name: '图片上传',
         component: () => import('@/views/photo/index'),
-        meta: { title: '图片', icon: 'icon' }
+        meta: { title: '图片上传', icon: 'icon' }
       }
     ]
   },
@@ -253,13 +253,13 @@ export const constantRoutes = [
         path: 'dutyLogConfig',
         name: '排班设置',
         component: () => import('@/views/dutyLog/dutyLogConfig'),
-        meta: { title: '排班设置', icon: 'form' }
+        meta: { title: '排班设置', icon: 'documentation' }
       },
       {
         path: 'dutyLog',
         name: '排班记录',
         component: () => import('@/views/dutyLog/dutyLog'),
-        meta: { title: '排班记录', icon: 'form' }
+        meta: { title: '排班记录', icon: 'list' }
       }
     ]
   },
@@ -275,25 +275,25 @@ export const constantRoutes = [
         path: 'operationWay',
         name: '运转方式管理',
         component: () => import('@/views/roleManage/operationWay'),
-        meta: { title: '运转方式管理', icon: 'form' }
+        meta: { title: '运转方式管理', icon: 'fullscreen' }
       },
       {
         path: 'team',
         name: '值管理',
         component: () => import('@/views/roleManage/team'),
-        meta: { title: '值管理', icon: 'form' }
+        meta: { title: '值管理', icon: 'table' }
       },
       {
         path: 'profession',
         name: '专业管理',
         component: () => import('@/views/roleManage/profession'),
-        meta: { title: '专业管理', icon: 'form' }
+        meta: { title: '专业管理', icon: 'peoples' }
       },
       {
         path: 'function',
         name: '功能管理',
         component: () => import('@/views/roleManage/function'),
-        meta: { title: '功能管理', icon: 'form' }
+        meta: { title: '功能管理', icon: 'chart' }
       }
     ]
   },

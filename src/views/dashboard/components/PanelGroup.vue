@@ -23,7 +23,7 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
+      <div class="card-panel" @click="viewPointLog('OM')">
         <div class="card-panel-icon-wrapper icon-dashboard">
           <svg-icon icon-class="dashboard" class-name="card-panel-icon" />
         </div>
@@ -34,7 +34,7 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel">
+      <div class="card-panel" @click="viewPointLog('ST')">
         <div class="card-panel-icon-wrapper icon-documentation">
           <svg-icon icon-class="documentation" class-name="card-panel-icon" />
         </div>
@@ -74,6 +74,9 @@ export default {
   methods: {
     viewItemLog(status) {
       this.$router.push({ path: '/example/itemLog', query: { status: status }})
+    },
+    viewPointLog(status) {
+      this.$router.push({ path: 'example/pointLog', query: { status: status }})
     }
   }
 }
