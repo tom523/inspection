@@ -39,8 +39,11 @@
                 <el-select
                   v-model="scope.row.members"
                   style="width: 100%"
+                  collapse-tags
+                  filterable
                   multiple
                 >
+                  <el-button type="text" style="margin-left: 80%" @click="allSelectMembers(scope.row.members)">全选</el-button>
                   <el-option
                     v-for="item in members"
                     :key="item.id"
@@ -82,8 +85,11 @@
                 <el-select
                   v-model="scope.row.access"
                   style="width: 100%"
+                  collapse-tags
+                  filterable
                   multiple
                 >
+                  <el-button type="text" style="margin-left: 80%" @click="allSelectAccess(scope.row.access)">全选</el-button>
                   <el-option
                     v-for="item in professions"
                     :key="item.id"
@@ -278,6 +284,20 @@ export default {
       this.members = membersData.data
       const descData = await getDutyLogOperationWay()
       this.descs = descData.data.items
+    },
+    allSelectMembers(rowMembers) {
+      for (var i = 0; i < this.members.length; i++) {
+        if (rowMembers.filter(item => item === this.members[i].username).length === 0) {
+          rowMembers.push(this.members[i].username)
+        }
+      }
+    },
+    allSelectAccess(rowAccess) {
+      for (var i = 0; i < this.professions.length; i++) {
+        if (rowAccess.filter(item => item === this.professions[i].name).length === 0) {
+          rowAccess.push(this.professions[i].name)
+        }
+      }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

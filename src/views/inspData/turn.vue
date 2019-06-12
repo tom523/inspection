@@ -37,9 +37,11 @@
               <el-select
                 v-model="scope.row.points"
                 filterable
+                collapse-tags
                 style="width: 100%"
                 multiple
               >
+                <el-button type="text" style="margin-left: 80%" @click="allSelectPoint(scope.row.points)">全选</el-button>
                 <el-option
                   v-for="item in points"
                   :key="item.username"
@@ -226,6 +228,13 @@ export default {
       getTurnChoices().then(response => {
         this.points = response.data
       })
+    },
+    allSelectPoint(rowPoint) {
+      for (var i = 0; i < this.points.length; i++) {
+        if (rowPoint.filter(item => item === this.points[i].name).length === 0) {
+          rowPoint.push(this.points[i].name)
+        }
+      }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

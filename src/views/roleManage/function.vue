@@ -32,8 +32,11 @@
                 <el-select
                   v-model="scope.row.members"
                   style="width: 100%"
+                  collapse-tags
+                  filterable
                   multiple
                 >
+                  <el-button type="text" style="margin-left: 90%" @click="allSelectmembers(scope.row.members)">全选</el-button>
                   <el-option
                     v-for="item in members"
                     :key="item.username"
@@ -158,6 +161,13 @@ export default {
       // 获取用户
       const membersData = await getAllUser()
       this.members = membersData.data
+    },
+    allSelectmembers(rowMembers) {
+      for (var i = 0; i < this.members.length; i++) {
+        if (rowMembers.filter(item => item === this.members[i].username).length === 0) {
+          rowMembers.push(this.members[i].username)
+        }
+      }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
