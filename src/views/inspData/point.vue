@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 1%">
       <span style="margin-left: 10%">搜索：</span>
-      <el-input v-model="listQuery.name__contains" style="width: 20%" size="medium" placeholder="请输入搜索内容" />
+      <el-input v-model="listQuery.name__contains" style="width: 20%" size="medium" placeholder="搜索巡检点名称" />
       <el-button style="margin-left: 35%; width: 10%" type="success" @click="handleImport">+ 导入数据</el-button>
       <el-button style="width: 10%;" type="primary" @click="addRow">+ 添加巡检点</el-button>
       <el-table
