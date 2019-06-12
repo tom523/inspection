@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <el-col>
-        <el-button style="width: 10%;margin-left: 85%" type="primary" @click="listQuery.plan_end_time__gte = null">查看所有轮次记录</el-button>
+        <el-button style="width: 15%;margin-left: 80%" type="primary" @click="listQuery.plan_end_time__gte = null">查看所有轮次记录</el-button>
         <el-table
           v-loading="loading"
           element-loading-text="拼命加载中"
@@ -45,28 +45,43 @@
           <el-table-column
             align="center"
             label="轮次开始时间"
-            prop="plan_start_time"
-          />
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.plan_start_time.substring(0,10) }}<br></span>
+              <span>{{ scope.row.plan_start_time.substring(11,19) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="轮次结束时间"
-            prop="plan_end_time"
-          />
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.plan_end_time.substring(0,10) }}<br></span>
+              <span>{{ scope.row.plan_end_time.substring(11,19) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="巡检开始时间"
           >
             <template slot-scope="scope">
-              {{ scope.row.actual_start_time || '--' }}
+              <div v-if="scope.row.actual_start_time">
+                <span>{{ scope.row.actual_start_time.substring(0,10) }}<br></span>
+                <span>{{ scope.row.actual_start_time.substring(11,19) }}</span>
+              </div>
+              <div v-else>--</div>
             </template>
           </el-table-column>
           <el-table-column
             align="center"
             label="巡检结束时间"
-            prop="actual_end_time"
           >
             <template slot-scope="scope">
-              {{ scope.row.actual_end_time || '--' }}
+              <div v-if="scope.row.actual_end_time">
+                <span>{{ scope.row.actual_end_time.substring(0,10) }}<br></span>
+                <span>{{ scope.row.actual_end_time.substring(11,19) }}</span>
+              </div>
+              <div v-else>--</div>
             </template>
           </el-table-column>
         </el-table>
