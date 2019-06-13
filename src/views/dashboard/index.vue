@@ -1,9 +1,12 @@
 <template>
   <div class="dashboard-editor-container">
     <panel-group />
-    <el-row>
-      <el-col style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+    <el-row style="height: auto; background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <el-col :span="12" style="padding:16px 16px 0;margin-bottom:32px;">
         <Recent-Dutylog />
+      </el-col>
+      <el-col :span="12" style="padding:16px 16px 0;margin-bottom:32px;">
+        <Pie-chart :chart-data="statusData" />
       </el-col>
     </el-row>
     <el-row>
@@ -46,7 +49,9 @@ import REfaultChart from './components/faultREchart'
 import STpointChart from './components/pointSTchart'
 import OMpointChart from './components/pointOMchart'
 import RecentDutylog from './components/RecentDutylog'
+import PieChart from './components/PieChart'
 import { getDashboardCount } from '@/api/dashboard'
+import { getDayPointCount } from '@/api/photoAndDaily'
 export default {
   name: 'DashboardAdmin',
   components: {
@@ -55,7 +60,8 @@ export default {
     REfaultChart,
     OMpointChart,
     STpointChart,
-    RecentDutylog
+    RecentDutylog,
+    PieChart
   },
   data() {
     return {
@@ -74,7 +80,8 @@ export default {
       STchartData: {
         data: [],
         dateList: []
-      }
+      },
+      statusData: {}
       // lineChartDataAll: {},
 
     }
@@ -94,6 +101,13 @@ export default {
         this.STchartData.data = response.data.point_stop_count
         this.OMchartData.dateList = response.data.date_list
         this.OMchartData.data = response.data.point_omit_count
+      })
+      getDayPointCount().then(response => {
+        this.statusData = {
+          title: '巡检状态统计图',
+          legend_data: response.data.map(item => { return item.name }),
+          series_data: response.data
+        }
       })
     }
   //   handleSetLineChartData(type) {
