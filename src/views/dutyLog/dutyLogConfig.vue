@@ -86,6 +86,7 @@
               <el-button
                 size="mini"
                 type="danger"
+                :disabled="scope.row.execute_result !== '未执行'"
                 @click="deleteConfig(scope.$index, scope.row)"
               >删除</el-button>
             </template>

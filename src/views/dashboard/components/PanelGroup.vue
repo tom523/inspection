@@ -28,7 +28,7 @@
           <svg-icon icon-class="dashboard" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">漏检点数据</div>
+          <div class="card-panel-text">当天漏检点</div>
           <count-to :start-val="0" :end-val="omit" :duration="2000" class="card-panel-num" />
         </div>
       </div>
@@ -39,7 +39,7 @@
           <svg-icon icon-class="documentation" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">停检点总数</div>
+          <div class="card-panel-text">当天停检点</div>
           <count-to :start-val="0" :end-val="stop" :duration="2000" class="card-panel-num" />
         </div>
       </div>
