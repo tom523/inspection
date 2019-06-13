@@ -1,7 +1,16 @@
 <template>
   <div class="app-container">
     <div>
-      <el-button style="margin-left: 80%; width: 10%;" type="primary" @click="addDuty">+ 添加排班</el-button>
+      <span style="margin-left: 10%">运转方式</span>
+      <el-select v-model="listQuery.operation_way" placeholder="请选择" style="width: 20%">
+        <el-option
+          v-for="item in operationWay"
+          :key="item.id"
+          :label="item.display_name"
+          :value="item.name"
+        />
+      </el-select>
+      <el-button style="margin-left: 45%; width: 10%;" type="primary" @click="addDuty">+ 添加排班</el-button>
       <el-col>
         <el-table
           v-loading="loading"
@@ -115,7 +124,7 @@
       <el-col>
         <el-pagination
           style="margin-top: 50px; margin-left: 10%; margin-bottom: 10%"
-          :current-page="page"
+          :current-page="listQuery.page"
           :total="total"
           background
           prev-text="上一页"
@@ -231,7 +240,7 @@
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, dutyCheckGetChoices } from '@/api/duty'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getChoicesOperationWay, dutyCheckGetChoices } from '@/api/duty'
 import { getAllTurn } from '@/api/insp'
 import { allSelect } from '@/utils/tool'
 export default {
@@ -266,7 +275,10 @@ export default {
       dutyChecks: [],
       teamsSet: [],
       rowID: undefined,
-      page: 1,
+      listQuery: {
+        page: 1,
+        operation_way: null
+      },
       total: null,
       operation: null,
       operationWay: [],
@@ -275,6 +287,10 @@ export default {
     }
   },
   watch: {
+    'listQuery.operation_way': function() {
+      this.listQuery.page = 1
+      this.fetchData()
+    },
     operation: function() {
       if (this.operation === null) {
         return
@@ -284,13 +300,13 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    // this.fetchData()
     this.fecthSelect()
   },
   methods: {
     // 翻页
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
     // 更新
@@ -385,8 +401,8 @@ export default {
     },
     // 获取表格
     fetchData() {
-      getDutyLogConfig({ page: this.page }).then(response => {
-        this.page = response.data.page
+      getDutyLogConfig(this.listQuery).then(response => {
+        this.listQuery.page = response.data.page
         this.total = response.data.count
         this.tableData = response.data.items
       })
@@ -406,8 +422,9 @@ export default {
       dutyCheckGetChoices().then(response => {
         this.dutyChecks = response.data
       })
-      getDutyLogOperationWay().then(response => {
-        this.operationWay = response.data.items
+      getChoicesOperationWay().then(response => {
+        this.operationWay = response.data
+        this.listQuery.operation_way = this.operationWay[0]
       })
     },
     // 清空表单
@@ -437,7 +454,7 @@ export default {
       }
     },
     indexMethod(index) {
-      return (this.page - 1) * 10 + index + 1
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }

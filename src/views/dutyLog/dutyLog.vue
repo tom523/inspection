@@ -2,11 +2,11 @@
   <div class="app-container">
     <div style="margin-top: 10px">
       <span>运转方式</span>
-      <el-select v-model="listQuery.team_desc" placeholder="请选择">
+      <el-select v-model="listQuery.team_desc" placeholder="请选择" style="width: 20%">
         <el-option
           v-for="item in teamDescs"
           :key="item.id"
-          :label="item.name"
+          :label="item.display_name"
           :value="item.name"
         />
       </el-select>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { getDutyLog, createInspectionLogByDutyLog, getDutyLogOperationWay } from '@/api/duty'
+import { getDutyLog, createInspectionLogByDutyLog, getChoicesOperationWay } from '@/api/duty'
 import { getCurTime } from '@/utils/tool'
 export default {
   data() {
@@ -173,8 +173,8 @@ export default {
   },
   created() {
     // this.fecthData()
-    getDutyLogOperationWay().then(response => {
-      this.teamDescs = response.data.items
+    getChoicesOperationWay().then(response => {
+      this.teamDescs = response.data
       this.listQuery.team_desc = this.teamDescs[0].name
     })
   },

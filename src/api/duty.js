@@ -87,6 +87,14 @@ export function getDutyLogOperationWay() {
   })
 }
 
+// 获取排班运转方式，不分页
+export function getChoicesOperationWay() {
+  return request({
+    url: '/duty-log/operation-way/get_choices/',
+    method: 'get'
+  })
+}
+
 // 新建排班运转方式
 export function addDutyLogOperationWay(data) {
   return request({
