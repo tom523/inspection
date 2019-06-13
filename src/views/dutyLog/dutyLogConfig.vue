@@ -20,9 +20,16 @@
           />
           <el-table-column
             align="center"
-            prop="start_time"
             label="开始时间"
-          />
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row.start_time !== null">
+                <span>{{ scope.row.start_time.substring(0,10) }}<br></span>
+                <span>{{ scope.row.start_time.substring(11,19) }}</span>
+              </div>
+              <div v-else>--</div>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             prop="type"
@@ -69,8 +76,20 @@
           />
           <el-table-column
             align="center"
-            prop="execute_time"
             label="执行时间"
+          >
+            <template slot-scope="scope">
+              <div v-if="scope.row.execute_time !== null">
+                <span>{{ scope.row.execute_time.substring(0,10) }}<br></span>
+                <span>{{ scope.row.execute_time.substring(11,19) }}</span>
+              </div>
+              <div v-else>--</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="连班天数"
+            prop="continuous"
           />
           <el-table-column
             align="center"
