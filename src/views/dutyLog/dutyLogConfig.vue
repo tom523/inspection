@@ -415,16 +415,16 @@ export default {
         this.teamsSet = response.data
       })
     },
-    fecthSelect() {
+    async fecthSelect() {
       getAllTurn().then(response => {
         this.turns = response.data
       })
       dutyCheckGetChoices().then(response => {
         this.dutyChecks = response.data
       })
-      getChoicesOperationWay().then(response => {
+      await getChoicesOperationWay().then(response => {
         this.operationWay = response.data
-        this.listQuery.operation_way = this.operationWay[0]
+        this.listQuery.operation_way = this.operationWay[0].name
       })
     },
     // 清空表单
