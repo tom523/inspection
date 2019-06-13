@@ -131,6 +131,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                :disabled="scope.row.role_type === 'PROFESSION'"
                 @click="editRowOrConfirm(scope.$index, scope.row)"
               >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
               <el-button

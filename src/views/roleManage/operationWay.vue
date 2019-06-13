@@ -58,6 +58,11 @@
           </el-table-column>
           <el-table-column
             align="center"
+            label="相关专业"
+            prop="related_professions"
+          />
+          <el-table-column
+            align="center"
             label="操作"
             width="180"
           >
