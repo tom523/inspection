@@ -108,8 +108,11 @@
                 <el-select
                   v-model="scope.row.members"
                   style="width: 100%"
+                  collapse-tags
+                  filterable
                   multiple
                 >
+                  <el-button type="text" style="margin-left: 80%" @click="allSelectMembers(scope.row.members)">全选</el-button>
                   <el-option
                     v-for="item in members"
                     :key="item.username"
@@ -175,6 +178,7 @@
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
+import { allSelect } from '@/utils/tool'
 
 export default {
   filters: {
@@ -406,6 +410,9 @@ export default {
         this_period: null,
         profession_id: null
       }
+    },
+    allSelectMembers(rowMember) {
+      rowMember = allSelect(rowMember, this.members, 'username')
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

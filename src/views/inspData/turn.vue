@@ -100,6 +100,7 @@
 
 <script>
 import { getTurn, updateTurn, addTurn, deleteTurn, getTurnChoices } from '@/api/insp'
+import { allSelect } from '@/utils/tool'
 export default {
   data() {
     return {
@@ -230,11 +231,12 @@ export default {
       })
     },
     allSelectPoint(rowPoint) {
-      for (var i = 0; i < this.points.length; i++) {
-        if (rowPoint.filter(item => item === this.points[i].name).length === 0) {
-          rowPoint.push(this.points[i].name)
-        }
-      }
+      rowPoint = allSelect(rowPoint, this.points, 'name')
+      // for (var i = 0; i < this.points.length; i++) {
+      //   if (rowPoint.filter(item => item === this.points[i].name).length === 0) {
+      //     rowPoint.push(this.points[i].name)
+      //   }
+      // }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

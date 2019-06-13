@@ -95,3 +95,19 @@ export function getDate() {
   var curDate = curtime.getFullYear() + '-' + Number(curtime.getMonth() + 1) + '-' + curtime.getDate()
   return curDate
 }
+
+// 选择框全选
+export function allSelect(option, selected, key) {
+  for (var i = 0; i < selected.length; i++) {
+    if (key === undefined) {
+      if (option.filter(item => item === selected[i]).length === 0) {
+        option.push(selected[i])
+      }
+    } else {
+      if (option.filter(item => item === selected[i][key]).length === 0) {
+        option.push(selected[i][key])
+      }
+    }
+  }
+  return option
+}

@@ -73,6 +73,7 @@
 <script>
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, updataRoleUser } from '@/api/user'
+import { allSelect } from '@/utils/tool'
 
 export default {
   filters: {
@@ -163,11 +164,12 @@ export default {
       this.members = membersData.data
     },
     allSelectmembers(rowMembers) {
-      for (var i = 0; i < this.members.length; i++) {
-        if (rowMembers.filter(item => item === this.members[i].username).length === 0) {
-          rowMembers.push(this.members[i].username)
-        }
-      }
+      rowMembers = allSelect(rowMembers, this.members, 'username')
+      // for (var i = 0; i < this.members.length; i++) {
+      //   if (rowMembers.filter(item => item === this.members[i].username).length === 0) {
+      //     rowMembers.push(this.members[i].username)
+      //   }
+      // }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

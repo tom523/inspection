@@ -156,7 +156,7 @@
             <el-input v-model="item.name" class="form_item_value" />
           </el-form-item>
           <el-form-item label="轮次" class="form_item">
-            <el-select v-model="item.turns" class="form_item_value" collapse-tags multiple placeholder="请选择">
+            <el-select v-model="item.turns" class="form_item_value" filterable collapse-tags multiple placeholder="请选择">
               <el-button type="text" style="margin-left: 80%" @click="allSelectTurns(item.turns)">全选</el-button>
               <el-option
                 v-for="i in turns"
@@ -214,6 +214,7 @@
 <script>
 import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getDutyLogOperationWay, dutyCheckGetChoices } from '@/api/duty'
 import { getAllTurn } from '@/api/insp'
+import { allSelect } from '@/utils/tool'
 export default {
   data() {
     return {
@@ -402,11 +403,12 @@ export default {
       this.addDutyDialog = false
     },
     allSelectTurns(turns) {
-      for (var i = 0; i < this.turns.length; i++) {
-        if (turns.filter(item => item === this.turns[i].id).length === 0) {
-          turns.push(this.turns[i].id)
-        }
-      }
+      turns = allSelect(turns, this.turns, 'id')
+      // for (var i = 0; i < this.turns.length; i++) {
+      //   if (turns.filter(item => item === this.turns[i].id).length === 0) {
+      //     turns.push(this.turns[i].id)
+      //   }
+      // }
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
