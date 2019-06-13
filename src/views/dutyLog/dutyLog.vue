@@ -1,7 +1,16 @@
 <template>
   <div class="app-container">
     <div style="margin-top: 10px">
-      <el-col>
+      <span>运转方式</span>
+      <el-select v-model="listQuery.team_desc" placeholder="请选择">
+        <el-option
+          v-for="item in teamDescs"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name"
+        />
+      </el-select>
+      <el-col style="margin-top: 30px">
         <el-table
           v-loading="createdLoading"
           element-loading-text="拼命加载中"
@@ -138,23 +147,36 @@
 </template>
 
 <script>
-import { getDutyLog, createInspectionLogByDutyLog } from '@/api/duty'
+import { getDutyLog, createInspectionLogByDutyLog, getDutyLogOperationWay } from '@/api/duty'
 import { getCurTime } from '@/utils/tool'
 export default {
   data() {
     return {
       listQuery: {
         page: 1,
-        end_time__gte: null
+        end_time__gte: null,
+        team_desc: null
       },
       total: null,
       tableData: [],
       createdLoading: false,
-      loading: true
+      loading: true,
+      teamDescs: null
+    }
+  },
+  watch: {
+    'listQuery.team_desc': function() {
+      this.listQuery.end_time__gte = getCurTime()
+      this.listQuery.page = 1
+      this.fecthData()
     }
   },
   created() {
-    this.fecthData()
+    // this.fecthData()
+    getDutyLogOperationWay().then(response => {
+      this.teamDescs = response.data.items
+      this.listQuery.team_desc = this.teamDescs[0].name
+    })
   },
   methods: {
     handleCurrentChange(index) {
@@ -179,7 +201,6 @@ export default {
     },
     fecthData() {
       this.createdLoading = true
-      this.listQuery.end_time__gte = getCurTime()
       getDutyLog(this.listQuery).then(response => {
         this.tableData = response.data.items
         this.listQuery.page = response.data.page
