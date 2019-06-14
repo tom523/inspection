@@ -17,9 +17,10 @@ export function getDashboardCount() {
 }
 
 // 最近五个班次
-export function getRecentDutyLog() {
+export function getRecentDutyLog(params) {
   return request({
-    url: '/duty-log/duty-log/dashboard_recent_duty_log/',
-    method: 'get'
+    url: '/duty-log/duty-log/',
+    method: 'get',
+    params
   })
 }

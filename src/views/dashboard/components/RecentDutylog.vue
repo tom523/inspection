@@ -63,8 +63,8 @@
 </template>
 
 <script>
-// import { getRecentDutyLog } from '@/api/dashboard'
-import { getDutyLog } from '@/api/duty'
+import { getRecentDutyLog } from '@/api/dashboard'
+// import { getDutyLog } from '@/api/duty'
 import { getCurTime } from '@/utils/tool'
 export default {
   data() {
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     fecthdata() {
-      getDutyLog(this.listQuery).then(response => {
+      getRecentDutyLog(this.listQuery).then(response => {
         this.total = response.data.count
         this.tableData = response.data.items
       })
