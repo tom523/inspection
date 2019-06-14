@@ -21,19 +21,17 @@
           <el-table-column
             align="center"
             label="用户名"
-            width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.username }}
-              <div v-if="scope.row.select_show">
+              <div v-if="scope.row.select_show && scope.row.id === undefined">
                 <el-input v-model="scope.row.username" />
               </div>
+              <div v-else>{{ scope.row.username }}</div>
             </template>
           </el-table-column>
           <el-table-column
             align="center"
             label="姓名"
-            width="100"
           >
             <template slot-scope="scope">
               {{ scope.row.select_show ? '' : scope.row.chname }}

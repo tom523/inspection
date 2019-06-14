@@ -178,7 +178,7 @@
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
-import { allSelect } from '@/utils/tool'
+import { allSelect, compare } from '@/utils/tool'
 
 export default {
   filters: {
@@ -348,8 +348,10 @@ export default {
         item.members.shift()
         item.access.pop()
         item.access.shift()
+        item.role_type === 'PROFESSION' ? item.inspection_leval = 1 : item.role_type === 'REVIEW_PROFESSION' ? item.inspection_leval = 2 : item.inspection_leval = 3
       })
       this.professions = data.filter(item => item.role_type === 'PROFESSION')
+      data.sort(compare('inspection_leval'))
       this.tableData = data
       this.loading = false
     },

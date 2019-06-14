@@ -111,3 +111,12 @@ export function allSelect(option, selected, key) {
   }
   return option
 }
+
+// js 对象按照某一属性值排序
+export function compare(property) {
+  return function(obj1, obj2) {
+    var value1 = obj1[property]
+    var value2 = obj2[property]
+    return value1 - value2
+  }
+}

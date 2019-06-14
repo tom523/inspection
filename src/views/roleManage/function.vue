@@ -55,7 +55,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                :disabled="scope.row.name === '复检' || scope.row.name === '管线巡检'"
+                :disabled="scope.row.name === '复检' || scope.row.name === '管线巡检' || scope.row.name === '巡检'"
                 @click="editRowOrConfirm(scope.$index, scope.row)"
               >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
               <el-button
