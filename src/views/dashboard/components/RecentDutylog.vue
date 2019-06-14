@@ -29,6 +29,7 @@
             />
             <el-table-column
               align="center"
+              width="400"
               label="员工"
             >
               <template slot-scope="scope">
