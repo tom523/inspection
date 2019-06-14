@@ -190,9 +190,14 @@ export default {
         id: obj.id
       }).then(response => {
         if (response.data.length !== 0) {
-          this.$message({
-            type: 'success',
-            message: '生成排班记录成功'
+          // this.$message({
+          //   type: 'success',
+          //   message: '生成排班记录成功'
+          // })
+          this.$confirm('成功生成' + response.data[0].turn_log_count + '条轮次记录,' + response.data[0].point_log_count + '条巡检点记录,' + response.data[0].device_log_count + '条设备记录,' + response.data[0].item_log_count + '条巡检项记录', '提示', {
+            confirmButtonText: '确定',
+            showCancelButton: false,
+            type: 'success'
           })
         }
         this.fecthData()
