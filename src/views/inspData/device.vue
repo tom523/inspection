@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
     editRowOrConfirm(index, obj) {

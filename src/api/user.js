@@ -124,3 +124,11 @@ export function getGlobalChoices() {
     method: 'get'
   })
 }
+
+// 值管理，获取用户
+export function getTeamNotSelectedChoices() {
+  return request({
+    url: '/account/user/get_team_not_selected_choices/',
+    method: 'get'
+  })
+}

@@ -43,12 +43,12 @@
                   filterable
                   multiple
                 >
-                  <el-button type="text" style="margin-left: 80%" @click="allSelectData(scope.row.members, members, 'username')">全选</el-button>
+                  <el-button type="text" style="margin-left: 80%" @click="allSelectData(scope.row.members, members)">全选</el-button>
                   <el-option
                     v-for="item in members"
-                    :key="item.id"
-                    :lable="item.id"
-                    :value="item.username"
+                    :key="item"
+                    :lable="item"
+                    :value="item"
                   />
                 </el-select>
               </div>
@@ -125,7 +125,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { getRoleUser, getTeamNotSelectedChoices, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { getDutyLogOperationWay } from '@/api/duty'
 import { allSelect } from '@/utils/tool'
 
@@ -203,6 +203,11 @@ export default {
         }
         this.tableData[index].select_show = false
       } else {
+        this.members = []
+        obj.members.map(item => {
+          this.members.push(item)
+        })
+        this.fetchUser()
         // 点击编辑
         this.rowName = JSON.parse(JSON.stringify(obj.name))
         this.rowAccess = JSON.parse(JSON.stringify(obj.access))
@@ -248,6 +253,8 @@ export default {
       }
     },
     add_row() {
+      this.members = []
+      this.fetchUser()
       // 点击添加
       this.tableData.push({
         role_type: 'TEAM',
@@ -280,11 +287,18 @@ export default {
       const professionData = await getRoleUser({ role_type: 'PROFESSION' })
       this.professions = professionData.data
       this.loading = false
-      // 获取用户
-      const membersData = await getAllUser()
-      this.members = membersData.data
+      // // 获取用户
+      // const membersData = await getAllUser()
+      // this.members = membersData.data
       const descData = await getDutyLogOperationWay()
       this.descs = descData.data.items
+    },
+    fetchUser() {
+      getTeamNotSelectedChoices().then(response => {
+        response.map(item => {
+          this.members.push(item)
+        })
+      })
     },
     allSelectData(rowData, selectData, key) {
       rowData = allSelect(rowData, selectData, key)
