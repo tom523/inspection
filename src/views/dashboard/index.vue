@@ -1,12 +1,17 @@
 <template>
   <div class="dashboard-editor-container">
     <panel-group />
-    <el-row style="height: auto; background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <el-col :span="12" style="padding:16px 16px 0;margin-bottom:32px;">
+    <el-row>
+      <el-col style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <Recent-Dutylog />
       </el-col>
+    </el-row>
+    <el-row style="height: auto; background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <el-col :span="12" style="padding:16px 16px 0;margin-bottom:32px;">
         <Pie-chart :chart-data="statusData" />
+      </el-col>
+      <el-col :span="12" style="padding:16px 16px 0;margin-bottom:32px;">
+        <Pie-chart :chart-data="turnData" />
       </el-col>
     </el-row>
     <el-row>
@@ -50,7 +55,7 @@ import STpointChart from './components/pointSTchart'
 import OMpointChart from './components/pointOMchart'
 import RecentDutylog from './components/RecentDutylog'
 import PieChart from './components/PieChart'
-import { getDashboardCount } from '@/api/dashboard'
+import { getDashboardCount, getDayTurnCount } from '@/api/dashboard'
 import { getDayPointCount } from '@/api/photoAndDaily'
 export default {
   name: 'DashboardAdmin',
@@ -81,7 +86,8 @@ export default {
         data: [],
         dateList: []
       },
-      statusData: {}
+      statusData: {},
+      turnData: {}
       // lineChartDataAll: {},
 
     }
@@ -107,6 +113,13 @@ export default {
           title: '巡检状态统计图',
           legend_data: response.data.map(item => { return item.name }),
           series_data: response.data
+        }
+      })
+      getDayTurnCount().then(response => {
+        this.turnData = {
+          title: '轮次状态统计图',
+          legend_data: response.data.data.map(item => { return item.name }),
+          series_data: response.data.data
         }
       })
     }

@@ -24,3 +24,11 @@ export function getRecentDutyLog(params) {
     params
   })
 }
+
+// 轮次状态统计
+export function getDayTurnCount() {
+  return request({
+    url: '/inspection-log/turn-log/get_day_turn_count/',
+    method: 'get'
+  })
+}

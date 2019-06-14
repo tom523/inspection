@@ -131,7 +131,6 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                :disabled="scope.row.role_type === 'PROFESSION'"
                 @click="editRowOrConfirm(scope.$index, scope.row)"
               >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
               <el-button
@@ -262,7 +261,7 @@ export default {
             this.tableData[index].select_show = true
             this.$message({
               type: 'warning',
-              message: err.response.data.data.members
+              message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
             console.log(err)
           })
