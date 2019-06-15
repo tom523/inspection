@@ -44,20 +44,24 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="轮次开始时间"
+            label="专业"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.plan_start_time.substring(0,10) }}<br></span>
-              <span>{{ scope.row.plan_start_time.substring(11,19) }}</span>
+
+              <div v-if="scope.row.related_professions !== undefined && scope.row.related_professions.length !== 0">
+                <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
+              </div>
+              <div v-else>
+                <span>--</span>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
             align="center"
-            label="轮次结束时间"
+            label="值"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.plan_end_time.substring(0,10) }}<br></span>
-              <span>{{ scope.row.plan_end_time.substring(11,19) }}</span>
+              {{ scope.row.display_team || '--' }}
             </template>
           </el-table-column>
           <el-table-column
