@@ -1,11 +1,32 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 5%">
+    <div style="margin-top: 2%">
+      <el-row>
+        <span style="margin-left: 6%">检查级别</span>
+        <el-select v-model="listQuery.inspection_level" clearable placeholder="请选择">
+          <el-option
+            v-for="item in inspection_level"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <span style="margin-left: 20px">巡检点状态</span>
+        <el-select v-model="listQuery.checking_status" clearable placeholder="请选择">
+          <el-option
+            v-for="item in checking_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-button style="width: 10%; margin-left: 39%" type="primary" @click="listQuery = {}">查看全部</el-button>
+      </el-row>
       <el-table
         :row-class-name="row_class"
         :data="tableData"
         border
-        style="width: 88%; margin-left: auto; margin-right: auto; margin-top: 1%"
+        style="width: 88%; margin-left: auto; margin-right: auto; margin-top: 2%"
       >
         <el-table-column
           align="center"
@@ -124,22 +145,68 @@ export default {
   data() {
     return {
       tableData: [],
+      page: 1,
       listQuery: {
-        page: 1,
         checking_status: null,
-        actual_end_time__lte: null,
-        actual_end_time__gte: null
+        inspection_level: null,
+        turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
+        turn_log__plan_start_time__lte: getDate() + ' 23:59:59'
       },
-      total: null
+      total: null,
+      checking_status: [{
+        label: '锁定',
+        value: 'LO'
+      },
+      {
+        label: '解锁',
+        value: 'UN'
+      },
+      {
+        label: '正常',
+        value: 'NO'
+      },
+      {
+        label: '异常',
+        value: 'AB'
+      },
+      {
+        label: '停检',
+        value: 'ST'
+      },
+      {
+        label: '漏检',
+        value: 'OM'
+      }],
+      inspection_level: [{
+        label: '巡检',
+        value: 1
+      },
+      {
+        label: '复检',
+        value: 2
+      },
+      {
+        label: '抽检',
+        value: 3
+      },
+      {
+        label: '管线',
+        value: 9
+      }]
     }
   },
   watch: {
-    'listQuery.checking_status': function() {
-      this.listQuery.page = 1
-      this.listQuery.actual_end_time__gte = getDate() + ' 00:00:00'
-      this.listQuery.actual_end_time__lte = getDate() + ' 23:59:59'
-      this.fetchData()
+    listQuery: {
+      handler: function() {
+        this.listQuery.page = 1
+        this.fetchData()
+      },
+      deep: true
     }
+    // 'listQuery.checking_status': function() {
+    //   this.listQuery.page = 1
+    //   this.fetchData()
+    // }
   },
   created() {
     if (this.$route.query.status) {

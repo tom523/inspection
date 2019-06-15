@@ -5,6 +5,9 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
+// import zhCN from 'antd/lib/locale-provider/zh_CN'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
@@ -32,6 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 Vue.use(ElementUI, { zhLocale })
+Vue.use(Antd)
 
 Vue.config.productionTip = false
 

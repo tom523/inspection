@@ -41,8 +41,8 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
-            label="类型"
+            prop="operation_way"
+            label="运转方式"
           />
           <el-table-column
             align="center"
@@ -64,7 +64,7 @@
                 >
                   <p>班次: {{ item.name }}</p>
                   <p>轮次: {{ item.turns }}</p>
-                  <p>班中检查: {{ item.duty_checks }}</p>
+                  <p v-if="item.duty_checks.length !== 0">班中检查: {{ item.duty_checks }}</p>
                   <p>----------------------------</p>
                 </div>
                 <div slot="reference" class="name-wrapper">
@@ -100,6 +100,14 @@
             label="连班天数"
             prop="continuous"
           />
+          <el-table-column
+            align="center"
+            label="全专业巡检"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.full_inspection ? '是' : '否' }}
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
             label="操作"
