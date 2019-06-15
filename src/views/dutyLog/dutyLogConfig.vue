@@ -208,7 +208,7 @@
       </el-form>
       <el-form :inline="true">
         <el-form-item class="form_item" label="类型">
-          <el-select v-model="type" class="form_item_value" placeholder="请选择">
+          <el-select v-model="type" style="width: 200px" placeholder="请选择">
             <el-option
               v-for="item in types"
               :key="item.value"
@@ -218,10 +218,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="连班天数" class="form_item">
-          <el-input v-model="continuous" type="number" min="0" class="form_item_value" />
+          <el-input v-model="continuous" type="number" min="0" style="width: 200px" />
         </el-form-item>
         <el-form-item label="交接班区间" class="form_item">
-          <el-select v-model="takeover_timedelta" class="form_item_value" placeholder="请选择">
+          <el-select v-model="takeover_timedelta" style="width: 200px" placeholder="请选择">
             <el-option
               v-for="item in takeoverTimedeltas"
               :key="item.value"
@@ -229,6 +229,9 @@
               :value="item.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item class="form_item">
+          <el-checkbox v-model="full_inspection">全专业巡检</el-checkbox>
         </el-form-item>
       </el-form>
       <div style="margin-left: 80%">
@@ -283,7 +286,8 @@ export default {
       operation: null,
       operationWay: [],
       professions: [],
-      fullscreenLoading: false
+      fullscreenLoading: false,
+      full_inspection: false
     }
   },
   watch: {
@@ -357,7 +361,7 @@ export default {
       for (let i = 0; i < this.operationWay[this.operation].running_count; i++) {
         this.template.push({
           name: '',
-          turns: '',
+          turns: [],
           duty_checks: ''
         })
       }
@@ -372,7 +376,8 @@ export default {
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
         template: this.template,
-        duty_checks: this.duty_checks
+        duty_checks: this.duty_checks,
+        full_inspection: this.full_inspection
       }
       if (this.rowID === undefined) {
         addDutyLogConfig(data).then(response => {
@@ -437,6 +442,7 @@ export default {
       this.template = []
       this.duty_checks = null
       this.addDutyDialog = false
+      this.full_inspection = false
     },
     allSelectTurns(turns) {
       turns = allSelect(turns, this.turns, 'id')
