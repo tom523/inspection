@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="dutyLogProfessions" placeholder="请选择">
+      <el-select v-model="dutyLogProfessions" placeholder="请选择" clearable>
         <el-option
           v-for="item in professions"
           :key="item.id"
@@ -14,7 +14,7 @@
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="turnProfessions" placeholder="请选择">
+      <el-select v-model="turnProfessions" placeholder="请选择" clearable>
         <el-option
           v-for="item in professions"
           :key="item.id"
@@ -26,7 +26,7 @@
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="staffProfessions" placeholder="请选择">
+      <el-select v-model="staffProfessions" placeholder="请选择" clearable>
         <el-option
           v-for="item in professions"
           :key="item.id"

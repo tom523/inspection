@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <span style="margin-left: 8%">选择专业</span>
-      <el-select v-model="listQuery.professions" placeholder="请选择">
+      <el-select v-model="listQuery.professions" placeholder="请选择" clearable>
         <el-option
           v-for="item in professions"
           :key="item"

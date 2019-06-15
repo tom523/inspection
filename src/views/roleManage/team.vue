@@ -39,6 +39,7 @@
                 <el-select
                   v-model="scope.row.members"
                   style="width: 100%"
+                  clearable
                   collapse-tags
                   filterable
                   multiple
@@ -63,6 +64,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.desc"
+                  clearable
                   style="width: 100%"
                 >
                   <el-option
@@ -84,6 +86,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.access"
+                  clearable
                   style="width: 100%"
                   collapse-tags
                   filterable

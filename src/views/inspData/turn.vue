@@ -37,6 +37,7 @@
               <el-select
                 v-model="scope.row.points"
                 filterable
+                clearable
                 collapse-tags
                 style="width: 100%"
                 multiple

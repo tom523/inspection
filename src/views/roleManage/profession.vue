@@ -41,6 +41,7 @@
               <div v-if="scope.row.select_show && scope.row.id===undefined">
                 <el-select
                   v-model="scope.row.role_type"
+                  clearable
                   style="width = 100%"
                 >
                   <el-option
@@ -62,6 +63,7 @@
               <div v-if="scope.row.select_show && scope.row.role_type !== 'PROFESSION'">
                 <el-select
                   v-model="scope.row.desc"
+                  clearable
                   style="width=100"
                 >
                   <el-option
@@ -85,6 +87,7 @@
                 <el-select
                   v-model="scope.row.access"
                   multiple
+                  clearable
                   style="width=100"
                 >
                   <el-option
@@ -108,6 +111,7 @@
                 <el-select
                   v-model="scope.row.members"
                   style="width: 100%"
+                  clearable
                   collapse-tags
                   filterable
                   multiple
@@ -157,6 +161,7 @@
           <el-form-item label="专业">
             <el-select
               v-model="generateData.profession_id"
+              clearable
               style="width: 80%"
             >
               <el-option

@@ -38,6 +38,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.duty_check"
+                  clearable
                   style="width: 100%"
                 >
                   <el-option

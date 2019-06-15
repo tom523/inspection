@@ -41,6 +41,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.profession"
+                  clearable
                   style="width: 100%"
                 >
                   <el-option
@@ -61,7 +62,7 @@
             <template slot-scope="scope">
               {{ scope.row.select_show ? '' : scope.row.type }}
               <div v-if="scope.row.select_show">
-                <el-select v-model="scope.row.type">
+                <el-select v-model="scope.row.type" clearable>
                   <el-option
                     v-for="item in getGlobalChoices"
                     :key="item"
@@ -81,6 +82,7 @@
                 <el-select
                   v-model="scope.row.point.id"
                   filterable
+                  clearable
                   width="100"
                 >
                   <el-option
@@ -100,7 +102,7 @@
           >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show">
-                <el-select v-model="scope.row.device.id" filterable>
+                <el-select v-model="scope.row.device.id" filterable clearable>
                   <el-option
                     v-for="item in devices"
                     :key="item.id"

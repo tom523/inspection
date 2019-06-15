@@ -37,6 +37,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.type"
+                  clearable
                   style="width: 100%"
                 >
                   <el-option
@@ -59,6 +60,7 @@
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.profession"
+                  clearable
                   style="width: 100%"
                 >
                   <el-option

@@ -33,6 +33,7 @@
                   v-model="scope.row.members"
                   style="width: 100%"
                   collapse-tags
+                  clearable
                   filterable
                   multiple
                 >

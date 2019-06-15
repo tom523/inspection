@@ -2,7 +2,7 @@
   <div class="app-container">
     <div>
       <span style="margin-left: 10%">运转方式</span>
-      <el-select v-model="listQuery.operation_way" placeholder="请选择" style="width: 20%">
+      <el-select v-model="listQuery.operation_way" placeholder="请选择" clearable style="width: 20%">
         <el-option
           v-for="item in operationWay"
           :key="item.id"
@@ -153,7 +153,7 @@
           />
         </el-form-item>
         <el-form-item style="margin-left: 50px" label="运转方式">
-          <el-select v-model="operation" class="form_item_value" placeholder="请选择">
+          <el-select v-model="operation" class="form_item_value" clearable placeholder="请选择">
             <el-option
               v-for="item in operationWay"
               :key="item.id"
@@ -163,7 +163,7 @@
           </el-select>
         </el-form-item>
         <el-form-item class="form_item" label="值">
-          <el-select v-model="teams" class="form_item_value" placeholder="请选择">
+          <el-select v-model="teams" class="form_item_value" clearable placeholder="请选择">
             <el-option
               v-for="item in teamsSet"
               :key="item"
@@ -184,7 +184,7 @@
             <el-input v-model="item.name" class="form_item_value" />
           </el-form-item>
           <el-form-item label="轮次" class="form_item">
-            <el-select v-model="item.turns" class="form_item_value" filterable collapse-tags multiple placeholder="请选择">
+            <el-select v-model="item.turns" class="form_item_value" filterable clearable collapse-tags multiple placeholder="请选择">
               <el-button type="text" style="margin-left: 80%" @click="allSelectTurns(item.turns)">全选</el-button>
               <el-option
                 v-for="i in turns"
@@ -195,7 +195,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="班中检查" class="form_item">
-            <el-select v-model="item.duty_checks" class="form_item_value" multiple placeholder="请选择">
+            <el-select v-model="item.duty_checks" class="form_item_value" clearable multiple placeholder="请选择">
               <el-option
                 v-for="i in dutyChecks"
                 :key="i.id"
@@ -208,7 +208,7 @@
       </el-form>
       <el-form :inline="true">
         <el-form-item class="form_item" label="类型">
-          <el-select v-model="type" style="width: 200px" placeholder="请选择">
+          <el-select v-model="type" style="width: 200px" clearable placeholder="请选择">
             <el-option
               v-for="item in types"
               :key="item.value"
@@ -221,7 +221,7 @@
           <el-input v-model="continuous" type="number" min="0" style="width: 200px" />
         </el-form-item>
         <el-form-item label="交接班区间" class="form_item">
-          <el-select v-model="takeover_timedelta" style="width: 200px" placeholder="请选择">
+          <el-select v-model="takeover_timedelta" style="width: 200px" clearable placeholder="请选择">
             <el-option
               v-for="item in takeoverTimedeltas"
               :key="item.value"

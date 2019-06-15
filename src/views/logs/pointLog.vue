@@ -40,6 +40,24 @@
         </el-table-column>
         <el-table-column
           align="center"
+          label="轮次"
+          prop="turn_log__name"
+        />
+        <el-table-column
+          align="center"
+          label="值"
+          prop="duty_log__team"
+        />
+        <el-table-column
+          align="center"
+          label="专业"
+        >
+          <template slot-scope="scope">
+            <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
+          align="center"
           label="巡检开始时间"
         >
           <template slot-scope="scope">
@@ -53,7 +71,7 @@
           <template slot-scope="scope">
             {{ scope.row.actual_end_time || '--' }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           label="检查人"
