@@ -224,7 +224,7 @@
         </div>
       </el-form>
       <el-form :inline="true">
-        <el-form-item class="form_item" label="类型">
+        <!-- <el-form-item class="form_item" label="类型">
           <el-select v-model="type" style="width: 200px" clearable placeholder="请选择">
             <el-option
               v-for="item in types"
@@ -233,12 +233,12 @@
               :value="item.value"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="连班天数" class="form_item">
-          <el-input v-model="continuous" type="number" min="0" style="width: 200px" />
+          <el-input v-model="continuous" type="number" min="0" class="form_item_value" />
         </el-form-item>
         <el-form-item label="交接班区间" class="form_item">
-          <el-select v-model="takeover_timedelta" style="width: 200px" clearable placeholder="请选择">
+          <el-select v-model="takeover_timedelta" class="form_item_value" clearable placeholder="请选择">
             <el-option
               v-for="item in takeoverTimedeltas"
               :key="item.value"
@@ -286,7 +286,6 @@ export default {
       tableData: [],
       addDutyDialog: false,
       start_time: null,
-      type: null,
       continuous: null,
       teams: null,
       takeover_timedelta: null,
@@ -334,7 +333,6 @@ export default {
     updateConfig(index, obj) {
       this.rowID = obj.id
       this.start_time = obj.start_time
-      this.type = obj.type
       this.teams = obj.teams.toString()
       this.template = obj.template
       this.duty_checks = obj.template[0].duty_checks
@@ -389,7 +387,7 @@ export default {
         teams: this.teams,
         start_time: this.start_time,
         continuous: this.continuous,
-        type: this.type,
+        operation_way: this.operationWay[this.operation].name,
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
         template: this.template,
@@ -454,7 +452,7 @@ export default {
       this.teams = null
       this.start_time = null
       this.operation = null
-      this.type = null
+      this.operation_way = null
       this.takeover_timedelta = null
       this.template = []
       this.duty_checks = null
