@@ -30,6 +30,7 @@
         </el-table-column>
         <el-table-column
           align="center"
+          width="350"
           label="巡检点"
         >
           <template slot-scope="scope">
@@ -38,6 +39,7 @@
                 v-model="scope.row.points"
                 filterable
                 clearable
+                reserve-keyword
                 collapse-tags
                 style="width: 100%"
                 multiple

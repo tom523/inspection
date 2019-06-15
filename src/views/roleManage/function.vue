@@ -36,6 +36,7 @@
                   clearable
                   filterable
                   multiple
+                  reserve-keyword
                 >
                   <el-button type="text" style="margin-left: 90%" @click="allSelectmembers(scope.row.members)">全选</el-button>
                   <el-option
@@ -169,7 +170,9 @@ export default {
       // 获取用户
       getTeamNotSelectedChoices().then(response => {
         response.map(item => {
-          this.members.push(item)
+          if (this.members.filter(data => item === data).length === 0) {
+            this.members.push(item)
+          }
         })
       })
     },

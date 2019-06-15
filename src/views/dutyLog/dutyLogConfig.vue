@@ -184,7 +184,16 @@
             <el-input v-model="item.name" class="form_item_value" />
           </el-form-item>
           <el-form-item label="轮次" class="form_item">
-            <el-select v-model="item.turns" class="form_item_value" filterable clearable collapse-tags multiple placeholder="请选择">
+            <el-select
+              v-model="item.turns"
+              class="form_item_value"
+              filterable
+              clearable
+              reserve-keyword
+              collapse-tags
+              multiple
+              placeholder="请选择"
+            >
               <el-button type="text" style="margin-left: 80%" @click="allSelectTurns(item.turns)">全选</el-button>
               <el-option
                 v-for="i in turns"
@@ -195,7 +204,15 @@
             </el-select>
           </el-form-item>
           <el-form-item label="班中检查" class="form_item">
-            <el-select v-model="item.duty_checks" class="form_item_value" clearable multiple placeholder="请选择">
+            <el-select
+              v-model="item.duty_checks"
+              class="form_item_value"
+              clearable
+              filterable
+              reserve-keyword
+              multiple
+              placeholder="请选择"
+            >
               <el-option
                 v-for="i in dutyChecks"
                 :key="i.id"

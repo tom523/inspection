@@ -87,6 +87,8 @@
                 <el-select
                   v-model="scope.row.access"
                   multiple
+                  filterable
+                  reserve-keyword
                   clearable
                   style="width=100"
                 >
@@ -114,6 +116,7 @@
                   clearable
                   collapse-tags
                   filterable
+                  reserve-keyword
                   multiple
                 >
                   <el-button type="text" style="margin-left: 80%" @click="allSelectMembers(scope.row.members)">全选</el-button>
@@ -371,7 +374,9 @@ export default {
       // 获取用户
       getTeamNotSelectedChoices().then(response => {
         response.map(item => {
-          this.members.push(item)
+          if (this.members.filter(data => data === item).length === 0) {
+            this.members.push(item)
+          }
         })
       })
     },

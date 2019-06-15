@@ -42,6 +42,7 @@
                   clearable
                   collapse-tags
                   filterable
+                  reserve-keyword
                   multiple
                 >
                   <el-button type="text" style="margin-left: 80%" @click="allSelectData(scope.row.members, members)">全选</el-button>
@@ -90,6 +91,7 @@
                   style="width: 100%"
                   collapse-tags
                   filterable
+                  reserve-keyword
                   multiple
                 >
                   <el-button type="text" style="margin-left: 80%" @click="allSelectData(scope.row.access, professions, 'name')">全选</el-button>
