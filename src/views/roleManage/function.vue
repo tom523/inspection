@@ -39,10 +39,10 @@
                 >
                   <el-button type="text" style="margin-left: 90%" @click="allSelectmembers(scope.row.members)">全选</el-button>
                   <el-option
-                    v-for="item in members"
-                    :key="item.username"
-                    :lable="item.id"
-                    :value="item.username"
+                    v-for="(item, index) in members"
+                    :key="index"
+                    :lable="item"
+                    :value="item"
                   />
                 </el-select>
               </div>
@@ -74,7 +74,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getAllUser, updataRoleUser } from '@/api/user'
+import { getRoleUser, getTeamNotSelectedChoices, updataRoleUser } from '@/api/user'
 import { allSelect } from '@/utils/tool'
 
 export default {
@@ -110,7 +110,7 @@ export default {
   },
   created() {
     this.fecthdata()
-    this.fecthUser()
+    // this.fecthUser()
   },
   methods: {
     editRowOrConfirm(index, obj) {
@@ -136,6 +136,11 @@ export default {
         this.tableData[index].select_show = false
       } else {
         // 点击编辑
+        this.members = []
+        obj.members.map(item => {
+          this.members.push(item)
+        })
+        this.fecthUser()
         this.rowMember = JSON.parse(JSON.stringify(obj.members))
         this.tableData[index].select_show = true
       }
@@ -162,11 +167,14 @@ export default {
     },
     async fecthUser() {
       // 获取用户
-      const membersData = await getAllUser()
-      this.members = membersData.data
+      getTeamNotSelectedChoices().then(response => {
+        response.map(item => {
+          this.members.push(item)
+        })
+      })
     },
     allSelectmembers(rowMembers) {
-      rowMembers = allSelect(rowMembers, this.members, 'username')
+      rowMembers = allSelect(rowMembers, this.members)
       // for (var i = 0; i < this.members.length; i++) {
       //   if (rowMembers.filter(item => item === this.members[i].username).length === 0) {
       //     rowMembers.push(this.members[i].username)
