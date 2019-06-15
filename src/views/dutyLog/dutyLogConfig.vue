@@ -2,7 +2,7 @@
   <div class="app-container">
     <div>
       <span style="margin-left: 10%">运转方式</span>
-      <el-select v-model="listQuery.operation_way" placeholder="请选择" clearable style="width: 20%">
+      <el-select v-model="listQuery.operation_way" placeholder="请选择" style="width: 20%">
         <el-option
           v-for="item in operationWay"
           :key="item.id"

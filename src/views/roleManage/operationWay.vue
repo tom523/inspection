@@ -117,7 +117,7 @@ export default {
           }).catch(err => {
             this.$message({
               type: 'warning',
-              message: err
+              message: err.response.data.data.name
             })
             this.tableData[index].select_show = true
             // this.tableData.splice(index, 1)

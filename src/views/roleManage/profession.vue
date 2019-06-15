@@ -121,10 +121,10 @@
                 >
                   <el-button type="text" style="margin-left: 80%" @click="allSelectMembers(scope.row.members)">全选</el-button>
                   <el-option
-                    v-for="(item, index) in members"
-                    :key="index"
-                    :lable="item"
-                    :value="item"
+                    v-for="item in members"
+                    :key="item.id"
+                    :lable="item.username"
+                    :value="item.username"
                   />
                 </el-select>
               </div>
@@ -184,7 +184,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getRoleUser, getTeamNotSelectedChoices, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
+import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
 import { allSelect, compare } from '@/utils/tool'
 
@@ -248,7 +248,7 @@ export default {
   },
   created() {
     this.fecthdata()
-    // this.fecthUser()
+    this.fecthUser()
   },
   methods: {
     editRowOrConfirm(index, obj) {
@@ -294,10 +294,6 @@ export default {
         this.tableData[index].select_show = false
       } else {
         // 点击编辑
-        this.members = []
-        obj.members.map(item => {
-          this.members.push(item)
-        })
         this.fecthUser()
         this.rowMember = JSON.parse(JSON.stringify(obj.members))
         this.tableData[index].select_show = true
@@ -337,8 +333,6 @@ export default {
       }
     },
     add_row() {
-      this.members = []
-      this.fecthUser()
       // 点击添加
       this.tableData.push({
         role_type: '',
@@ -372,12 +366,8 @@ export default {
     },
     fecthUser() {
       // 获取用户
-      getTeamNotSelectedChoices().then(response => {
-        response.map(item => {
-          if (this.members.filter(data => data === item).length === 0) {
-            this.members.push(item)
-          }
-        })
+      getAllUser().then(response => {
+        this.members = response.data
       })
     },
     // 生成复检巡检记录
@@ -434,7 +424,7 @@ export default {
       }
     },
     allSelectMembers(rowMember) {
-      rowMember = allSelect(rowMember, this.members)
+      rowMember = allSelect(rowMember, this.members, 'username')
     },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {

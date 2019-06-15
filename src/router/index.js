@@ -260,6 +260,12 @@ export const constantRoutes = [
         name: '排班记录',
         component: () => import('@/views/dutyLog/dutyLog'),
         meta: { title: '排班记录', icon: 'list' }
+      },
+      {
+        path: 'operationWay',
+        name: '运转方式管理',
+        component: () => import('@/views/roleManage/operationWay'),
+        meta: { title: '运转方式管理', icon: 'fullscreen' }
       }
     ]
   },
@@ -271,12 +277,6 @@ export const constantRoutes = [
     name: '角色管理',
     meta: { title: '角色管理', icon: 'component' },
     children: [
-      {
-        path: 'operationWay',
-        name: '运转方式管理',
-        component: () => import('@/views/roleManage/operationWay'),
-        meta: { title: '运转方式管理', icon: 'fullscreen' }
-      },
       {
         path: 'team',
         name: '值管理',
