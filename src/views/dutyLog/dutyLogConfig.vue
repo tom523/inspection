@@ -354,7 +354,7 @@ export default {
     // },
     // 删除
     deleteConfig(index, obj) {
-      MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+      MessageBox.confirm('此操作将删除排班记录,是否继续', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

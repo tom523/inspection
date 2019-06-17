@@ -87,6 +87,24 @@
           </el-table-column>
           <el-table-column
             align="center"
+            label="轮次开始时间"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.plan_start_time.substring(0,10) }}<br></span>
+              <span>{{ scope.row.plan_start_time.substring(11,19) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="轮次结束时间"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.plan_end_time.substring(0,10) }}<br></span>
+              <span>{{ scope.row.plan_end_time.substring(11,19) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
             label="巡检开始时间"
           >
             <template slot-scope="scope">
