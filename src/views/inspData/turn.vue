@@ -158,9 +158,10 @@ export default {
               message: '更新轮次成功'
             })
           }).catch(err => {
+            this.tableData[index].select_show = true
             Message({
               type: 'warning',
-              message: err.response.data.data.members
+              message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
             console.log(err)
           })
