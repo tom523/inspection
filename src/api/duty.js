@@ -173,3 +173,12 @@ export function getTeamProfessionChoices() {
     method: 'get'
   })
 }
+
+// 获取单个排班记录
+export function getCreatedLogSummary(params) {
+  return request({
+    url: '/duty-log/duty-log/get_created_log_summary/',
+    method: 'get',
+    params
+  })
+}

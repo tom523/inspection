@@ -120,11 +120,13 @@
           </el-table-column>
           <el-table-column
             align="center"
-            width="90"
+            width="120"
             label="是否生成"
           >
             <template slot-scope="scope">
-              <div v-if="scope.row.has_created">已生成</div>
+              <div v-if="scope.row.has_created">
+                <el-button type="text" @click="dutyLogDrewer(scope.row)">已生成</el-button>
+              </div>
               <div v-else>
                 <el-button round type="success" @click="createdLog(scope.$index, scope.row)">生成</el-button>
               </div>
@@ -143,11 +145,42 @@
         />
       </el-col>
     </div>
+    <a-drawer
+      title="排班记录"
+      width="50%"
+      placement="right"
+      :closable="true"
+      :visible="visible"
+      @close="onClose"
+    >
+      <a-list
+        bordered
+        :split="true"
+      >
+        <div v-if="activeDutyLog !== null">
+          <a-list-item>{{ '概述：该排班记录共有' + activeDutyLog.turn_logs_count + '条轮次记录,' + activeDutyLog.check_point_logs_count + '条巡检点记录,' + activeDutyLog.device_logs_count + '条设备记录,' + activeDutyLog.item_logs_count + '第巡检项记录' }}</a-list-item>
+          <div v-for="item in activeDutyLog.turn_logs" :key="item.id">
+            <a-list-item>{{ '轮次：' + item.snapshot.name }}</a-list-item>
+            <a-list-item>{{ '巡查点：' + item.snapshot.points }}</a-list-item>
+            <a-list-item>{{ '专业：' }}
+              <span v-for="(profession, index) in item.related_professions" :key="index">{{ profession + ',' }}</span>
+            </a-list-item>
+            <a-list-item>{{ '状态：' + statusFilter(item.checking_status) }}</a-list-item>
+            <a-list-item>{{ '轮次开始时间：' + item.plan_start_time }}</a-list-item>
+            <a-list-item>{{ '轮次结束时间：' + item.plan_end_time }}</a-list-item>
+            <a-list-item v-if="item.actual_start_time">{{ '巡检开始时间：' + item.actual_start_time }}</a-list-item>
+            <a-list-item v-if="item.actual_end_time">{{ '巡检结束时间：' + item.actual_end_time }}</a-list-item>
+            <a-list-item />
+          </div>
+        </div>
+
+      </a-list>
+    </a-drawer>
   </div>
 </template>
 
 <script>
-import { getDutyLog, createInspectionLogByDutyLog, getChoicesOperationWay } from '@/api/duty'
+import { getDutyLog, createInspectionLogByDutyLog, getChoicesOperationWay, getCreatedLogSummary } from '@/api/duty'
 import { getCurTime } from '@/utils/tool'
 import { MessageBox } from 'element-ui'
 export default {
@@ -162,7 +195,9 @@ export default {
       tableData: [],
       createdLoading: false,
       loading: true,
-      teamDescs: null
+      teamDescs: null,
+      visible: false,
+      activeDutyLog: null
     }
   },
   watch: {
@@ -180,6 +215,17 @@ export default {
     })
   },
   methods: {
+    statusFilter(key) {
+      const map = {
+        'LO': '未检',
+        'OM': '漏检',
+        'NO': '正常'
+      }
+      return map[key]
+    },
+    onClose() {
+      this.visible = false
+    },
     handleCurrentChange(index) {
       this.listQuery.page = index
       this.fecthData()
@@ -213,6 +259,12 @@ export default {
         this.total = response.data.count
         this.loading = false
         this.createdLoading = false
+      })
+    },
+    dutyLogDrewer(dutyLog) {
+      this.visible = true
+      getCreatedLogSummary({ duty_log_id: dutyLog.id }).then(response => {
+        this.activeDutyLog = response.data
       })
     },
     row_class({ row, rowIndex }) {
