@@ -1,5 +1,35 @@
 <template>
   <div class="app-container">
+    <el-col>
+      <span style="margin-left: 6.6%">选择专业：</span>
+      <el-select v-model="listQuery.professions" clearable filterable placeholder="请选择">
+        <el-option
+          v-for="item in professions"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name"
+        />
+      </el-select>
+      <span style="margin-left: 32px">选择巡检点：</span>
+      <el-select v-model="listQuery.point" clearable filterable placeholder="请选择">
+        <el-option
+          v-for="item in points"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name"
+        />
+      </el-select>
+      <span style="margin-left: 32px">选择时间:</span>
+      <el-date-picker
+        v-model="actual_check_time"
+        style="width: 400px"
+        type="daterange"
+        value-format="yyyy-MM-dd"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      />
+    </el-col>
     <el-col
       v-for="(photo, index) in photos"
       :key="index"
@@ -9,7 +39,15 @@
       <el-card :body-style="{ padding: '0px' }">
         <img :src="photo.photo" class="image">
         <div style="padding: 14px; margin-left: 5%">
-          <span>{{ '描述：' + photo.comments }}</span>
+          <div v-if="photo.profession">
+            <span>{{ '专业：' + photo.profession }}<br></span>
+          </div>
+          <div v-if="photo.point" style="margin-top: 10px">
+            <span>{{ '巡检点：' + photo.point }}<br></span>
+          </div>
+          <div style="margin-top: 10px">
+            <span>{{ '描述：' + photo.comments }}</span>
+          </div>
           <div style="margin-top: 10px">
             <span>{{ '时间：' + photo.actual_check_time }}</span>
           </div>
@@ -22,7 +60,7 @@
     <el-col>
       <el-pagination
         style="margin-top: 50px; margin-left: 6.6%; margin-bottom: 10%"
-        :current-page="page"
+        :current-page="listQuery.page"
         :total="total"
         background
         prev-text="上一页"
@@ -36,26 +74,66 @@
 
 <script>
 import { getPhoto } from '@/api/photoAndDaily'
+import { getRoleUser } from '@/api/user'
+import { getAllPoint } from '@/api/insp'
 export default {
   data() {
     return {
       photos: null,
+      total: null,
       page: 1,
-      total: null
+      listQuery: {
+        profession: null,
+        point: null,
+        actual_check_time__gte: null,
+        actual_check_time__lte: null
+      },
+      professions: null,
+      points: null,
+      actual_check_time: null
+    }
+  },
+  watch: {
+    listQuery: {
+      handler: function() {
+        this.listQuery.page = 1
+        this.fetchData()
+      },
+      deep: true
+    },
+    actual_check_time: function() {
+      console.log(this.actual_check_time)
+      if (this.actual_check_time) {
+        this.listQuery.actual_check_time__gte = this.actual_check_time[0] + ' 00:00:00'
+        this.listQuery.actual_check_time__lte = this.actual_check_time[1] + ' 23:59:59'
+      } else {
+        this.listQuery.actual_check_time__gte = null
+        this.listQuery.actual_check_time__lte = null
+      }
     }
   },
   created() {
     this.fetchData()
+    this.fetchSelect()
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fetchData()
     },
     fetchData() {
-      getPhoto({ page: this.page }).then(response => {
-        this.total = response.data.count
-        this.photos = response.data.items
+      getPhoto(this.listQuery).then(response => {
+        debugger
+        this.total = response.count
+        this.photos = response.items
+      })
+    },
+    fetchSelect() {
+      getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION,PIPE_PROFESSION' }).then(response => {
+        this.professions = response.data
+      })
+      getAllPoint().then(response => {
+        this.points = response.data
       })
     }
   }
