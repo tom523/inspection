@@ -38,7 +38,7 @@ export function deleteDutyLogConfig(id) {
 // 获取排班记录
 export function getDutyLog(params) {
   return request({
-    url: '/duty-log/duty-log/get_team_desc_duty_log/',
+    url: '/duty-log/duty-log/',
     method: 'get',
     params
   })

@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-top: 10px">
       <span>运转方式</span>
-      <el-select v-model="listQuery.team_desc" placeholder="请选择" style="width: 20%">
+      <el-select v-model="listQuery.duty_log_config__operation_way" placeholder="请选择" style="width: 20%">
         <el-option
           v-for="item in teamDescs"
           :key="item.id"
@@ -181,15 +181,15 @@
 
 <script>
 import { getDutyLog, createInspectionLogByDutyLog, getChoicesOperationWay, getCreatedLogSummary } from '@/api/duty'
-import { getCurTime } from '@/utils/tool'
+// import { getCurTime } from '@/utils/tool'
 import { MessageBox } from 'element-ui'
 export default {
   data() {
     return {
       listQuery: {
         page: 1,
-        end_time__gte: null,
-        team_desc: null
+        // end_time__gte: null,
+        duty_log_config__operation_way: null
       },
       total: null,
       tableData: [],
@@ -201,8 +201,8 @@ export default {
     }
   },
   watch: {
-    'listQuery.team_desc': function() {
-      this.listQuery.end_time__gte = getCurTime()
+    'listQuery.duty_log_config__operation_way': function() {
+      // this.listQuery.end_time__gte = getCurTime()
       this.listQuery.page = 1
       this.fecthData()
     }
@@ -211,7 +211,7 @@ export default {
     // this.fecthData()
     getChoicesOperationWay().then(response => {
       this.teamDescs = response.data
-      this.listQuery.team_desc = this.teamDescs[0].name
+      // this.listQuery.team_desc = this.teamDescs[0].name
     })
   },
   methods: {
