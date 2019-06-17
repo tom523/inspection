@@ -62,10 +62,11 @@ export function getTurn(params) {
 }
 
 // 获取所有轮次
-export function getAllTurn() {
+export function getAllTurn(params) {
   return request({
     url: '/inspection/turn/get_choices/',
-    mehtod: 'get'
+    mehtod: 'get',
+    params
   })
 }
 
@@ -283,5 +284,13 @@ export function getPointLog(params) {
     url: '/inspection-log/point-log/',
     method: 'get',
     params
+  })
+}
+
+// 获取分组
+export function getPorfessionGroup() {
+  return request({
+    url: '/role/users/get_profession_group_choices/',
+    method: 'get'
   })
 }

@@ -161,16 +161,16 @@
           />
         </el-form-item>
         <el-form-item style="margin-left: 50px" label="运转方式">
-          <el-select v-model="operation" class="form_item_value" clearable placeholder="请选择">
+          <el-select v-model="operation" style="width: 600px" clearable placeholder="请选择">
             <el-option
               v-for="item in operationWay"
               :key="item.id"
-              :label="item.name"
+              :label="item.display_name"
               :value="operationWay.indexOf(item)"
             />
           </el-select>
         </el-form-item>
-        <el-form-item class="form_item" label="值">
+        <!-- <el-form-item class="form_item" label="值">
           <el-select v-model="teams" class="form_item_value" clearable placeholder="请选择">
             <el-option
               v-for="item in teamsSet"
@@ -179,7 +179,7 @@
               :value="item"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <el-form :inline="true">
         <div
@@ -194,7 +194,7 @@
           <el-form-item label="轮次" class="form_item">
             <el-select
               v-model="item.turns"
-              class="form_item_value"
+              style="width: 450px"
               filterable
               clearable
               reserve-keyword
@@ -255,9 +255,9 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item class="form_item">
+        <!-- <el-form-item class="form_item">
           <el-checkbox v-model="full_inspection">全专业巡检</el-checkbox>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div style="margin-left: 80%">
         <el-button @click="cancelConfig">取消</el-button>
@@ -268,7 +268,7 @@
 </template>
 
 <script>
-import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getTeamSet, getChoicesOperationWay, dutyCheckGetChoices } from '@/api/duty'
+import { getDutyLogConfig, addDutyLogConfig, updateDutyLogConfig, deleteDutyLogConfig, getChoicesOperationWay, dutyCheckGetChoices } from '@/api/duty'
 import { getAllTurn } from '@/api/insp'
 import { allSelect } from '@/utils/tool'
 import { MessageBox, Message } from 'element-ui'
@@ -325,7 +325,10 @@ export default {
         return
       }
       this.addTamplate()
-      this.fecthTeamSet()
+      getAllTurn({ operation_way: this.operationWay[this.operation].name }).then(response => {
+        this.turns = response.data
+      })
+      // this.fecthTeamSet()
     }
   },
   created() {
@@ -339,16 +342,16 @@ export default {
       this.fetchData()
     },
     // 更新
-    updateConfig(index, obj) {
-      this.rowID = obj.id
-      this.start_time = obj.start_time
-      this.teams = obj.teams.toString()
-      this.template = obj.template
-      this.duty_checks = obj.template[0].duty_checks
-      this.takeover_timedelta = obj.takeover_timedelta
-      this.addDutyDialog = true
-      this.continuous = obj.continuous
-    },
+    // updateConfig(index, obj) {
+    //   this.rowID = obj.id
+    //   this.start_time = obj.start_time
+    //   this.teams = obj.teams.toString()
+    //   this.template = obj.template
+    //   this.duty_checks = obj.template[0].duty_checks
+    //   this.takeover_timedelta = obj.takeover_timedelta
+    //   this.addDutyDialog = true
+    //   this.continuous = obj.continuous
+    // },
     // 删除
     deleteConfig(index, obj) {
       MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
@@ -380,6 +383,7 @@ export default {
     addDuty() {
       this.addDutyDialog = true
     },
+    // 规定有几个班次
     addTamplate() {
       this.template = []
       for (let i = 0; i < this.operationWay[this.operation].running_count; i++) {
@@ -390,18 +394,19 @@ export default {
         })
       }
     },
+    // 添加排班配置
     addDutyConfig() {
       this.fullscreenLoading = true
       const data = {
-        teams: this.teams,
+        // teams: this.teams,
         start_time: this.start_time,
         continuous: this.continuous,
         operation_way: this.operationWay[this.operation].name,
         takeover_timedelta: this.takeover_timedelta,
         check_times_ratio: [15, 20, 30, 20, 15],
         template: this.template,
-        duty_checks: this.duty_checks,
-        full_inspection: this.full_inspection
+        duty_checks: this.duty_checks
+        // full_inspection: this.full_inspection
       }
       if (this.rowID === undefined) {
         addDutyLogConfig(data).then(response => {
@@ -437,17 +442,14 @@ export default {
       })
     },
     // 获取选择框数据
-    fecthTeamSet() {
-      getTeamSet({
-        team_desc: this.operationWay[this.operation].name
-      }).then(response => {
-        this.teamsSet = response.data
-      })
-    },
+    // fecthTeamSet() {
+    //   getTeamSet({
+    //     team_desc: this.operationWay[this.operation].name
+    //   }).then(response => {
+    //     this.teamsSet = response.data
+    //   })
+    // },
     async fecthSelect() {
-      getAllTurn().then(response => {
-        this.turns = response.data
-      })
       dutyCheckGetChoices().then(response => {
         this.dutyChecks = response.data
       })
@@ -458,7 +460,7 @@ export default {
     },
     // 清空表单
     clearDate() {
-      this.teams = null
+      // this.teams = null
       this.start_time = null
       this.operation = null
       this.operation_way = null
@@ -466,8 +468,9 @@ export default {
       this.template = []
       this.duty_checks = null
       this.addDutyDialog = false
-      this.full_inspection = false
+      // this.full_inspection = false
     },
+    // 轮次全选
     allSelectTurns(turns) {
       turns = allSelect(turns, this.turns, 'id')
       // for (var i = 0; i < this.turns.length; i++) {

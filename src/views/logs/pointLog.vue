@@ -20,7 +20,12 @@
             :value="item.value"
           />
         </el-select>
-        <el-button style="width: 10%; margin-left: 39%" type="primary" @click="listQuery = {}">查看全部</el-button>
+        <el-switch
+          v-model="watchAllPointLog"
+          style="margin-left: 5%"
+          active-text="查看所有巡检点记录"
+        />
+        <!-- <el-button style="width: 10%; margin-left: 39%" type="primary" @click="listQuery = {}">查看全部</el-button> -->
       </el-row>
       <el-table
         :row-class-name="row_class"
@@ -192,7 +197,8 @@ export default {
       {
         label: '管线',
         value: 9
-      }]
+      }],
+      watchAllPointLog: false
     }
   },
   watch: {
@@ -202,6 +208,14 @@ export default {
         this.fetchData()
       },
       deep: true
+    },
+    watchAllPointLog: function() {
+      this.watchAllPointLog ? this.listQuery = {} : this.listQuery = {
+        checking_status: null,
+        inspection_level: null,
+        turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
+        turn_log__plan_start_time__lte: getDate() + ' 23:59:59'
+      }
     }
     // 'listQuery.checking_status': function() {
     //   this.listQuery.page = 1

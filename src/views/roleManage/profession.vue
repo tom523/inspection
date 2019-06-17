@@ -42,7 +42,7 @@
                 <el-select
                   v-model="scope.row.role_type"
                   clearable
-                  style="width = 100%"
+                  style="width: 100%"
                 >
                   <el-option
                     v-for="item in professionType"
@@ -64,7 +64,7 @@
                 <el-select
                   v-model="scope.row.desc"
                   clearable
-                  style="width=100"
+                  style="width: 100%"
                 >
                   <el-option
                     v-for="item in frequency"
@@ -80,7 +80,7 @@
           <el-table-column
             align="center"
             width="120"
-            label="绑定专业"
+            label="绑定专业/分组"
           >
             <template slot-scope="scope">
               <div v-if="scope.row.select_show && scope.row.role_type === 'REVIEW_PROFESSION'">
@@ -88,9 +88,10 @@
                   v-model="scope.row.access"
                   multiple
                   filterable
+                  collapse-tags
                   reserve-keyword
                   clearable
-                  style="width=100"
+                  style="width: 100%"
                 >
                   <el-option
                     v-for="item in professions"
@@ -100,7 +101,22 @@
                   />
                 </el-select>
               </div>
-              <div v-else>{{ scope.row.role_type !== 'REVIEW_PROFESSION' ? '--' : scope.row.access.toString() }}</div>
+              <div v-else-if="scope.row.select_show && scope.row.role_type === 'PROFESSION'">
+                <el-select
+                  v-model="scope.row.access"
+                  filterable
+                  clearable
+                  style="width: 100%"
+                >
+                  <el-option
+                    v-for="item in group"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
+              <div v-else>{{ scope.row.role_type === 'PROFESSION' ? scope.row.access : scope.row.access.toString() }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -186,6 +202,7 @@
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
+import { getPorfessionGroup } from '@/api/insp'
 import { allSelect, compare } from '@/utils/tool'
 import { MessageBox, Message } from 'element-ui'
 
@@ -238,13 +255,16 @@ export default {
       }],
       tableData: [],
       rowMember: [],
+      rowAccess: null,
+      rowDesc: null,
       members: [],
       professions: [],
       generateData: {
         this_period: null,
         profession_id: null
       },
-      generateLogDialog: false
+      generateLogDialog: false,
+      group: []
     }
   },
   created() {
@@ -256,7 +276,7 @@ export default {
       // 点击确定
       if (this.tableData[index].select_show) {
         obj.members = obj.members.toString()
-        obj.access = obj.access.toString()
+        obj.access ? obj.access = obj.access.toString() : obj.access = ''
         // 新建专业
         if (obj.id === undefined) {
           addRoleUser(obj).then(response => {
@@ -296,7 +316,9 @@ export default {
       } else {
         // 点击编辑
         this.fecthUser()
+        obj.role_type === 'PROFESSION' ? this.rowAccess = obj.access : this.rowAccess = JSON.parse(JSON.stringify(obj.access))
         this.rowMember = JSON.parse(JSON.stringify(obj.members))
+        this.rowDesc = JSON.parse(JSON.stringify(obj.desc))
         this.tableData[index].select_show = true
       }
     },
@@ -307,6 +329,8 @@ export default {
           this.tableData.splice(index, 1)
         } else {
           this.tableData[index].members = this.rowMember
+          this.tableData[index].access = this.rowAccess
+          this.tableData[index].desc = this.rowDesc
           this.tableData[index].select_show = false
         }
       } else {
@@ -352,12 +376,14 @@ export default {
       var data = professionData.data
       data.map(item => {
         item.select_show = false
+        if (item.role_type !== 'PROFESSION') {
+          item.access = item.access.substring(1, item.access.length - 1)
+          item.access = item.access.split(',')
+        } else {
+          item.access = item.access.substring(1, item.access.length - 1)
+        }
+        item.members = item.members.substring(1, item.members.length - 1)
         item.members = item.members.split(',')
-        item.access = item.access.split(',')
-        item.members.pop()
-        item.members.shift()
-        item.access.pop()
-        item.access.shift()
         item.role_type === 'PROFESSION' ? item.inspection_leval = 1 : item.role_type === 'REVIEW_PROFESSION' ? item.inspection_leval = 2 : item.inspection_leval = 3
       })
       this.professions = data.filter(item => item.role_type === 'PROFESSION')
@@ -369,6 +395,9 @@ export default {
       // 获取用户
       getAllUser().then(response => {
         this.members = response.data
+      })
+      getPorfessionGroup().then(response => {
+        this.group = response.data
       })
     },
     // 生成复检巡检记录
