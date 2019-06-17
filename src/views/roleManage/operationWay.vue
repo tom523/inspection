@@ -87,7 +87,7 @@
 <script>
 // import { getList } from '@/api/table'
 import { getDutyLogOperationWay, addDutyLogOperationWay, updateDutyLogOperationWay, deleteDutyLogOperationWay } from '@/api/duty'
-
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -109,13 +109,13 @@ export default {
         // 新建值
         if (obj.id === undefined) {
           addDutyLogOperationWay(obj).then(response => {
-            this.$message({
+            Message({
               type: 'success',
               message: '添加成功'
             })
             this.fecthdata()
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.name
             })
@@ -126,12 +126,12 @@ export default {
         } else {
           updateDutyLogOperationWay(obj.id, obj).then(response => {
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'success',
               message: '更新成功'
             })
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err
             })
@@ -160,14 +160,14 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteDutyLogOperationWay(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'success',
               message: '删除成功！'
             })
@@ -175,7 +175,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })

@@ -116,6 +116,7 @@
 
 <script>
 import { getAccountUser, addAccountUser, updataAccountUser, deleteAccoutUser, modifyPassword } from '@/api/user'
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     var checkCnName = (rule, value, callback) => {
@@ -183,12 +184,12 @@ export default {
             phone: obj.phone
           }).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'success',
               message: '添加成功'
             })
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.message
             })
@@ -200,7 +201,7 @@ export default {
           // 更新用户
           updataAccountUser(obj.id, obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'success',
               message: '更新成功'
             })
@@ -232,20 +233,20 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.username + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.username + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteAccoutUser(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'success',
               message: '删除成功'
             })
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })
@@ -268,7 +269,7 @@ export default {
             password: this.rowData.newPassword
           }
           modifyPassword(this.rowData.id, data).then(response => {
-            this.$message({
+            Message({
               type: 'success',
               message: '密码修改成功！'
             })
@@ -289,13 +290,13 @@ export default {
         type: 'warning'
       }).then(() => {
         modifyPassword(obj.id, { password: '' }).then(response => {
-          this.$message({
+          Message({
             type: 'success',
             message: '重置密码成功'
           })
         })
       }).catch(() => {
-        this.$message({
+        Message({
           type: 'info',
           message: '已取消删除'
         })

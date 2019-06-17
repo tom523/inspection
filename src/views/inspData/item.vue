@@ -200,6 +200,7 @@
 <script>
 import { getItem, addItem, updateItem, deleteItem, getAllPoint, getAllDevice } from '@/api/insp'
 import { getRoleUser, getGlobalChoices } from '@/api/user'
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -250,7 +251,7 @@ export default {
           // 添加
           addItem(obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'success',
               message: '添加巡检点成功'
             })
@@ -261,7 +262,7 @@ export default {
           // 更新
           updateItem(obj.id, obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'success',
               message: '更新巡检项成功！'
             })
@@ -301,14 +302,14 @@ export default {
         }
       } else {
         // 点击删除
-        this.$confirm('此操作将删除“' + obj.name + '”,是否继续', '提示', {
+        MessageBox.confirm('此操作将删除“' + obj.name + '”,是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteItem(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'success',
               message: '删除成功！'
             })
@@ -316,7 +317,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })

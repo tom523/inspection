@@ -87,7 +87,7 @@
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import { convertExcelToJson } from '@/utils/tool'
 import { importInspectionData, getPoint, addPoint, updatePoint, deletePoint } from '@/api/insp'
-
+import { MessageBox, Message } from 'element-ui'
 export default {
   components: { UploadExcelComponent },
   data() {
@@ -129,7 +129,7 @@ export default {
         if (obj.id === undefined) {
           addPoint(obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '添加巡检点成功！'
             })
@@ -140,7 +140,7 @@ export default {
         } else {
           updatePoint(obj.id, obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '更新巡检点成功'
             })
@@ -168,14 +168,14 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deletePoint(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'sussess',
               message: '删除巡检点成功'
             })
@@ -183,7 +183,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })
@@ -217,7 +217,7 @@ export default {
       const jsonData = await convertExcelToJson(this.importData)
       importInspectionData(jsonData).then(response => {
         this.importDialog = false
-        this.$message({
+        Message({
           type: 'success',
           message: '导入数据成功！'
         })
@@ -225,7 +225,7 @@ export default {
         this.loading = false
       }).catch(err => {
         this.loading = false
-        this.$message({
+        Message({
           type: 'warning',
           message: err.response.data[0]
         })
@@ -245,7 +245,7 @@ export default {
       if (isLt1M) {
         return true
       }
-      this.$message({
+      Message({
         message: 'Please do not upload files larger than 1m in size.',
         type: 'warning'
       })

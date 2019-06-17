@@ -91,6 +91,7 @@
 
 <script>
 import { getDutyCheckItem, addDutyCheckItem, updateDutyCheckItem, deleteDutyCheckItem, getDutyCheck } from '@/api/insp'
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -119,7 +120,7 @@ export default {
         if (obj.id === undefined) {
           addDutyCheckItem(obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '添加班中检查成功！'
             })
@@ -130,7 +131,7 @@ export default {
         } else {
           updateDutyCheckItem(obj.id, obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '更新班中检查成功'
             })
@@ -158,14 +159,14 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteDutyCheckItem(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'sussess',
               message: '删除班中检查成功'
             })
@@ -173,7 +174,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })
@@ -201,7 +202,6 @@ export default {
     },
     fetchSelect() {
       getDutyCheck().then(response => {
-        debugger
         this.dutyChecks = response.data.items
       })
     },

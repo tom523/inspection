@@ -123,6 +123,7 @@
 <script>
 import { getDevice, addDevice, updateDevice, deleteDevice, getAllPoint } from '@/api/insp'
 import { getRoleUser } from '@/api/user'
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -166,12 +167,12 @@ export default {
         if (obj.id === undefined) {
           addDevice(obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '添加设备成功！'
             })
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.name || err.response.data.data.point
             })
@@ -181,7 +182,7 @@ export default {
         } else {
           updateDevice(obj.id, obj).then(response => {
             this.fetchData()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '更新设备成功'
             })
@@ -211,14 +212,14 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteDevice(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'sussess',
               message: '删除设备成功'
             })
@@ -226,7 +227,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })

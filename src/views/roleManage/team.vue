@@ -133,6 +133,7 @@
 import { getRoleUser, getTeamNotSelectedChoices, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { getDutyLogOperationWay } from '@/api/duty'
 import { allSelect } from '@/utils/tool'
+import { MessageBox, Message } from 'element-ui'
 
 export default {
   data() {
@@ -169,13 +170,13 @@ export default {
           addRoleUser(obj).then(response => {
             obj.members = obj.members.split(',')
             obj.access = obj.access.split(',')
-            this.$message({
+            Message({
               type: 'success',
               message: '添加成功'
             })
             this.fecthdata()
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
@@ -191,7 +192,7 @@ export default {
               obj.access = obj.access.split(',')
             }
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'success',
               message: '更新成功'
             })
@@ -199,7 +200,7 @@ export default {
             this.tableData[index].members = this.rowMember
             this.tableData[index].desc = this.rowDsec
             this.tableData[index].access = this.rowAccess
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
@@ -235,14 +236,14 @@ export default {
         }
       } else {
         // 点击删除，删除值
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteRoleUser(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'success',
               message: '删除成功！'
             })
@@ -250,7 +251,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })

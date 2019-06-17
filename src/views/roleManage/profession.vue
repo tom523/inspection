@@ -187,6 +187,7 @@
 import { getRoleUser, getAllUser, addRoleUser, updataRoleUser, deleteRoleUser } from '@/api/user'
 import { genLogByFrequencyREviewAndPipe } from '@/api/duty'
 import { allSelect, compare } from '@/utils/tool'
+import { MessageBox, Message } from 'element-ui'
 
 export default {
   filters: {
@@ -261,13 +262,13 @@ export default {
           addRoleUser(obj).then(response => {
             obj.members = obj.members.split(',')
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'success',
               message: '添加成功'
             })
           }).catch(err => {
             this.tableData[index].select_show = true
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
@@ -278,13 +279,13 @@ export default {
           updataRoleUser(obj.id, obj).then(response => {
             obj.members = obj.members.split(',')
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'success',
               message: '更新成功'
             })
           }).catch(err => {
             this.tableData[index].select_show = true
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members
             })
@@ -310,14 +311,14 @@ export default {
         }
       } else {
         // 点击删除
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteRoleUser(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'success',
               message: '删除成功！'
             })
@@ -325,7 +326,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })
@@ -387,7 +388,7 @@ export default {
     generateLogByFrequency() {
       console.log(this.generateData)
       genLogByFrequencyREviewAndPipe(this.generateData).then(response => {
-        this.$message({
+        Message({
           type: 'success',
           message: '生成记录成功！'
         })
@@ -396,7 +397,7 @@ export default {
       })
       // if (this.professions[0].role_type === 'REVIEW_PROFESSION') {
       //   genLogByFrequencyREview(this.generateData).then(response => {
-      //     this.$message({
+      //     Message({
       //       type: 'success',
       //       message: '生成复检巡检记录成功！'
       //     })
@@ -405,7 +406,7 @@ export default {
       //   })
       // } else if (this.professions[0].role_type === 'PIPE_PROFESSION') {
       //   genLogByFrequencyPipe(this.generateData).then(response => {
-      //     this.$message({
+      //     Message({
       //       type: 'success',
       //       message: '生成管线巡检记录成功！'
       //     })

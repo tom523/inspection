@@ -104,6 +104,7 @@
 <script>
 import { getTurn, updateTurn, addTurn, deleteTurn, getTurnChoices } from '@/api/insp'
 import { allSelect } from '@/utils/tool'
+import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
     return {
@@ -136,12 +137,12 @@ export default {
             points: obj.points
           }).then(response => {
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '添加轮次成功！'
             })
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members || err.response.data.data.non_field_errors
             })
@@ -152,12 +153,12 @@ export default {
         } else {
           updateTurn(obj.id, obj).then(response => {
             this.fecthdata()
-            this.$message({
+            Message({
               type: 'sussess',
               message: '更新轮次成功'
             })
           }).catch(err => {
-            this.$message({
+            Message({
               type: 'warning',
               message: err.response.data.data.members
             })
@@ -184,14 +185,14 @@ export default {
         }
       } else {
         // 点击删除
-        this.$confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
+        MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           deleteTurn(obj.id).then(response => {
             this.tableData.splice(index, 1)
-            this.$message({
+            Message({
               type: 'sussess',
               message: '删除轮次成功'
             })
@@ -199,7 +200,7 @@ export default {
             console.log(err)
           })
         }).catch(() => {
-          this.$message({
+          Message({
             type: 'info',
             message: '已取消删除'
           })

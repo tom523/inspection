@@ -77,7 +77,7 @@
 // import { getList } from '@/api/table'
 import { getRoleUser, getAllUser, updataRoleUser } from '@/api/user'
 import { allSelect } from '@/utils/tool'
-
+import { Message } from 'element-ui'
 export default {
   filters: {
     chooseProfessionType: function(info) {
@@ -122,13 +122,13 @@ export default {
         updataRoleUser(obj.id, obj).then(response => {
           obj.members = obj.members.split(',')
           this.fecthdata()
-          this.$message({
+          Message({
             type: 'success',
             message: '更新成功'
           })
         }).catch(err => {
           this.tableData[index].members = this.rowMember
-          this.$message({
+          Message({
             type: 'warning',
             message: err.response.data.data.members || err.response.data.data.non_field_errors || err.response.data.data.detail
           })
