@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     handleCurrentChange(index) {
-      this.page = index
+      this.listQuery.page = index
       this.fecthdata()
     },
     fecthdata() {

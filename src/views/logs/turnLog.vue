@@ -2,7 +2,28 @@
   <div class="app-container">
     <div style="margin-top: 50px">
       <el-col>
-        <el-button style="width: 15%;margin-left: 80%" type="primary" @click="listQuery.plan_end_time__gte = null">查看所有轮次记录</el-button>
+        <span style="margin-left: 5%">值：</span>
+        <el-select
+          v-model="teams"
+          multiple
+          collapse-tags
+          clearable
+          filterable
+          style="margin-left: 20px;"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in selectTeams"
+            :key="item.id"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+        <el-switch
+          v-model="watchAllTurn"
+          style="margin-left: 5%"
+          active-text="查看所有轮次记录"
+        />
         <el-table
           v-loading="loading"
           element-loading-text="拼命加载中"
@@ -107,6 +128,7 @@
 <script>
 import { getTurnLog } from '@/api/insp'
 import { getCurTime } from '@/utils/tool'
+import { getRoleUser } from '@/api/user'
 export default {
   filters: {
     statusFilter(key) {
@@ -123,20 +145,40 @@ export default {
       tableData: [],
       listQuery: {
         page: 1,
-        plan_end_time__gte: getCurTime()
+        plan_end_time__gte: getCurTime(),
+        duty_log__team__in: []
       },
       total: null,
-      loading: false
+      loading: false,
+      watchAllTurn: false,
+      selectTeams: null,
+      teams: []
     }
   },
   watch: {
-    'listQuery.plan_end_time__gte': function() {
-      this.listQuery.page = 1
-      this.fecthdata()
+    listQuery: {
+      handler: function() {
+        console.log(this.listQuery)
+        this.listQuery.page = 1
+        this.fecthdata()
+      },
+      deep: true
+    },
+    // 'listQuery.duty_log__team__in': function() {
+    //   debugger
+    //   this.listQuery.page = 1
+    //   this.fecthdata()
+    // },
+    watchAllTurn: function() {
+      this.watchAllTurn ? this.listQuery.plan_end_time__gte = null : this.listQuery.plan_end_time__gte = getCurTime()
+    },
+    teams: function() {
+      this.listQuery.duty_log__team__in = this.teams.toString(',')
     }
   },
   created() {
     this.fecthdata()
+    this.fecthTeam()
   },
   methods: {
     handleCurrentChange(index) {
@@ -150,6 +192,11 @@ export default {
         this.total = response.data.count
         this.tableData = response.data.items
         this.loading = false
+      })
+    },
+    fecthTeam() {
+      getRoleUser({ role_type: 'TEAM' }).then(response => {
+        this.selectTeams = response.data
       })
     },
     row_class({ row, rowIndex }) {
