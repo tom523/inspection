@@ -19,13 +19,13 @@
           :value="item.name"
         />
       </el-select>
-      <span style="margin-left: 32px">选择时间:</span>
+      <span style="margin-left: 32px">选择时间：</span>
       <el-date-picker
         v-model="actual_check_time"
-        style="width: 400px"
+        style="width: 300px"
         type="daterange"
         value-format="yyyy-MM-dd"
-        range-separator="至"
+        range-separator="~"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
       />
@@ -123,7 +123,6 @@ export default {
     },
     fetchData() {
       getPhoto(this.listQuery).then(response => {
-        debugger
         this.total = response.count
         this.photos = response.items
       })

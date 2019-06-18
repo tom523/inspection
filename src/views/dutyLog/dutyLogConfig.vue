@@ -100,14 +100,14 @@
             label="连班天数"
             prop="continuous"
           />
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             label="全专业巡检"
           >
             <template slot-scope="scope">
               {{ scope.row.full_inspection ? '是' : '否' }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             align="center"
             label="操作"

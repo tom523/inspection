@@ -1,38 +1,68 @@
 <template>
   <div class="dashboard-editor-container">
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="dutyLogProfessions" placeholder="请选择">
-        <el-option
+      <span style="margin-left: 70%">选择专业：</span>
+      <el-select v-model="dutyLogProfessions" style="width: 300px" placeholder="请选择">
+        <el-option-group
           v-for="item in professions"
-          :key="item.id"
-          :label="item.related_professions"
-          :value="item.related_professions"
-        />
+          :key="item.operation_way"
+          :label="item.operation_way"
+        >
+          <el-option
+            v-for="(group, index) in item.grouped_professions"
+            :key="index"
+            style="width: 300px"
+            :label="group.toString()"
+            :value="group.toString()"
+          >
+            <span style="float: left">{{ group.toString() }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
+          </el-option>
+        </el-option-group>
       </el-select>
       <bar-chart :chart-data="dutyData" />
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="turnProfessions" placeholder="请选择">
-        <el-option
+      <span style="margin-left: 70%">选择专业：</span>
+      <el-select v-model="turnProfessions" style="width: 300px" placeholder="请选择">
+        <el-option-group
           v-for="item in professions"
-          :key="item.id"
-          :label="item.related_professions"
-          :value="item.related_professions"
-        />
+          :key="item.operation_way"
+          :label="item.operation_way"
+        >
+          <el-option
+            v-for="(group, index) in item.grouped_professions"
+            :key="index"
+            style="width: 300px"
+            :label="group.toString()"
+            :value="group.toString()"
+          >
+            <span style="float: left">{{ group.toString() }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
+          </el-option>
+        </el-option-group>
       </el-select>
       <bar-chart :chart-data="turnData" />
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 75%">选择专业</span>
-      <el-select v-model="staffProfessions" placeholder="请选择">
-        <el-option
+      <span style="margin-left: 70%">选择专业：</span>
+      <el-select v-model="staffProfessions" style="width: 300px" placeholder="请选择">
+        <el-option-group
           v-for="item in professions"
-          :key="item.id"
-          :label="item.related_professions"
-          :value="item.related_professions"
-        />
+          :key="item.operation_way"
+          :label="item.operation_way"
+        >
+          <el-option
+            v-for="(group, index) in item.grouped_professions"
+            :key="index"
+            style="width: 300px"
+            :label="group.toString()"
+            :value="group.toString()"
+          >
+            <span style="float: left">{{ group.toString() }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
+          </el-option>
+        </el-option-group>
       </el-select>
       <bar-chart :chart-data="staffData" />
     </div>
@@ -179,10 +209,11 @@ export default {
   methods: {
     fetchData() {
       getRelatedTurnProfession().then(response => {
+        debugger
         this.professions = response.data
-        this.dutyLogProfessions = this.professions[0].related_professions
-        this.turnProfessions = this.professions[0].related_professions
-        this.staffProfessions = this.professions[0].related_professions
+        // this.dutyLogProfessions = this.professions[0].related_professions
+        // this.turnProfessions = this.professions[0].related_professions
+        // this.staffProfessions = this.professions[0].related_professions
       })
     //   getStatisticData().then(res => {
     //     const duty_log_statistic = res.data.duty_log_statistic

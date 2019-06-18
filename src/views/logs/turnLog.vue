@@ -66,17 +66,8 @@
           <el-table-column
             align="center"
             label="专业"
-          >
-            <template slot-scope="scope">
-
-              <div v-if="scope.row.related_professions !== undefined && scope.row.related_professions.length !== 0">
-                <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
-              </div>
-              <div v-else>
-                <span>--</span>
-              </div>
-            </template>
-          </el-table-column>
+            prop="related_professions"
+          />
           <el-table-column
             align="center"
             label="值"

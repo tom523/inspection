@@ -228,6 +228,7 @@ export default {
         if (obj.id === undefined) {
           this.tableData.splice(index, 1)
         } else {
+          debugger
           this.tableData[index].name = this.rowName
           this.tableData[index].access = this.rowAccess
           this.tableData[index].members = this.rowMember

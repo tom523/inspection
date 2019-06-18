@@ -12,7 +12,7 @@
           />
         </el-select>
         <span style="margin-left: 20px">巡检点状态</span>
-        <el-select v-model="listQuery.checking_status" clearable placeholder="请选择">
+        <el-select v-model="listQuery.checking_status__in" clearable placeholder="请选择">
           <el-option
             v-for="item in checking_status"
             :key="item.value"
@@ -128,8 +128,8 @@ export default {
   filters: {
     statusFilter(key) {
       const map = {
-        'LO': '锁定',
-        'UN': '解锁',
+        'LO': '未检',
+        'UN': '未检',
         'NO': '正常',
         'AB': '异常',
         'ST': '停检',
@@ -141,7 +141,7 @@ export default {
       const map = {
         1: '巡检',
         2: '复检',
-        3: '抽检',
+        // 3: '抽检',
         9: '管线'
       }
       return map[key]
@@ -152,20 +152,20 @@ export default {
       tableData: [],
       page: 1,
       listQuery: {
-        checking_status: null,
+        checking_status__in: null,
         inspection_level: null,
         turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
         turn_log__plan_start_time__lte: getDate() + ' 23:59:59'
       },
       total: null,
       checking_status: [{
-        label: '锁定',
-        value: 'LO'
+        label: '未检',
+        value: 'LO,UN'
       },
-      {
-        label: '解锁',
-        value: 'UN'
-      },
+      // {
+      //   label: '解锁',
+      //   value: 'UN'
+      // },
       {
         label: '正常',
         value: 'NO'
@@ -211,7 +211,7 @@ export default {
     },
     watchAllPointLog: function() {
       this.watchAllPointLog ? this.listQuery = {} : this.listQuery = {
-        checking_status: null,
+        checking_status__in: null,
         inspection_level: null,
         turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
         turn_log__plan_start_time__lte: getDate() + ' 23:59:59'

@@ -11,7 +11,7 @@ export function getStatisticData() {
 // 数据统计过滤条件
 export function getRelatedTurnProfession() {
   return request({
-    url: '/inspection/turn/get_related_turn_profession/',
+    url: '/role/users/get_group_professions/',
     method: 'get'
   })
 }
