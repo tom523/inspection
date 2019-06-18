@@ -69,8 +69,9 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                :disabled="scope.row.id ? true : false"
                 @click="editRowOrConfirm(scope.$index, scope.row)"
-              >{{ scope.row.select_show ? '确定' : '编辑' }}</el-button>
+              >确定</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -86,7 +87,7 @@
 
 <script>
 // import { getList } from '@/api/table'
-import { getDutyLogOperationWay, addDutyLogOperationWay, updateDutyLogOperationWay, deleteDutyLogOperationWay } from '@/api/duty'
+import { getDutyLogOperationWay, addDutyLogOperationWay, deleteDutyLogOperationWay } from '@/api/duty'
 import { MessageBox, Message } from 'element-ui'
 export default {
   data() {
@@ -123,41 +124,44 @@ export default {
             // this.tableData.splice(index, 1)
             console.log(err)
           })
-        } else {
-          updateDutyLogOperationWay(obj.id, obj).then(response => {
-            this.fecthdata()
-            Message({
-              type: 'success',
-              message: '更新成功'
-            })
-          }).catch(err => {
-            Message({
-              type: 'warning',
-              message: err
-            })
-            console.log(err)
-          })
         }
-        this.tableData[index].select_show = false
-      } else {
-        // 点击编辑
-        this.rowName = JSON.parse(JSON.stringify(obj.name))
-        this.rowTeamCount = JSON.parse(JSON.stringify(obj.team_count))
-        this.rowRunningCount = JSON.parse(JSON.stringify(obj.running_count))
-        this.tableData[index].select_show = true
+        // else {
+        //   updateDutyLogOperationWay(obj.id, obj).then(response => {
+        //     this.fecthdata()
+        //     Message({
+        //       type: 'success',
+        //       message: '更新成功'
+        //     })
+        //   }).catch(err => {
+        //     Message({
+        //       type: 'warning',
+        //       message: err
+        //     })
+        //     console.log(err)
+        //   })
+        // }
+        // this.tableData[index].select_show = false
       }
+      // else {
+      //   // 点击编辑
+      //   this.rowName = JSON.parse(JSON.stringify(obj.name))
+      //   this.rowTeamCount = JSON.parse(JSON.stringify(obj.team_count))
+      //   this.rowRunningCount = JSON.parse(JSON.stringify(obj.running_count))
+      //   this.tableData[index].select_show = true
+      // }
     },
     deleteRowOrCancel(index, obj) {
       if (this.tableData[index].select_show) {
         // 点击取消
         if (obj.id === undefined) {
           this.tableData.splice(index, 1)
-        } else {
-          this.tableData[index].name = this.rowName
-          this.tableData[index].team_count = this.rowTeamCount
-          this.tableData[index].running_count = this.rowRunningCount
-          this.tableData[index].select_show = false
         }
+        // else {
+        //   this.tableData[index].name = this.rowName
+        //   this.tableData[index].team_count = this.rowTeamCount
+        //   this.tableData[index].running_count = this.rowRunningCount
+        //   this.tableData[index].select_show = false
+        // }
       } else {
         // 点击删除，删除值
         MessageBox.confirm('此操作将删除' + obj.name + ',是否继续', '提示', {

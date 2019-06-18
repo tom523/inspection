@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 70%">选择专业：</span>
+      <span style="margin-left: 60%">选择专业：</span>
       <el-select v-model="dutyLogProfessions" style="width: 300px" placeholder="请选择">
         <el-option-group
           v-for="item in professions"
@@ -23,7 +23,7 @@
       <bar-chart :chart-data="dutyData" />
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 70%">选择专业：</span>
+      <span style="margin-left: 60%">选择专业：</span>
       <el-select v-model="turnProfessions" style="width: 300px" placeholder="请选择">
         <el-option-group
           v-for="item in professions"
@@ -45,7 +45,7 @@
       <bar-chart :chart-data="turnData" />
     </div>
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 70%">选择专业：</span>
+      <span style="margin-left: 60%">选择专业：</span>
       <el-select v-model="staffProfessions" style="width: 300px" placeholder="请选择">
         <el-option-group
           v-for="item in professions"

@@ -208,7 +208,7 @@ export default {
     }
   },
   created() {
-    // this.fecthData()
+    this.fecthData()
     getChoicesOperationWay().then(response => {
       this.teamDescs = response.data
       // this.listQuery.team_desc = this.teamDescs[0].name
