@@ -61,7 +61,14 @@
           label="状态"
         >
           <template slot-scope="scope">
-            {{ scope.row.checking_status | statusFilter }}
+            <div v-if="scope.row.checking_status === 'ST'">
+              <el-tooltip class="item" effect="dark" :content="scope.row.stop_comments" placement="right">
+                <el-button type="text">{{ scope.row.checking_status | statusFilter }}</el-button>
+              </el-tooltip>
+            </div>
+            <div v-else>
+              {{ scope.row.checking_status | statusFilter }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -82,22 +89,6 @@
             <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          align="center"
-          label="巡检开始时间"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.actual_start_time || '--' }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          label="巡检结时间"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.actual_end_time || '--' }}
-          </template>
-        </el-table-column> -->
         <el-table-column
           align="center"
           label="检查人"

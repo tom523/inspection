@@ -378,7 +378,7 @@ export default {
         item.select_show = false
         if (item.role_type !== 'PROFESSION') {
           item.access = item.access.substring(1, item.access.length - 1)
-          item.access = item.access.split(',')
+          item.access = item.access === '' ? [] : item.access.split(',')
         } else {
           item.access = item.access.substring(1, item.access.length - 1)
         }

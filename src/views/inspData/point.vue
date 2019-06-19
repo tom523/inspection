@@ -227,7 +227,7 @@ export default {
         this.loading = false
         Message({
           type: 'warning',
-          message: err.response.data[0]
+          message: err.response.data[0] || err.response.data.message
         })
         console.log(err)
       })
