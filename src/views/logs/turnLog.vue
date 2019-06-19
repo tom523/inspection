@@ -39,6 +39,7 @@
             type="index"
             label="序号"
             width="80"
+            :index="indexMethod"
           />
           <el-table-column
             align="center"
@@ -163,8 +164,8 @@ export default {
   data() {
     return {
       tableData: [],
+      page: 1,
       listQuery: {
-        page: 1,
         plan_end_time__gte: getCurTime(),
         duty_log__team__in: []
       },
@@ -178,17 +179,11 @@ export default {
   watch: {
     listQuery: {
       handler: function() {
-        console.log(this.listQuery)
         this.listQuery.page = 1
         this.fecthdata()
       },
       deep: true
     },
-    // 'listQuery.duty_log__team__in': function() {
-    //   debugger
-    //   this.listQuery.page = 1
-    //   this.fecthdata()
-    // },
     watchAllTurn: function() {
       this.watchAllTurn ? this.listQuery.plan_end_time__gte = null : this.listQuery.plan_end_time__gte = getCurTime()
     },
@@ -225,6 +220,9 @@ export default {
       } else if (rowIndex % 2 === 1) {
         return 'success-row'
       }
+    },
+    indexMethod(index) {
+      return (this.listQuery.page - 1) * 10 + index + 1
     }
   }
 }
