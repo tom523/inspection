@@ -40,14 +40,20 @@
           />
           <el-table-column
             align="center"
-            prop="start_time"
-            label="开始时间"
-          />
-          <el-table-column
+            width="300"
+            label="时间"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.start_time }}<br></span>
+              <span>至<br></span>
+              <span>{{ scope.row.end_time }}</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column
             align="center"
             prop="end_time"
             label="结束时间"
-          />
+          /> -->
           <el-table-column
             align="center"
             label="轮次"
@@ -120,7 +126,7 @@
           </el-table-column>
           <el-table-column
             align="center"
-            width="120"
+            width="150"
             label="是否生成"
           >
             <template slot-scope="scope">

@@ -78,14 +78,20 @@
           </el-table-column>
           <el-table-column
             align="center"
-            label="轮次开始时间"
+            width="220"
+            label="轮次时间"
           >
             <template slot-scope="scope">
+              <span>{{ scope.row.plan_start_time }}<br></span>
+              <span>至<br></span>
+              <span>{{ scope.row.plan_end_time }}</span>
+            </template>
+            <!-- <template slot-scope="scope">
               <span>{{ scope.row.plan_start_time.substring(0,10) }}<br></span>
               <span>{{ scope.row.plan_start_time.substring(11,19) }}</span>
-            </template>
+            </template> -->
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             label="轮次结束时间"
           >
@@ -93,20 +99,25 @@
               <span>{{ scope.row.plan_end_time.substring(0,10) }}<br></span>
               <span>{{ scope.row.plan_end_time.substring(11,19) }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             align="center"
-            label="巡检开始时间"
+            label="巡检时间"
           >
             <template slot-scope="scope">
+              <span>{{ scope.row.actual_start_time || '--' }}<br></span>
+              <span v-if="scope.row.actual_start_time || scope.row.actual_end_time">至<br></span>
+              <span>{{ scope.row.actual_end_time || '--' }}</span>
+            </template>
+            <!-- <template slot-scope="scope">
               <div v-if="scope.row.actual_start_time">
                 <span>{{ scope.row.actual_start_time.substring(0,10) }}<br></span>
                 <span>{{ scope.row.actual_start_time.substring(11,19) }}</span>
               </div>
               <div v-else>--</div>
-            </template>
+            </template> -->
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             label="巡检结束时间"
           >
@@ -117,7 +128,7 @@
               </div>
               <div v-else>--</div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <el-pagination
           style="margin-top: 20px; margin-left: 5%; margin-bottom: 5%"

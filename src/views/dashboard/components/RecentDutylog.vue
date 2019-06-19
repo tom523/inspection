@@ -38,15 +38,19 @@
             </el-table-column>
             <el-table-column
               align="center"
-              label="开始时间"
-              prop="start_time"
+              label="时间"
             >
               <template slot-scope="scope">
+                <span>{{ scope.row.start_time }}<br></span>
+                <span>至<br></span>
+                <span>{{ scope.row.end_time }}</span>
+              </template>
+              <!-- <template slot-scope="scope">
                 <span>{{ scope.row.start_time.substring(0,10) }}<br></span>
                 <span>{{ scope.row.start_time.substring(11,19) }}</span>
-              </template>
+              </template> -->
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               align="center"
               label="结束时间"
               prop="end_time"
@@ -55,7 +59,7 @@
                 <span>{{ scope.row.end_time.substring(0,10) }}<br></span>
                 <span>{{ scope.row.end_time.substring(11,19) }}</span>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table-column>
         </el-table>
       </el-col>
