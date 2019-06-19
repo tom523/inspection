@@ -1,9 +1,16 @@
 <template>
   <div class="dashboard-editor-container">
     <div style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <span style="margin-left: 60%">选择专业：</span>
-      <el-select v-model="dutyLogProfessions" style="width: 300px" placeholder="请选择">
-        <el-option-group
+      <span style="margin-left: 60%">选择运转方式：</span>
+      <el-select v-model="dutyLogOperationWay" style="width: 300px" placeholder="请选择">
+        <el-option
+          v-for="(item, index) in operation_way"
+          :key="index"
+          style="width: 300px"
+          :label="item.name"
+          :value="item.name"
+        />
+        <!-- <el-option-group
           v-for="item in professions"
           :key="item.operation_way"
           :label="item.operation_way"
@@ -18,7 +25,7 @@
             <span style="float: left">{{ group.toString() }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
           </el-option>
-        </el-option-group>
+        </el-option-group> -->
       </el-select>
       <bar-chart :chart-data="dutyData" />
     </div>
@@ -105,6 +112,7 @@
 import BarChart from './components/BarChart'
 // import LineChart from './components/LineChart'
 import { getRelatedTurnProfession, getStaffTimeConsumed, getTurnLogTimeConsumed, getDutyLogTimeConsumed } from '@/api/misc'
+import { getChoicesOperationWay } from '@/api/duty'
 // import { getCurTime, getAnyTime } from '@/utils/tool'
 export default {
   name: 'Insreport',
@@ -150,14 +158,15 @@ export default {
       //   reviewTeam: {}
       // },
       professions: [],
-      dutyLogProfessions: null,
+      dutyLogOperationWay: null,
       turnProfessions: null,
-      staffProfessions: null
+      staffProfessions: null,
+      operation_way: []
     }
   },
   watch: {
-    dutyLogProfessions: function() {
-      getDutyLogTimeConsumed({ related_professions: this.dutyLogProfessions }).then(response => {
+    dutyLogOperationWay: function() {
+      getDutyLogTimeConsumed({ operation_way: this.dutyLogOperationWay }).then(response => {
         this.dutyData = {
           title: '班次巡检时长统计',
           xAxis: response.data.duty_log_statistic.map(item => { return item.name }),
@@ -186,11 +195,11 @@ export default {
       getStaffTimeConsumed({ related_professions: this.staffProfessions }).then(response => {
         this.staffData = {
           title: '员工巡检时长统计',
-          xAxis: response.data.staff_time_statistic.map(item => { return item.name }),
+          xAxis: Object.keys(response.data.staff_time_statistic),
           series: [{
             name: '员工统计',
             type: 'bar',
-            data: response.data.staff_time_statistic.map(item => { return item.time_consumed / 60 })
+            data: Object.keys(response.data.staff_time_statistic).map(item => { return response.data.staff_time_statistic[item] / 60 })
           }]
         }
       })
@@ -208,9 +217,14 @@ export default {
   },
   methods: {
     fetchData() {
+      getChoicesOperationWay().then(response => {
+        this.operation_way = response.data
+        this.dutyLogOperationWay = this.operation_way[0].name
+      })
       getRelatedTurnProfession().then(response => {
-        debugger
         this.professions = response.data
+        this.turnProfessions = this.professions[0].grouped_professions[Object.keys(this.professions[0].grouped_professions)].toString()
+        this.staffProfessions = this.professions[0].grouped_professions[Object.keys(this.professions[0].grouped_professions)].toString()
         // this.dutyLogProfessions = this.professions[0].related_professions
         // this.turnProfessions = this.professions[0].related_professions
         // this.staffProfessions = this.professions[0].related_professions
