@@ -1,7 +1,16 @@
 <template>
   <div class="app-container">
     <el-col>
-      <span style="margin-left: 6.6%">选择专业：</span>
+      <span style="margin-left: 6.6%">选择来源：</span>
+      <el-select v-model="listQuery.source" clearable placeholder="请选择">
+        <el-option
+          v-for="item in source"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <span style="margin-left: 27%">选择专业：</span>
       <el-select v-model="listQuery.professions" clearable filterable placeholder="请选择">
         <el-option
           v-for="item in professions"
@@ -10,16 +19,9 @@
           :value="item.name"
         />
       </el-select>
-      <span style="margin-left: 32px">选择巡检点：</span>
-      <el-select v-model="listQuery.point" clearable filterable placeholder="请选择">
-        <el-option
-          v-for="item in points"
-          :key="item.id"
-          :label="item.name"
-          :value="item.name"
-        />
-      </el-select>
-      <span style="margin-left: 32px">选择时间：</span>
+    </el-col>
+    <el-col style="margin-top: 20px">
+      <span style="margin-left: 6.6%">选择时间：</span>
       <el-date-picker
         v-model="actual_check_time"
         style="width: 300px"
@@ -29,31 +31,55 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期"
       />
+      <span style="margin-left: 21%">选择巡检点：</span>
+      <el-select v-model="listQuery.point" clearable filterable placeholder="请选择">
+        <el-option
+          v-for="item in points"
+          :key="item.id"
+          :label="item.name"
+          :value="item.name"
+        />
+      </el-select>
     </el-col>
     <el-col
       v-for="(photo, index) in photos"
       :key="index"
-      style="width: 40%; margin-left: 6.6%; margin-right: auto; margin-top: 20px"
+      style="width: 40%; margin-left: 6.6%; margin-right: auto; margin-top: 50px"
       :span="8"
     >
       <el-card :body-style="{ padding: '0px' }">
         <img :src="photo.photo" class="image">
         <div style="padding: 14px; margin-left: 5%">
-          <div v-if="photo.profession">
-            <span>{{ '专业：' + photo.profession }}<br></span>
-          </div>
-          <div v-if="photo.point" style="margin-top: 10px">
-            <span>{{ '巡检点：' + photo.point }}<br></span>
-          </div>
-          <div style="margin-top: 10px">
-            <span>{{ '描述：' + photo.comments }}</span>
-          </div>
-          <div style="margin-top: 10px">
-            <span>{{ '时间：' + photo.actual_check_time }}</span>
-          </div>
-          <div class="bottom clearfix">
-            <span>{{ '拍照人:' + photo.staff }}</span>
-          </div>
+          <el-row>
+            <el-col :span="12">
+              <div v-if="photo.inspection_level" style="margin-top: 10px">
+                <span>{{ '检查级别：' + inspLevelFilter(photo.inspection_level) }}</span>
+              </div>
+              <div style="margin-top: 10px">
+                <span>{{ '描述：' + photo.comments }}</span>
+              </div>
+              <div style="margin-top: 10px">
+                <span>{{ '时间：' + photo.actual_check_time }}</span>
+              </div>
+              <div class="bottom clearfix">
+                <span>{{ '拍照人：' + photo.staff }}</span>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div v-if="photo.profession" style="margin-top: 10px">
+                <span>{{ '专业：' + photo.profession }}<br></span>
+              </div>
+              <div v-if="photo.team" style="margin-top: 10px">
+                <span>{{ '值：' + photo.team }}</span>
+              </div>
+              <div v-if="photo.point" style="margin-top: 10px">
+                <span>{{ '巡检点：' + photo.point }}<br></span>
+              </div>
+              <div v-if="photo.device" style="margin-top: 10px">
+                <span>{{ '设备：' + photo.device }}</span>
+              </div>
+            </el-col>
+          </el-row>
         </div>
       </el-card>
     </el-col>
@@ -86,16 +112,30 @@ export default {
         profession: null,
         point: null,
         actual_check_time__gte: null,
-        actual_check_time__lte: null
+        actual_check_time__lte: null,
+        source: null
       },
       professions: null,
       points: null,
-      actual_check_time: null
+      actual_check_time: null,
+      source: [{
+        label: '拍照',
+        value: 'photo'
+      },
+      {
+        label: '巡检项',
+        value: 'item'
+      },
+      {
+        label: '修复项',
+        value: 'repair'
+      }]
     }
   },
   watch: {
     listQuery: {
       handler: function() {
+        debugger
         this.listQuery.page = 1
         this.fetchData()
       },
@@ -117,6 +157,15 @@ export default {
     this.fetchSelect()
   },
   methods: {
+    inspLevelFilter(key) {
+      const map = {
+        1: '巡检',
+        2: '复检',
+        3: '抽检',
+        9: '管线巡检'
+      }
+      return map[key]
+    },
     handleCurrentChange(index) {
       this.listQuery.page = index
       this.fetchData()
