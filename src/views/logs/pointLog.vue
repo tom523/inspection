@@ -23,7 +23,8 @@
         <el-switch
           v-model="watchAllPointLog"
           style="margin-left: 5%"
-          active-text="查看所有巡检点记录"
+          inactive-text="仅显示当天"
+          active-text="显示所有"
         />
         <!-- <el-button style="width: 10%; margin-left: 39%" type="primary" @click="listQuery = {}">查看全部</el-button> -->
       </el-row>
@@ -83,10 +84,31 @@
         />
         <el-table-column
           align="center"
+          label="轮次开始时间"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.turn_log__plan_start_time.substring(0,10) }}<br></span>
+            <span>{{ scope.row.turn_log__plan_start_time.substring(11,19) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
           label="专业"
         >
           <template slot-scope="scope">
             <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="巡检开始时间"
+        >
+          <template slot-scope="scope">
+            <div v-if="scope.row.actual_start_time">
+              <span>{{ scope.row.actual_start_time.substring(0,10) }}<br></span>
+              <span>{{ scope.row.actual_start_time.substring(11,19) }}</span>
+            </div>
+            <div v-else>--</div>
           </template>
         </el-table-column>
         <el-table-column

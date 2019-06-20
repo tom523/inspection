@@ -22,7 +22,8 @@
         <el-switch
           v-model="watchAllTurn"
           style="margin-left: 5%"
-          active-text="查看所有轮次记录"
+          inactive-text="未检轮次"
+          active-text="所有轮次"
         />
         <el-table
           v-loading="loading"
