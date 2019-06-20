@@ -46,7 +46,10 @@
           label="名称"
         >
           <template slot-scope="scope">
-            {{ scope.row.snapshot.name }}
+            <div v-if="scope.row.checking_status === 'AB'">
+              <el-button type="text" @click="watchItem(scope.row)">{{ scope.row.snapshot.name }}</el-button>
+            </div>
+            <div v-else>{{ scope.row.snapshot.name }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -131,12 +134,58 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <a-drawer
+      title="异常项记录"
+      width="40%"
+      placement="right"
+      :closable="false"
+      :visible="visible"
+      @close="visible = false"
+    >
+      <el-card v-for="item in activeItem" :key="item.id" class="box-card">
+        <div slot="header" class="clearfix">
+          <span>{{ item.snapshot.name }}</span>
+          <span v-if="item.checking_status === 'RE'">(已修复)</span>
+          <el-button :disabled="item.photo===null" style="float: right; padding: 3px 0" type="text" @click="watchPhoto(item.photo)">查看图片</el-button>
+        </div>
+        <div>
+          <el-row>
+            <el-col :span="12">
+              <span>{{ '数值：' + item.numerical }}<br><br></span>
+              <span>{{ '异常等级：' + item.fault_level }}<br><br></span>
+              <span>{{ '越限值：' + item.snapshot.extra.comparisonOperator + ' ' + item.snapshot.extra.threshold + ' ' + item.snapshot.extra.cnUnit }}<br><br></span>
+              <span>{{ '轮次：' + item.turn_log.snapshot.name }}<br><br></span>
+              <span>{{ '检查人：' + item.staff }}<br><br></span>
+            </el-col>
+            <el-col :span="12">
+              <span>{{ '异常描述：' + item.comments }}<br><br></span>
+              <span>{{ '检查类型：' + item.snapshot.type }}<br><br></span>
+              <span>{{ '专业：' + item.snapshot.profession }}<br><br></span>
+              <span>{{ '设备：' + item.device_name }}<br><br></span>
+              <span>{{ '巡检点：' + item.point_name }}<br><br></span>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <span>{{ '轮次规定时间：' + item.turn_log.plan_start_time + ' ~ ' + item.turn_log.plan_end_time }}<br><br></span>
+              <span>{{ '实际巡检时间：' + item.turn_log.actual_start_time + ' ~ ' + item.turn_log.actual_end_time }}</span>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+    </a-drawer>
+    <el-dialog :visible.sync="cpDialogPhoto" title="图片详情" width="40%">
+      <div class="img_wap">
+        <img :src="photo" class="head-img">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getPointLog } from '@/api/insp'
+import { getPointLog, getItemLog } from '@/api/insp'
 import { getDate } from '@/utils/tool'
+import { putSetHasRead } from '@/api/dashboard'
 export default {
   filters: {
     statusFilter(key) {
@@ -211,7 +260,11 @@ export default {
         label: '管线',
         value: 9
       }],
-      watchAllPointLog: false
+      watchAllPointLog: false,
+      visible: false,
+      activeItem: null,
+      cpDialogPhoto: false,
+      photo: null
     }
   },
   watch: {
@@ -235,16 +288,28 @@ export default {
     //   this.fetchData()
     // }
   },
-  created() {
-    if (this.$route.query.status) {
+  async created() {
+    if (this.$route.query.has_read === false) {
+      this.listQuery = {
+        has_read: false
+      }
+      await this.fetchData()
+      this.setHasRead()
+    } else if (this.$route.query.status) {
       this.listQuery.checking_status = this.$route.query.status
+      this.fetchData()
+    } else {
+      this.fetchData()
     }
-    this.fetchData()
   },
   methods: {
     handleCurrentChange(index) {
       this.listQuery.page = index
       this.fetchData()
+    },
+    setHasRead() {
+      putSetHasRead().then(response => {
+      })
     },
     fetchData() {
       getPointLog(this.listQuery).then(response => {
@@ -253,12 +318,25 @@ export default {
         this.listQuery.page = response.data.page
       })
     },
+    watchItem(rowData) {
+      this.visible = true
+      getItemLog({
+        point_log: rowData.id,
+        checking_status__in: 'AB,RE'
+      }).then(response => {
+        this.activeItem = response.data.items
+      })
+    },
     row_class({ row, rowIndex }) {
       if (rowIndex % 2 === 0) {
         return 'warning-row'
       } else if (rowIndex % 2 === 1) {
         return 'success-row'
       }
+    },
+    watchPhoto(photo) {
+      this.cpDialogPhoto = true
+      this.photo = photo
     },
     indexMethod(index) {
       return (this.listQuery.page - 1) * 10 + index + 1
@@ -270,8 +348,14 @@ export default {
   .el-table .warning-row {
     background: oldlace;
   }
-
+  .itemLog {
+    margin-top: 10px
+  }
   .el-table .success-row {
     background: #f0f9eb;
+  }
+  .head-img {
+    width: 100%;
+    height: auto;
   }
 </style>

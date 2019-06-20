@@ -2,16 +2,16 @@
   <div class="app-container">
     <el-col>
       <span style="margin-left: 6.6%">选择来源：</span>
-      <el-select v-model="listQuery.source" clearable placeholder="请选择">
+      <el-select v-model="source" multiple collapse-tags clearable placeholder="请选择">
         <el-option
-          v-for="item in source"
+          v-for="item in sources"
           :key="item.value"
           :label="item.label"
           :value="item.value"
         />
       </el-select>
       <span style="margin-left: 27%">选择专业：</span>
-      <el-select v-model="listQuery.professions" clearable filterable placeholder="请选择">
+      <el-select v-model="listQuery.profession" :disabled="professionDisabled" clearable filterable placeholder="请先选择来源">
         <el-option
           v-for="item in professions"
           :key="item.id"
@@ -118,7 +118,7 @@ export default {
       professions: null,
       points: null,
       actual_check_time: null,
-      source: [{
+      sources: [{
         label: '拍照',
         value: 'photo'
       },
@@ -129,13 +129,18 @@ export default {
       {
         label: '修复项',
         value: 'repair'
-      }]
+      }],
+      source: []
+    }
+  },
+  computed: {
+    professionDisabled: function() {
+      return !(this.source.length > 0 && this.source.filter(item => item === 'item' || item === 'repair').length > 0)
     }
   },
   watch: {
     listQuery: {
       handler: function() {
-        debugger
         this.listQuery.page = 1
         this.fetchData()
       },
@@ -150,6 +155,13 @@ export default {
         this.listQuery.actual_check_time__gte = null
         this.listQuery.actual_check_time__lte = null
       }
+    },
+    source: function() {
+      this.listQuery.source = this.source.toString()
+    },
+    professionDisabled: function() {
+      debugger
+      this.professionDisabled ? this.listQuery.profession = null : console.log()
     }
   },
   created() {
@@ -177,7 +189,7 @@ export default {
       })
     },
     fetchSelect() {
-      getRoleUser({ role_type__in: 'PROFESSION,REVIEW_PROFESSION,PIPE_PROFESSION' }).then(response => {
+      getRoleUser({ role_type__in: 'PROFESSION,PIPE_PROFESSION' }).then(response => {
         this.professions = response.data
       })
       getAllPoint().then(response => {

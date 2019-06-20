@@ -32,3 +32,19 @@ export function getDayTurnCount() {
     method: 'get'
   })
 }
+
+// 消息
+export function getUnreadCount() {
+  return request({
+    url: '/inspection-log/point-log/get_unread_count/',
+    method: 'get'
+  })
+}
+
+// 清空消息
+export function putSetHasRead() {
+  return request({
+    url: '/inspection-log/point-log/set_has_read/',
+    method: 'put'
+  })
+}

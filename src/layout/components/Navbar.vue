@@ -3,6 +3,9 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb class="breadcrumb-container" />
+    <el-badge class="badge" :value="unreadValue">
+      <el-button size="small" @click="watchUnread">消息</el-button>
+    </el-badge>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -35,17 +38,28 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { getUnreadCount } from '@/api/dashboard'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      unreadValue: null
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar'
     ])
+  },
+  created() {
+    getUnreadCount().then(response => {
+      this.unreadValue = response.data.unread_count
+    })
   },
   methods: {
     toggleSideBar() {
@@ -54,6 +68,9 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    watchUnread() {
+      this.$router.push({ path: '/example/pointLog', query: { has_read: false }})
     }
   }
 }
@@ -80,6 +97,11 @@ export default {
     }
   }
 
+  .badge {
+    position: absolute;
+    left: 88%;
+    top: 15px
+  }
   .breadcrumb-container {
     float: left;
   }
