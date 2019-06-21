@@ -269,7 +269,7 @@ export default {
   },
   watch: {
     listQuery: {
-      handler: function() {
+      handler: async function() {
         this.listQuery.page = 1
         this.fetchData()
       },
@@ -293,8 +293,8 @@ export default {
       this.listQuery = {
         has_read: false
       }
-      await this.fetchData()
-      this.setHasRead()
+      // await this.fetchData()
+      // this.setHasRead()
     } else if (this.$route.query.status) {
       this.listQuery.checking_status = this.$route.query.status
       this.fetchData()
@@ -309,6 +309,7 @@ export default {
     },
     setHasRead() {
       putSetHasRead().then(response => {
+        // 设置消息数字为0
       })
     },
     fetchData() {
@@ -316,6 +317,9 @@ export default {
         this.tableData = response.data.items
         this.total = response.data.count
         this.listQuery.page = response.data.page
+        if (this.listQuery.has_read === false) {
+          this.setHasRead()
+        }
       })
     },
     watchItem(rowData) {
