@@ -269,8 +269,8 @@ export default {
       listQuery: {
         checking_status__in: null,
         inspection_level: null,
-        turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
-        turn_log__plan_start_time__lte: getDate() + ' 23:59:59',
+        actual_start_time__gte: getDate() + ' 00:00:00',
+        actual_start_time__lte: getDate() + ' 23:59:59',
         check_point__name__contains: null,
         duty_log__team: null,
         devicelog__profession__in: null
@@ -329,6 +329,7 @@ export default {
   watch: {
     listQuery: {
       handler: async function() {
+        debugger
         this.listQuery.page = 1
         this.fetchData()
       },
@@ -338,8 +339,8 @@ export default {
       this.watchAllPointLog ? this.listQuery = {} : this.listQuery = {
         checking_status__in: null,
         inspection_level: null,
-        turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
-        turn_log__plan_start_time__lte: getDate() + ' 23:59:59'
+        actual_start_time__gte: getDate() + ' 00:00:00',
+        actual_start_time__lte: getDate() + ' 23:59:59'
       }
     }
     // 'listQuery.checking_status': function() {
