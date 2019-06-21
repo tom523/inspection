@@ -67,7 +67,6 @@
             label="巡检点"
           >
             <template slot-scope="scope">
-              {{ scope.row.select_show ? '' : scope.row.point.name }}
               <div v-if="scope.row.select_show">
                 <el-select
                   v-model="scope.row.point.id"
@@ -83,6 +82,7 @@
                   />
                 </el-select>
               </div>
+              <div v-else>{{ scope.row.point.name }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -163,6 +163,7 @@ export default {
       // 点击确定
       if (this.tableData[index].select_show) {
         // 新建设备
+        const point = obj.point
         obj.point = obj.point.id
         if (obj.id === undefined) {
           addDevice(obj).then(response => {
@@ -172,11 +173,12 @@ export default {
               message: '添加设备成功！'
             })
           }).catch(err => {
+            this.tableData[index].select_show = true
+            this.tableData[index].point = point
             Message({
               type: 'warning',
               message: err.response.data.data.name || err.response.data.data.point
             })
-            this.tableData[index].select_show = true
             console.log(err)
           })
         } else {
@@ -187,6 +189,8 @@ export default {
               message: '更新设备成功'
             })
           }).catch(err => {
+            this.tableData[index].point = point
+            this.tableData[index].select_show = true
             console.log(err)
           })
         }
@@ -243,6 +247,7 @@ export default {
         name: '',
         profession: '',
         point: {
+          name: null,
           id: null
         },
         select_show: true

@@ -1,31 +1,82 @@
 <template>
   <div class="app-container">
-    <div style="margin-top: 2%">
-      <el-row>
-        <span style="margin-left: 6%">检查级别</span>
-        <el-select v-model="listQuery.inspection_level" clearable placeholder="请选择">
-          <el-option
-            v-for="item in inspection_level"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+    <div style="margin-top: 10px">
+      <el-row style="margin-left: 6%">
+        <el-col :span="8">
+          <span>检查级别</span>
+          <el-select v-model="listQuery.inspection_level" clearable placeholder="请选择">
+            <el-option
+              v-for="item in inspection_level"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <span>巡检点状态</span>
+          <el-select v-model="listQuery.checking_status__in" clearable placeholder="请选择">
+            <el-option
+              v-for="item in checking_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <span>值：</span>
+          <el-select v-model="listQuery.duty_log__team" clearable filterable placeholder="请选择">
+            <el-option
+              v-for="item in teams"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            />
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 30px;margin-left: 6%">
+        <el-col :span="8">
+          <span>巡检点：</span>
+          <el-select v-model="listQuery.check_point__name__contains" clearable filterable placeholder="请选择">
+            <el-option
+              v-for="item in points"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <span>选择专业：</span>
+          <el-select v-model="listQuery.devicelog__profession__in" style="width: 300px" placeholder="请选择">
+            <el-option-group
+              v-for="item in professions"
+              :key="item.operation_way"
+              :label="item.operation_way"
+            >
+              <el-option
+                v-for="(group, index) in item.grouped_professions"
+                :key="index"
+                style="width: 300px"
+                :label="group.toString()"
+                :value="group.toString()"
+              >
+                <span style="float: left">{{ group.toString() }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
+              </el-option>
+            </el-option-group>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-switch
+            v-model="watchAllPointLog"
+            style="margin-top: 10px"
+            inactive-text="仅显示当天"
+            active-text="显示所有"
           />
-        </el-select>
-        <span style="margin-left: 20px">巡检点状态</span>
-        <el-select v-model="listQuery.checking_status__in" clearable placeholder="请选择">
-          <el-option
-            v-for="item in checking_status"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-switch
-          v-model="watchAllPointLog"
-          style="margin-left: 5%"
-          inactive-text="仅显示当天"
-          active-text="显示所有"
-        />
+        </el-col>
         <!-- <el-button style="width: 10%; margin-left: 39%" type="primary" @click="listQuery = {}">查看全部</el-button> -->
       </el-row>
       <el-table
@@ -99,7 +150,7 @@
           label="专业"
         >
           <template slot-scope="scope">
-            <span v-for="(profession, index) in scope.row.related_professions" :key="index">{{ profession }}<br></span>
+            <span v-for="(profession, index) in scope.row.professions" :key="index">{{ profession }}<br></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -183,9 +234,11 @@
 </template>
 
 <script>
-import { getPointLog, getItemLog } from '@/api/insp'
+import { getPointLog, getItemLog, getAllPoint } from '@/api/insp'
 import { getDate } from '@/utils/tool'
 import { putSetHasRead } from '@/api/dashboard'
+import { getRoleUser } from '@/api/user'
+import { getRelatedTurnProfession } from '@/api/misc'
 export default {
   filters: {
     statusFilter(key) {
@@ -217,7 +270,10 @@ export default {
         checking_status__in: null,
         inspection_level: null,
         turn_log__plan_start_time__gte: getDate() + ' 00:00:00',
-        turn_log__plan_start_time__lte: getDate() + ' 23:59:59'
+        turn_log__plan_start_time__lte: getDate() + ' 23:59:59',
+        check_point__name__contains: null,
+        duty_log__team: null,
+        devicelog__profession__in: null
       },
       total: null,
       checking_status: [{
@@ -264,7 +320,10 @@ export default {
       visible: false,
       activeItem: null,
       cpDialogPhoto: false,
-      photo: null
+      photo: null,
+      professions: null,
+      teams: null,
+      points: null
     }
   },
   watch: {
@@ -301,6 +360,7 @@ export default {
     } else {
       this.fetchData()
     }
+    this.fetchSelectData()
   },
   methods: {
     handleCurrentChange(index) {
@@ -325,6 +385,17 @@ export default {
         checking_status__in: 'AB,RE'
       }).then(response => {
         this.activeItem = response.data.items
+      })
+    },
+    fetchSelectData() {
+      getRoleUser({ role_type: 'TEAM' }).then(response => {
+        this.teams = response.data
+      })
+      getAllPoint().then(response => {
+        this.points = response.data
+      })
+      getRelatedTurnProfession().then(response => {
+        this.professions = response.data
       })
     },
     row_class({ row, rowIndex }) {

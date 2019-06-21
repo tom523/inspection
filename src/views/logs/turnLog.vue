@@ -19,6 +19,25 @@
             :value="item.name"
           />
         </el-select>
+        <span style="margin-left: 30px">选择专业：</span>
+        <el-select v-model="listQuery.related_professions" style="width: 300px" placeholder="请选择">
+          <el-option-group
+            v-for="item in professions"
+            :key="item.operation_way"
+            :label="item.operation_way"
+          >
+            <el-option
+              v-for="(group, index) in item.grouped_professions"
+              :key="index"
+              style="width: 300px"
+              :label="group.toString()"
+              :value="group.toString()"
+            >
+              <span style="float: left">{{ group.toString() }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ index }}</span>
+            </el-option>
+          </el-option-group>
+        </el-select>
         <el-switch
           v-model="watchAllTurn"
           style="margin-left: 5%"
@@ -151,6 +170,7 @@
 import { getTurnLog } from '@/api/insp'
 import { getCurTime } from '@/utils/tool'
 import { getRoleUser } from '@/api/user'
+import { getRelatedTurnProfession } from '@/api/misc'
 export default {
   filters: {
     statusFilter(key) {
@@ -168,18 +188,21 @@ export default {
       page: 1,
       listQuery: {
         plan_end_time__gte: getCurTime(),
-        duty_log__team__in: []
+        duty_log__team__in: [],
+        related_professions: null
       },
       total: null,
       loading: false,
       watchAllTurn: false,
       selectTeams: null,
-      teams: []
+      teams: [],
+      professions: null
     }
   },
   watch: {
     listQuery: {
       handler: function() {
+        debugger
         this.listQuery.page = 1
         this.fecthdata()
       },
@@ -194,7 +217,7 @@ export default {
   },
   created() {
     this.fecthdata()
-    this.fecthTeam()
+    this.fecthSelectData()
   },
   methods: {
     handleCurrentChange(index) {
@@ -210,9 +233,12 @@ export default {
         this.loading = false
       })
     },
-    fecthTeam() {
+    fecthSelectData() {
       getRoleUser({ role_type: 'TEAM' }).then(response => {
         this.selectTeams = response.data
+      })
+      getRelatedTurnProfession().then(response => {
+        this.professions = response.data
       })
     },
     row_class({ row, rowIndex }) {
